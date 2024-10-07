@@ -35,3 +35,6 @@
    * 다양한 전략을 통해 합리적으로 대기열을 제공할 방법을 고안
    * 특정 시간 동안 N 명에게만 권한을 부여
    * 한번에 활성화된 최대 유저를 N 으로 유지
+
+## Milestone
+[Project Milestone Link](https://github.com/users/Yn3-3xh/projects/1/views/1)
