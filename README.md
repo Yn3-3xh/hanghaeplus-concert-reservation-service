@@ -38,3 +38,8 @@
 
 ## Milestone
 [Project Milestone Link](https://github.com/users/Yn3-3xh/projects/1/views/1)
+
+## Domain Modeling
+<div style="background-color: white; display: inline-block;">
+    <img src="docs/images/domain-modeling.png" alt="도메인 모델링" style="width: 500px;" />
+</div>
