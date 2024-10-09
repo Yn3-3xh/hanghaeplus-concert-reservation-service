@@ -36,7 +36,7 @@
 
 ## Domain Modeling
 <div style="background-color: white; display: inline-block;">
-    <img src="docs/images/domain-modeling.png" alt="도메인 모델링" style="width: 500px;" />
+    <img src="docs/images/domain-modeling.png" alt="도메인 모델링" style="width: 800px;" />
 </div>
 
 ## Sequence Diagram
