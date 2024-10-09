@@ -43,8 +43,10 @@
 ### 1. 유저 대기열 토큰 기능
 [유저 대기열 토큰 기능 Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/4)
 
-**토큰 발급 API**
 ``` mermaid
+---
+title: 토큰 발급 API
+---
 sequenceDiagram
 autonumber
 
@@ -66,8 +68,10 @@ Token->>Client: 토큰 반환
 Note right of Client: 토큰 수신
 ```
 
-**대기열 확인 API**
 ``` mermaid
+---
+title: 대기열 확인 API
+---
 sequenceDiagram
 autonumber
 
@@ -99,8 +103,10 @@ end
 ### 2. 예약 가능 날짜 / 좌석 API
 [예약 가능 날짜 / 좌석 API Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/5)
 
-**예약 가능 날짜 조회 API**
 ``` mermaid
+---
+title: 예약 가능 날짜 조회 API
+---
 sequenceDiagram
 autonumber
 
@@ -120,8 +126,10 @@ Concert->>Client: 예약 가능한 날짜 목록 반환
 Note right of Client: 예약 가능한 날짜 목록 수신
 ```
 
-**좌석 조회 API**
 ``` mermaid
+---
+title: 좌석 조회 API
+---
 sequenceDiagram
 autonumber
 
@@ -156,8 +164,10 @@ Note right of Client: 예약 가능한 좌석 목록 수신
 ### 3. 좌석 예약 요청 API
 [좌석 예약 요청 API Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/6)
 
-**좌석 예약 요청 API**
 ``` mermaid
+---
+title: 좌석 예약 요청 API
+---
 sequenceDiagram
 autonumber
 
@@ -184,8 +194,10 @@ Note right of Client: 좌석 임시 배정이 완료되었습니다.
 ### 4. 잔액 충전 / 조회 API
 [잔액 충전 / 조회 API Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/7)
 
-**잔액 충전 API**
 ``` mermaid
+---
+title: 잔액 충전 API
+---
 sequenceDiagram
 autonumber
 
@@ -210,8 +222,10 @@ Point->>Client: 포인트 잔액 반환
 Note right of Client: 포인트 잔액 수신
 ```
 
-**잔액 조회 API**
 ``` mermaid
+---
+title: 잔액 조회 API
+---
 sequenceDiagram
 autonumber
 
@@ -237,8 +251,10 @@ Note right of Client: 포인트 잔액 수신
 ### 5. 결제 API
 [결제 API Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/8)
 
-**결제 API**
 ``` mermaid
+---
+title: 결제 API
+---
 sequenceDiagram
 autonumber
 
