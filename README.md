@@ -31,11 +31,6 @@
    * 결제 처리하고 결제 내역을 생성하는 API를 작성
    * 결제가 완료되면 해당 좌석의 소유권을 유저에게 배정하고, 대기열 토큰을 만료시킴
 
-6. 대기열 고도화
-   * 다양한 전략을 통해 합리적으로 대기열을 제공할 방법을 고안
-   * 특정 시간 동안 N 명에게만 권한을 부여
-   * 한번에 활성화된 최대 유저를 N 으로 유지
-
 ## Milestone
 [Project Milestone Link](https://github.com/users/Yn3-3xh/projects/1/views/1)
 
@@ -43,3 +38,46 @@
 <div style="background-color: white; display: inline-block;">
     <img src="docs/images/domain-modeling.png" alt="도메인 모델링" style="width: 500px;" />
 </div>
+
+## Sequence Diagram
+### 1. 유저 대기열 토큰 기능
+[유저 대기열 토큰 기능 Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/4)
+
+**토큰 발급 API**
+``` mermaid
+sequenceDiagram
+autonumber
+
+actor Client
+
+Client->>Token: POST /tokens
+
+Token->>Token: 토큰 조회
+
+rect rgb(255, 230, 200)
+    alt 토큰이 존재하는 경우
+            Token->>Token: 토큰 초기화
+    else 토큰이 존재하지 않는 경우
+        Token->>Token: 토큰 발급 및 저장
+    end
+end
+
+Token->>Client: 토큰 반환
+Note right of Client: 토큰 수신
+```
+
+### 2. 예약 가능 날짜 / 좌석 API
+[예약 가능 날짜 / 좌석 API Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/5)
+
+
+### 3. 좌석 예약 요청 API
+[좌석 예약 요청 API Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/6)
+
+
+### 4. 잔액 충전 / 조회 API
+[잔액 충전 / 조회 API Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/7)
+
+
+### 5. 결제 API
+[결제 API Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/8)
+
