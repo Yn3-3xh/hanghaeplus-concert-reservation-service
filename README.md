@@ -66,18 +66,212 @@ Token->>Client: 토큰 반환
 Note right of Client: 토큰 수신
 ```
 
+**대기열 확인 API**
+``` mermaid
+sequenceDiagram
+autonumber
+
+actor Client
+
+loop Client에서 폴링으로 대기열을 확인한다고 가정
+    Client->>Concert: GET /concerts/{concertId}/performance-date/{date}/queues
+    
+    Concert->>Token: 토큰 검증 요청
+    Token->>Token: 토큰 검증
+    Token->>Concert: 토큰 검증 완료
+    
+    rect rgb(212, 240, 240)
+        opt 대기열에 등록되어 있지 않은 경우
+            Concert->>Queue: 대기열 추가 요청
+            Queue->>Queue: 대기열에 추가
+            Concert->>Token: 토큰 상태 변경(대기)
+        end
+    end
+    
+    Concert->>Queue: 대기열 순서 조회
+    Queue->>Concert: 대기열 순서 반환
+    Concert->>Concert: 대기열 순서 계산
+    Concert->>Client: 남은 순서 반환
+    Note right of Client: 남은 순서 수신
+end
+```
+
 ### 2. 예약 가능 날짜 / 좌석 API
 [예약 가능 날짜 / 좌석 API Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/5)
 
+**예약 가능 날짜 조회 API**
+``` mermaid
+sequenceDiagram
+autonumber
+
+actor Client
+
+Client->>Concert: GET /concerts/{concertId}/reservations/available
+
+Concert->>Concert: 예약 가능한 날짜 목록 조회
+
+rect rgb(255, 222, 239)
+    break 예약 가능한 날짜가 존재하지 않는 경우
+        Concert->>Client: 204 No Content
+        Note right of Client: 예약 가능한 날짜가 없습니다.
+    end
+end
+Concert->>Client: 예약 가능한 날짜 목록 반환
+Note right of Client: 예약 가능한 날짜 목록 수신
+```
+
+**좌석 조회 API**
+``` mermaid
+sequenceDiagram
+autonumber
+
+actor Client
+
+Client->>Concert: GET /concerts/{concertId}/performance-date/{date}/seats/available
+
+Concert->>Token: 토큰 검증 요청
+Token->>Token: 토큰 검증
+Token->>Concert: 토큰 검증 완료
+
+rect rgb(255, 222, 239)
+    break 토큰이 유효하지 않은 경우
+        Concert->>Client: 401 Unauthorized
+        Note right of Client: 유효하지 않은 토큰입니다.
+    end
+end
+
+Concert->>Token: 토큰 상태값 변경(활성)
+Concert->>Concert: 예약 가능한 좌석 목록 조회
+rect rgb(255, 222, 239)
+    break 예약 가능한 좌석이 존재하지 않는 경우
+        Concert->>Client: 204 No Content
+        Note right of Client: 예약 가능한 좌석이 없습니다.
+    end
+end
+
+Concert->>Client: 예약 가능한 좌석 목록 반환
+Note right of Client: 예약 가능한 좌석 목록 수신
+```
 
 ### 3. 좌석 예약 요청 API
 [좌석 예약 요청 API Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/6)
 
+**좌석 예약 요청 API**
+``` mermaid
+sequenceDiagram
+autonumber
+
+actor Client
+
+Client->>Concert: POST /concerts/{concertId}/performance-date/{date}/seats/{seatId}
+
+Concert->>Token: 토큰 검증 요청
+Token->>Token: 토큰 검증
+Token->>Concert: 토큰 검증 완료
+rect rgb(255, 222, 239)
+    break 토큰이 유효하지 않은 경우
+        Concert->>Client: 401 Unauthorized
+        Note right of Client: 유효하지 않은 토큰입니다.
+    end
+end
+
+Concert->>Concert: 좌석 임시 배정
+
+Concert->>Client: 좌석 임시 배정 완료 메시지 반환
+Note right of Client: 좌석 임시 배정이 완료되었습니다.
+```
 
 ### 4. 잔액 충전 / 조회 API
 [잔액 충전 / 조회 API Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/7)
 
+**잔액 충전 API**
+``` mermaid
+sequenceDiagram
+autonumber
+
+actor Client
+
+Client->>Point: POST /points
+
+Point->>Token: 토큰 검증 요청
+Token->>Token: 토큰 검증
+Token->>Point: 토큰 검증 완료
+rect rgb(255, 222, 239)
+    break 토큰이 유효하지 않은 경우
+        Point->>Client: 401 Unauthorized
+        Note right of Client: 유효하지 않은 토큰입니다.
+    end
+end
+
+Point->>Point: 포인트 조회
+Point->>Point: 포인트 충전
+Point->>Point: 포인트 충전 내역 저장
+Point->>Client: 포인트 잔액 반환
+Note right of Client: 포인트 잔액 수신
+```
+
+**잔액 조회 API**
+``` mermaid
+sequenceDiagram
+autonumber
+
+actor Client
+
+Client->>Point: GET /points
+
+Point->>Token: 토큰 검증 요청
+Token->>Token: 토큰 검증
+Token->>Point: 토큰 검증 완료
+rect rgb(255, 222, 239)
+    break 토큰이 유효하지 않은 경우
+        Point->>Client: 401 Unauthorized
+        Note right of Client: 유효하지 않은 토큰입니다.
+    end
+end
+
+Point->>Point: 포인트 조회
+Point->>Client: 포인트 잔액 반환
+Note right of Client: 포인트 잔액 수신
+```
 
 ### 5. 결제 API
 [결제 API Sequence Diagram](https://github.com/Yn3-3xh/hanghae-backend-plus/issues/8)
 
+**결제 API**
+``` mermaid
+sequenceDiagram
+autonumber
+
+actor Client
+
+Client->>Payment: POST /payments
+
+Payment->>Token: 토큰 검증 요청
+Token->>Token: 토큰 검증
+Token->>Payment: 토큰 검증 완료
+rect rgb(255, 222, 239)
+    break 토큰이 유효하지 않은 경우
+        Payment->>Client: 401 Unauthorized
+        Note right of Client: 유효하지 않은 토큰입니다.
+    end
+end
+
+Payment->>Point: 포인트 차감 요청
+Point->>Point: 포인트 차감
+Point->>Payment: 포인트 차감 메세지 반환
+
+Payment->>Payment: 결제 내역 저장
+
+rect rgb(255, 222, 239)
+    opt 포인트가 부족해서 결제가 안된 경우
+        Payment->>Client: 400 Bad Request
+        Note right of Client: 결제할 포인트가 부족합니다.
+    end
+end
+
+Payment->>Concert: 임시 배정된 좌석을 해당 유저에게 배정
+Payment->>Token: 토큰 상태 변경(완료)
+
+Payment->>Client: 결제 완료 메시지 반환
+Note right of Client: 결제가 완료되었습니다.
+```
