@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: hanghaeplus-concert-reservation-service

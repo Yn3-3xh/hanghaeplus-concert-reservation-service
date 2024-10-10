@@ -1,4 +1,4 @@
-package hanghaeplus.concert;
+package hanghaeplus;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
