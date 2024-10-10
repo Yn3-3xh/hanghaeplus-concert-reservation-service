@@ -1,0 +1,323 @@
+openapi: 3.0.0
+info:
+  title: 콘서트 예약 서비스 OPEN API
+  version: 1.0.0
+paths:
+  /tokens:
+    post:
+      summary: 토큰 발급 API
+      operationId: enrollToken
+      parameters:
+        - in: header
+          name: X-USER-TOKEN
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+      responses:
+        '200':
+          description: 새로 발급되거나 초기화된 사용자 인증 토큰 반환
+          headers:
+            X-USER-TOKEN:
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+
+  /concerts/{concertId}/performance-date/{date}/queues:
+    get:
+      summary: 대기열 확인 API
+      operationId: checkConcertDateQueueCount
+      parameters:
+        - in: header
+          name: X-USER-TOKEN
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: concertId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: date
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: 대기열 남은 순서 반환
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueCountResponse'
+
+  /concerts/{concertId}/reservations/available:
+    get:
+      summary: 예약 가능 날짜 조회 API
+      operationId: selectAvailableConcertDates
+      parameters:
+        - in: header
+          name: X-USER-TOKEN
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: concertId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 예약 가능한 날짜 목록 반환
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableDatesResponse'
+
+  /concerts/{concertId}/performance-date/{date}/seats/available:
+    get:
+      summary: 예약 가능 좌석 조회 API
+      operationId: selectAvailableConcertSeats
+      parameters:
+        - in: header
+          name: X-USER-TOKEN
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: concertId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: date
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: 예약 가능한 좌석 목록 반환
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableSeatsResponse'
+
+  /concerts/{concertId}/performance-date/{date}/seats/{seatId}:
+    post:
+      summary: 좌석 예약 API
+      operationId: reserveConcertSeat
+      parameters:
+        - in: header
+          name: X-USER-TOKEN
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: concertId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: date
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: path
+          name: seatId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeatReservationRequest'
+      responses:
+        '200':
+          description: 좌석 임시 배정 완료
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeatReservationResponse'
+
+  /points:
+    post:
+      summary: 잔액 충전 API
+      operationId: chargePoint
+      parameters:
+        - in: header
+          name: X-USER-TOKEN
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PointChargeRequest'
+      responses:
+        '200':
+          description: 충전 완료 후 잔액 반환
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointChargeResponse'
+
+    get:
+      summary: 잔액 조회 API
+      operationId: selectPoint
+      parameters:
+        - in: header
+          name: X-USER-TOKEN
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: userId
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 현재 잔액 반환
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointSelectResponse'
+
+  /payments:
+    post:
+      summary: 결제 API
+      operationId: processPayment
+      parameters:
+        - in: header
+          name: X-USER-TOKEN
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '200':
+          description: 결제 완료
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+
+components:
+  schemas:
+    TokenRequest:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 1
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "21113572-4cb4-44ef-8e19-63269724b8be"
+          format: uuid
+
+    QueueCountResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 5
+
+    AvailableDatesResponse:
+      type: array
+      items:
+        type: string
+        format: date
+        example: "2024-10-20"
+
+    AvailableSeatsResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          seatId:
+            type: integer
+            example: 3
+          seatName:
+            type: string
+            example: "A-3"
+
+    SeatReservationRequest:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 1
+    SeatReservationResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "좌석이 임시 배정되었습니다."
+
+    PointChargeRequest:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 1
+        amount:
+          type: integer
+          example: 20000
+    PointChargeResponse:
+      type: object
+      properties:
+        point:
+          type: integer
+          example: 25000
+
+    PointSelectResponse:
+      type: object
+      properties:
+        point:
+          type: integer
+          example: 25000
+
+    PaymentRequest:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 1
+        concertId:
+          type: integer
+          example: 1
+        seatId:
+          type: integer
+          example: 1
+        amount:
+          type: integer
+          example: 25000
+    PaymentResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 결제가 완료되었습니다.
+        paymentId:
+          type: integer
+          example: 1
