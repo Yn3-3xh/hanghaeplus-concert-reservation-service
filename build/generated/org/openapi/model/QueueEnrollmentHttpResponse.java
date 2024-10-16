@@ -17,35 +17,35 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * QueueCountHttpResponse
+ * QueueEnrollmentHttpResponse
  */
 @lombok.AllArgsConstructor @lombok.NoArgsConstructor
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-16T09:28:14.616814+09:00[Asia/Seoul]")
-public class QueueCountHttpResponse implements Serializable {
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T06:25:33.385941+09:00[Asia/Seoul]")
+public class QueueEnrollmentHttpResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  private Integer count;
+  private String message;
 
-  public QueueCountHttpResponse count(Integer count) {
-    this.count = count;
+  public QueueEnrollmentHttpResponse message(String message) {
+    this.message = message;
     return this;
   }
 
   /**
-   * Get count
-   * @return count
+   * Get message
+   * @return message
   */
   
-  @Schema(name = "count", example = "5", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("count")
-  public Integer getCount() {
-    return count;
+  @Schema(name = "message", example = "대기열에 등록되었습니다.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("message")
+  public String getMessage() {
+    return message;
   }
 
-  public void setCount(Integer count) {
-    this.count = count;
+  public void setMessage(String message) {
+    this.message = message;
   }
 
   @Override
@@ -56,20 +56,20 @@ public class QueueCountHttpResponse implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    QueueCountHttpResponse queueCountHttpResponse = (QueueCountHttpResponse) o;
-    return Objects.equals(this.count, queueCountHttpResponse.count);
+    QueueEnrollmentHttpResponse queueEnrollmentHttpResponse = (QueueEnrollmentHttpResponse) o;
+    return Objects.equals(this.message, queueEnrollmentHttpResponse.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(count);
+    return Objects.hash(message);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class QueueCountHttpResponse {\n");
-    sb.append("    count: ").append(toIndentedString(count)).append("\n");
+    sb.append("class QueueEnrollmentHttpResponse {\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();
   }

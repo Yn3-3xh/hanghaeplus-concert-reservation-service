@@ -8,7 +8,6 @@ package org.openapi.api;
 import org.openapi.model.PointChargeHttpRequest;
 import org.openapi.model.PointChargeHttpResponse;
 import org.openapi.model.PointSelectHttpResponse;
-import java.util.UUID;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,7 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-16T09:28:14.616814+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T06:25:33.385941+09:00[Asia/Seoul]")
 @Validated
 @Tag(name = "points", description = "the points API")
 public interface PointsApi {
@@ -43,7 +42,7 @@ public interface PointsApi {
     /**
      * POST /points : 잔액 충전 API
      *
-     * @param X_USER_TOKEN  (optional)
+     * @param tokenId  (optional)
      * @param pointChargeHttpRequest  (optional)
      * @return 충전 완료 후 잔액 반환 (status code 200)
      */
@@ -64,7 +63,7 @@ public interface PointsApi {
     )
     
     ResponseEntity<PointChargeHttpResponse> chargePoint(
-        @Parameter(name = "X-USER-TOKEN", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "X-USER-TOKEN", required = false) UUID X_USER_TOKEN,
+        @Parameter(name = "tokenId", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = false) String tokenId,
         @Parameter(name = "PointChargeHttpRequest", description = "") @Valid @RequestBody(required = false) PointChargeHttpRequest pointChargeHttpRequest
     );
 
@@ -72,7 +71,7 @@ public interface PointsApi {
     /**
      * GET /points : 잔액 조회 API
      *
-     * @param X_USER_TOKEN  (optional)
+     * @param tokenId  (optional)
      * @param userId  (optional)
      * @return 현재 잔액 반환 (status code 200)
      */
@@ -92,7 +91,7 @@ public interface PointsApi {
     )
     
     ResponseEntity<PointSelectHttpResponse> selectPoint(
-        @Parameter(name = "X-USER-TOKEN", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "X-USER-TOKEN", required = false) UUID X_USER_TOKEN,
+        @Parameter(name = "tokenId", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = false) String tokenId,
         @Parameter(name = "userId", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "userId", required = false) Long userId
     );
 

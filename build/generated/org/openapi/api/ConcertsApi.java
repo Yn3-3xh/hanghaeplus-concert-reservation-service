@@ -6,10 +6,9 @@
 package org.openapi.api;
 
 import org.openapi.model.AvailableSeatsHttpResponse;
-import org.openapi.model.QueueCountHttpResponse;
-import org.openapi.model.SeatReservationHttpRequest;
+import org.openapi.model.QueueEnrollmentHttpResponse;
+import org.openapi.model.QueuePositionHttpResponse;
 import org.openapi.model.SeatReservationHttpResponse;
-import java.util.UUID;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,49 +35,74 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-16T09:28:14.616814+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T06:25:33.385941+09:00[Asia/Seoul]")
 @Validated
 @Tag(name = "concerts", description = "the concerts API")
 public interface ConcertsApi {
 
     /**
-     * GET /concerts/{concertId}/performance-date/{date}/queues : 대기열 확인 API
+     * POST /concerts/{concertId}/queues : 대기열 추가 API
      *
-     * @param X_USER_TOKEN  (required)
+     * @param tokenId  (required)
      * @param concertId  (required)
-     * @param date  (required)
+     * @return 좌석 임시 배정 완료 (status code 200)
+     */
+    @Operation(
+        operationId = "enrollConcertQueue",
+        summary = "대기열 추가 API",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "좌석 임시 배정 완료", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = QueueEnrollmentHttpResponse.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/concerts/{concertId}/queues",
+        produces = { "application/json" }
+    )
+    
+    ResponseEntity<QueueEnrollmentHttpResponse> enrollConcertQueue(
+        @NotNull @Parameter(name = "tokenId", description = "", required = true, in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = true) String tokenId,
+        @Parameter(name = "concertId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("concertId") Long concertId
+    );
+
+
+    /**
+     * GET /concerts/{concertId}/queues : 대기열 확인 API
+     *
+     * @param tokenId  (required)
+     * @param concertId  (required)
      * @return 대기열 남은 순서 반환 (status code 200)
      */
     @Operation(
-        operationId = "checkConcertDateQueueCount",
+        operationId = "getConcertQueuePosition",
         summary = "대기열 확인 API",
         responses = {
             @ApiResponse(responseCode = "200", description = "대기열 남은 순서 반환", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = QueueCountHttpResponse.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = QueuePositionHttpResponse.class))
             })
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/concerts/{concertId}/performance-date/{date}/queues",
+        value = "/concerts/{concertId}/queues",
         produces = { "application/json" }
     )
     
-    ResponseEntity<QueueCountHttpResponse> checkConcertDateQueueCount(
-        @NotNull @Parameter(name = "X-USER-TOKEN", description = "", required = true, in = ParameterIn.HEADER) @RequestHeader(value = "X-USER-TOKEN", required = true) UUID X_USER_TOKEN,
-        @Parameter(name = "concertId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("concertId") Long concertId,
-        @Parameter(name = "date", description = "", required = true, in = ParameterIn.PATH) @PathVariable("date") String date
+    ResponseEntity<QueuePositionHttpResponse> getConcertQueuePosition(
+        @NotNull @Parameter(name = "tokenId", description = "", required = true, in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = true) String tokenId,
+        @Parameter(name = "concertId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("concertId") Long concertId
     );
 
 
     /**
-     * POST /concerts/{concertId}/performance-date/{date}/seats/{seatId} : 좌석 예약 API
+     * POST /concerts/{concertId}/details/{detailId}/seats/{seatId} : 좌석 예약 API
      *
      * @param concertId  (required)
-     * @param date  (required)
+     * @param detailId  (required)
      * @param seatId  (required)
-     * @param X_USER_TOKEN  (optional)
-     * @param seatReservationHttpRequest  (optional)
+     * @param tokenId  (optional)
      * @return 좌석 임시 배정 완료 (status code 200)
      */
     @Operation(
@@ -92,29 +116,27 @@ public interface ConcertsApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/concerts/{concertId}/performance-date/{date}/seats/{seatId}",
-        produces = { "application/json" },
-        consumes = { "application/json" }
+        value = "/concerts/{concertId}/details/{detailId}/seats/{seatId}",
+        produces = { "application/json" }
     )
     
     ResponseEntity<SeatReservationHttpResponse> reserveConcertSeat(
         @Parameter(name = "concertId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("concertId") Long concertId,
-        @Parameter(name = "date", description = "", required = true, in = ParameterIn.PATH) @PathVariable("date") String date,
+        @Parameter(name = "detailId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("detailId") Long detailId,
         @Parameter(name = "seatId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("seatId") Long seatId,
-        @Parameter(name = "X-USER-TOKEN", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "X-USER-TOKEN", required = false) UUID X_USER_TOKEN,
-        @Parameter(name = "SeatReservationHttpRequest", description = "") @Valid @RequestBody(required = false) SeatReservationHttpRequest seatReservationHttpRequest
+        @Parameter(name = "tokenId", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = false) String tokenId
     );
 
 
     /**
-     * GET /concerts/{concertId}/reservations/available : 예약 가능 날짜 조회 API
+     * GET /concerts/{concertId}/available-dates : 예약 가능 날짜 조회 API
      *
      * @param concertId  (required)
-     * @param X_USER_TOKEN  (optional)
+     * @param tokenId  (optional)
      * @return 예약 가능한 날짜 목록 반환 (status code 200)
      */
     @Operation(
-        operationId = "selectAvailableConcertDates",
+        operationId = "selectConcertAvailableDates",
         summary = "예약 가능 날짜 조회 API",
         responses = {
             @ApiResponse(responseCode = "200", description = "예약 가능한 날짜 목록 반환", content = {
@@ -124,26 +146,26 @@ public interface ConcertsApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/concerts/{concertId}/reservations/available",
+        value = "/concerts/{concertId}/available-dates",
         produces = { "application/json" }
     )
     
-    ResponseEntity<List<String>> selectAvailableConcertDates(
+    ResponseEntity<List<String>> selectConcertAvailableDates(
         @Parameter(name = "concertId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("concertId") Long concertId,
-        @Parameter(name = "X-USER-TOKEN", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "X-USER-TOKEN", required = false) UUID X_USER_TOKEN
+        @Parameter(name = "tokenId", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = false) String tokenId
     );
 
 
     /**
-     * GET /concerts/{concertId}/performance-date/{date}/seats/available : 예약 가능 좌석 조회 API
+     * GET /concerts/{concertId}/details/{detailId}/available-seats : 예약 가능 좌석 조회 API
      *
      * @param concertId  (required)
-     * @param date  (required)
-     * @param X_USER_TOKEN  (optional)
+     * @param detailId  (required)
+     * @param tokenId  (optional)
      * @return 예약 가능한 좌석 목록 반환 (status code 200)
      */
     @Operation(
-        operationId = "selectAvailableConcertSeats",
+        operationId = "selectConcertAvailableSeats",
         summary = "예약 가능 좌석 조회 API",
         responses = {
             @ApiResponse(responseCode = "200", description = "예약 가능한 좌석 목록 반환", content = {
@@ -153,14 +175,14 @@ public interface ConcertsApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/concerts/{concertId}/performance-date/{date}/seats/available",
+        value = "/concerts/{concertId}/details/{detailId}/available-seats",
         produces = { "application/json" }
     )
     
-    ResponseEntity<List<AvailableSeatsHttpResponse>> selectAvailableConcertSeats(
+    ResponseEntity<List<AvailableSeatsHttpResponse>> selectConcertAvailableSeats(
         @Parameter(name = "concertId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("concertId") Long concertId,
-        @Parameter(name = "date", description = "", required = true, in = ParameterIn.PATH) @PathVariable("date") String date,
-        @Parameter(name = "X-USER-TOKEN", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "X-USER-TOKEN", required = false) UUID X_USER_TOKEN
+        @Parameter(name = "detailId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("detailId") Long detailId,
+        @Parameter(name = "tokenId", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = false) String tokenId
     );
 
 }

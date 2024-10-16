@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import java.util.UUID;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
@@ -22,14 +21,14 @@ import jakarta.annotation.Generated;
  */
 @lombok.AllArgsConstructor @lombok.NoArgsConstructor
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-16T09:28:14.616814+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T06:25:33.385941+09:00[Asia/Seoul]")
 public class TokenHttpResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  private UUID token;
+  private String token;
 
-  public TokenHttpResponse token(UUID token) {
+  public TokenHttpResponse token(String token) {
     this.token = token;
     return this;
   }
@@ -38,14 +37,14 @@ public class TokenHttpResponse implements Serializable {
    * Get token
    * @return token
   */
-  @Valid 
+  
   @Schema(name = "token", example = "21113572-4cb4-44ef-8e19-63269724b8be", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("token")
-  public UUID getToken() {
+  public String getToken() {
     return token;
   }
 
-  public void setToken(UUID token) {
+  public void setToken(String token) {
     this.token = token;
   }
 

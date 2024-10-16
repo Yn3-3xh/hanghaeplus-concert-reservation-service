@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  */
 @lombok.AllArgsConstructor @lombok.NoArgsConstructor
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-16T09:28:14.616814+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T06:25:33.385941+09:00[Asia/Seoul]")
 public class SeatReservationHttpResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;

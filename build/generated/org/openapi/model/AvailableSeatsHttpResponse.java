@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  */
 @lombok.AllArgsConstructor @lombok.NoArgsConstructor
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-16T09:28:14.616814+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T06:25:33.385941+09:00[Asia/Seoul]")
 public class AvailableSeatsHttpResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -29,6 +29,8 @@ public class AvailableSeatsHttpResponse implements Serializable {
   private Long seatId;
 
   private String seatName;
+
+  private Integer price;
 
   public AvailableSeatsHttpResponse seatId(Long seatId) {
     this.seatId = seatId;
@@ -70,6 +72,26 @@ public class AvailableSeatsHttpResponse implements Serializable {
     this.seatName = seatName;
   }
 
+  public AvailableSeatsHttpResponse price(Integer price) {
+    this.price = price;
+    return this;
+  }
+
+  /**
+   * Get price
+   * @return price
+  */
+  
+  @Schema(name = "price", example = "15000", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("price")
+  public Integer getPrice() {
+    return price;
+  }
+
+  public void setPrice(Integer price) {
+    this.price = price;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -80,12 +102,13 @@ public class AvailableSeatsHttpResponse implements Serializable {
     }
     AvailableSeatsHttpResponse availableSeatsHttpResponse = (AvailableSeatsHttpResponse) o;
     return Objects.equals(this.seatId, availableSeatsHttpResponse.seatId) &&
-        Objects.equals(this.seatName, availableSeatsHttpResponse.seatName);
+        Objects.equals(this.seatName, availableSeatsHttpResponse.seatName) &&
+        Objects.equals(this.price, availableSeatsHttpResponse.price);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(seatId, seatName);
+    return Objects.hash(seatId, seatName, price);
   }
 
   @Override
@@ -94,6 +117,7 @@ public class AvailableSeatsHttpResponse implements Serializable {
     sb.append("class AvailableSeatsHttpResponse {\n");
     sb.append("    seatId: ").append(toIndentedString(seatId)).append("\n");
     sb.append("    seatName: ").append(toIndentedString(seatName)).append("\n");
+    sb.append("    price: ").append(toIndentedString(price)).append("\n");
     sb.append("}");
     return sb.toString();
   }

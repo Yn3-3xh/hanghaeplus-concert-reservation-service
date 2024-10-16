@@ -7,7 +7,6 @@ package org.openapi.api;
 
 import org.openapi.model.PaymentHttpRequest;
 import org.openapi.model.PaymentHttpResponse;
-import java.util.UUID;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-16T09:28:14.616814+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T06:25:33.385941+09:00[Asia/Seoul]")
 @Validated
 @Tag(name = "order", description = "the order API")
 public interface OrderApi {
@@ -42,7 +41,7 @@ public interface OrderApi {
     /**
      * POST /order/payments : 결제 API
      *
-     * @param X_USER_TOKEN  (optional)
+     * @param tokenId  (optional)
      * @param paymentHttpRequest  (optional)
      * @return 결제 완료 (status code 200)
      */
@@ -63,7 +62,7 @@ public interface OrderApi {
     )
     
     ResponseEntity<PaymentHttpResponse> executePayment(
-        @Parameter(name = "X-USER-TOKEN", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "X-USER-TOKEN", required = false) UUID X_USER_TOKEN,
+        @Parameter(name = "tokenId", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = false) String tokenId,
         @Parameter(name = "PaymentHttpRequest", description = "") @Valid @RequestBody(required = false) PaymentHttpRequest paymentHttpRequest
     );
 

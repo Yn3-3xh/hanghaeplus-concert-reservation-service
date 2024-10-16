@@ -10,8 +10,8 @@ org/openapi/model/PaymentHttpResponse.java
 org/openapi/model/PointChargeHttpRequest.java
 org/openapi/model/PointChargeHttpResponse.java
 org/openapi/model/PointSelectHttpResponse.java
-org/openapi/model/QueueCountHttpResponse.java
-org/openapi/model/SeatReservationHttpRequest.java
+org/openapi/model/QueueEnrollmentHttpResponse.java
+org/openapi/model/QueuePositionHttpResponse.java
 org/openapi/model/SeatReservationHttpResponse.java
 org/openapi/model/TokenHttpRequest.java
 org/openapi/model/TokenHttpResponse.java
