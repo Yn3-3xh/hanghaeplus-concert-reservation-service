@@ -9,10 +9,9 @@ paths:
       operationId: enrollToken
       parameters:
         - in: header
-          name: X-USER-TOKEN
+          name: tokenId
           schema:
             type: string
-            format: uuid
       requestBody:
         content:
           application/json:
@@ -22,55 +21,70 @@ paths:
         '200':
           description: 새로 발급되거나 초기화된 사용자 인증 토큰 반환
           headers:
-            X-USER-TOKEN:
+            tokenId:
               schema:
                 type: string
-                format: uuid
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TokenHttpResponse'
 
-  /concerts/{concertId}/performance-date/{date}/queues:
+  /concerts/{concertId}/queues:
     get:
       summary: 대기열 확인 API
-      operationId: checkConcertDateQueueCount
+      operationId: getConcertQueuePosition
       parameters:
         - in: header
-          name: X-USER-TOKEN
+          name: tokenId
           required: true
           schema:
             type: string
-            format: uuid
         - in: path
           name: concertId
           required: true
           schema:
             type: integer
             format: int64
-        - in: path
-          name: date
-          required: true
-          schema:
-            type: string
       responses:
         '200':
           description: 대기열 남은 순서 반환
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QueueCountHttpResponse'
+                $ref: '#/components/schemas/QueuePositionHttpResponse'
 
-  /concerts/{concertId}/reservations/available:
-    get:
-      summary: 예약 가능 날짜 조회 API
-      operationId: selectAvailableConcertDates
+    post:
+      summary: 대기열 추가 API
+      operationId: enrollConcertQueue
       parameters:
         - in: header
-          name: X-USER-TOKEN
+          name: tokenId
+          required: true
           schema:
             type: string
-            format: uuid
+        - in: path
+          name: concertId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 좌석 임시 배정 완료
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueEnrollmentHttpResponse'
+
+  /concerts/{concertId}/available-dates:
+    get:
+      summary: 예약 가능 날짜 조회 API
+      operationId: selectConcertAvailableDates
+      parameters:
+        - in: header
+          name: tokenId
+          schema:
+            type: string
         - in: path
           name: concertId
           required: true
@@ -85,16 +99,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/AvailableDatesHttpResponse'
 
-  /concerts/{concertId}/performance-date/{date}/seats/available:
+  /concerts/{concertId}/details/{detailId}/available-seats:
     get:
       summary: 예약 가능 좌석 조회 API
-      operationId: selectAvailableConcertSeats
+      operationId: selectConcertAvailableSeats
       parameters:
         - in: header
-          name: X-USER-TOKEN
+          name: tokenId
           schema:
             type: string
-            format: uuid
         - in: path
           name: concertId
           required: true
@@ -102,10 +115,11 @@ paths:
             type: integer
             format: int64
         - in: path
-          name: date
+          name: detailId
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         '200':
           description: 예약 가능한 좌석 목록 반환
@@ -116,16 +130,15 @@ paths:
                 items:
                   $ref: '#/components/schemas/AvailableSeatsHttpResponse'
 
-  /concerts/{concertId}/performance-date/{date}/seats/{seatId}:
+  /concerts/{concertId}/details/{detailId}/seats/{seatId}:
     post:
       summary: 좌석 예약 API
       operationId: reserveConcertSeat
       parameters:
         - in: header
-          name: X-USER-TOKEN
+          name: tokenId
           schema:
             type: string
-            format: uuid
         - in: path
           name: concertId
           required: true
@@ -133,22 +146,17 @@ paths:
             type: integer
             format: int64
         - in: path
-          name: date
+          name: detailId
           required: true
           schema:
-            type: string
-            format: string
+            type: integer
+            format: int64
         - in: path
           name: seatId
           required: true
           schema:
             type: integer
             format: int64
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SeatReservationHttpRequest'
       responses:
         '200':
           description: 좌석 임시 배정 완료
@@ -163,10 +171,9 @@ paths:
       operationId: chargePoint
       parameters:
         - in: header
-          name: X-USER-TOKEN
+          name: tokenId
           schema:
             type: string
-            format: uuid
       requestBody:
         content:
           application/json:
@@ -185,10 +192,9 @@ paths:
       operationId: selectPoint
       parameters:
         - in: header
-          name: X-USER-TOKEN
+          name: tokenId
           schema:
             type: string
-            format: uuid
         - in: query
           name: userId
           schema:
@@ -208,10 +214,9 @@ paths:
       operationId: executePayment
       parameters:
         - in: header
-          name: X-USER-TOKEN
+          name: tokenId
           schema:
             type: string
-            format: uuid
       requestBody:
         content:
           application/json:
@@ -240,14 +245,20 @@ components:
         token:
           type: string
           example: "21113572-4cb4-44ef-8e19-63269724b8be"
-          format: uuid
 
-    QueueCountHttpResponse:
+    QueuePositionHttpResponse:
       type: object
       properties:
         count:
           type: integer
           example: 5
+
+    QueueEnrollmentHttpResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "대기열에 등록되었습니다."
 
     AvailableDatesHttpResponse:
       type: array
@@ -265,14 +276,10 @@ components:
         seatName:
           type: string
           example: "A-3"
-
-    SeatReservationHttpRequest:
-      type: object
-      properties:
-        userId:
+        price:
           type: integer
-          example: 1
-          format: int64
+          example: 15000
+
     SeatReservationHttpResponse:
       type: object
       properties:
