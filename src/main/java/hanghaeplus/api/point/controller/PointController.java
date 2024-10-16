@@ -1,21 +1,22 @@
 package hanghaeplus.api.point.controller;
 
-import com.schooldevops.apifirst.openapi.domain.PointChargeRequest;
-import com.schooldevops.apifirst.openapi.domain.PointChargeResponse;
-import com.schooldevops.apifirst.openapi.domain.PointSelectResponse;
-import com.schooldevops.apifirst.openapi.rest.PointsApi;
+import org.openapi.api.PointsApi;
+import org.openapi.model.PointChargeHttpRequest;
+import org.openapi.model.PointChargeHttpResponse;
+import org.openapi.model.PointSelectHttpResponse;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class PointController implements PointsApi {
     @Override
-    public ResponseEntity<PointChargeResponse> chargePoint(UUID X_USER_TOKEN, PointChargeRequest pointChargeRequest) {
-        return ResponseEntity.ok(new PointChargeResponse(25000));
+    public ResponseEntity<PointChargeHttpResponse> chargePoint(UUID X_USER_TOKEN, PointChargeHttpRequest pointChargeHttpRequest) {
+        return ResponseEntity.ok(new PointChargeHttpResponse(BigDecimal.ZERO));
     }
 
     @Override
-    public ResponseEntity<PointSelectResponse> selectPoint(UUID X_USER_TOKEN, Integer userId) {
-        return ResponseEntity.ok(new PointSelectResponse(25000));
+    public ResponseEntity<PointSelectHttpResponse> selectPoint(UUID X_USER_TOKEN, Long userId) {
+        return ResponseEntity.ok(new PointSelectHttpResponse(BigDecimal.ZERO));
     }
 }

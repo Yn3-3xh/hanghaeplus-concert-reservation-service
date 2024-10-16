@@ -20,6 +20,11 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    configureEach {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'ch.qos.logback', module: 'logback-classic'
+        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+    }
 }
 
 repositories {
@@ -28,9 +33,12 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'com.mysql:mysql-connector-j'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
@@ -53,16 +61,16 @@ openApiGenerate {
     verbose.set(true)
     generatorName.set("spring")
     library.set("spring-boot")
-    inputSpec.set(project.file("$rootDir/src/main/resources/openapi.yaml").absolutePath)
-    outputDir.set(project.file("$projectDir").absolutePath)
-//    outputDir.set(project.file("$buildDir/openapi/generated").absolutePath)
-    apiPackage.set("com.schooldevops.apifirst.openapi.rest")
-    modelPackage.set("com.schooldevops.apifirst.openapi.domain")
+    inputSpec.set(project.file("$rootDir/src/main/resources/openapi/openapi.yaml").absolutePath)
+    outputDir.set(project.file("$buildDir/generated").absolutePath)
+    apiPackage.set("org.openapi.api")
+    modelPackage.set("org.openapi.model")
     configOptions.set([
             interfaceOnly: "true",
             useBeanValidation: "true",
             performBeanValidation: "true",
             serializableModel: "true",
+            sourceFolder:"",
             implFolder: "/java",
             useSpringBoot3: "true",
             useJakarta: "true",
@@ -70,15 +78,13 @@ openApiGenerate {
             skipDefaultInterface: "true",
             dateLibrary: "java17",
             additionalModelTypeAnnotations: "@lombok.AllArgsConstructor @lombok.NoArgsConstructor",
-            skipReadme: "true"
     ])
 }
 
 sourceSets {
     main {
         java {
-//            srcDirs = ['src/main/java', 'build/generated']
-            srcDirs = ['src/main/java']
+            srcDirs = ["src/main/java", "$buildDir/generated"]
         }
     }
 }

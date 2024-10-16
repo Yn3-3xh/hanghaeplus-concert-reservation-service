@@ -17,7 +17,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenRequest'
+              $ref: '#/components/schemas/TokenHttpRequest'
       responses:
         '200':
           description: 새로 발급되거나 초기화된 사용자 인증 토큰 반환
@@ -29,7 +29,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenResponse'
+                $ref: '#/components/schemas/TokenHttpResponse'
 
   /concerts/{concertId}/performance-date/{date}/queues:
     get:
@@ -47,19 +47,19 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
         - in: path
           name: date
           required: true
           schema:
             type: string
-            format: date
       responses:
         '200':
           description: 대기열 남은 순서 반환
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QueueCountResponse'
+                $ref: '#/components/schemas/QueueCountHttpResponse'
 
   /concerts/{concertId}/reservations/available:
     get:
@@ -76,13 +76,14 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         '200':
           description: 예약 가능한 날짜 목록 반환
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AvailableDatesResponse'
+                $ref: '#/components/schemas/AvailableDatesHttpResponse'
 
   /concerts/{concertId}/performance-date/{date}/seats/available:
     get:
@@ -99,19 +100,19 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
         - in: path
           name: date
           required: true
           schema:
             type: string
-            format: date
       responses:
         '200':
           description: 예약 가능한 좌석 목록 반환
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AvailableSeatsResponse'
+                $ref: '#/components/schemas/AvailableSeatsHttpResponse'
 
   /concerts/{concertId}/performance-date/{date}/seats/{seatId}:
     post:
@@ -128,29 +129,31 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
         - in: path
           name: date
           required: true
           schema:
             type: string
-            format: date
+            format: string
         - in: path
           name: seatId
           required: true
           schema:
             type: integer
+            format: int64
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SeatReservationRequest'
+              $ref: '#/components/schemas/SeatReservationHttpRequest'
       responses:
         '200':
           description: 좌석 임시 배정 완료
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SeatReservationResponse'
+                $ref: '#/components/schemas/SeatReservationHttpResponse'
 
   /points:
     post:
@@ -166,14 +169,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PointChargeRequest'
+              $ref: '#/components/schemas/PointChargeHttpRequest'
       responses:
         '200':
           description: 충전 완료 후 잔액 반환
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PointChargeResponse'
+                $ref: '#/components/schemas/PointChargeHttpResponse'
 
     get:
       summary: 잔액 조회 API
@@ -188,18 +191,19 @@ paths:
           name: userId
           schema:
             type: integer
+            format: int64
       responses:
         '200':
           description: 현재 잔액 반환
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PointSelectResponse'
+                $ref: '#/components/schemas/PointSelectHttpResponse'
 
-  /payments:
+  /order/payments:
     post:
       summary: 결제 API
-      operationId: processPayment
+      operationId: executePayment
       parameters:
         - in: header
           name: X-USER-TOKEN
@@ -210,24 +214,25 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PaymentRequest'
+              $ref: '#/components/schemas/PaymentHttpRequest'
       responses:
         '200':
           description: 결제 완료
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentResponse'
+                $ref: '#/components/schemas/PaymentHttpResponse'
 
 components:
   schemas:
-    TokenRequest:
+    TokenHttpRequest:
       type: object
       properties:
         userId:
           type: integer
           example: 1
-    TokenResponse:
+          format: int64
+    TokenHttpResponse:
       type: object
       properties:
         token:
@@ -235,21 +240,20 @@ components:
           example: "21113572-4cb4-44ef-8e19-63269724b8be"
           format: uuid
 
-    QueueCountResponse:
+    QueueCountHttpResponse:
       type: object
       properties:
         count:
           type: integer
           example: 5
 
-    AvailableDatesResponse:
+    AvailableDatesHttpResponse:
       type: array
       items:
         type: string
-        format: date
         example: "2024-10-20"
 
-    AvailableSeatsResponse:
+    AvailableSeatsHttpResponse:
       type: array
       items:
         type: object
@@ -257,62 +261,70 @@ components:
           seatId:
             type: integer
             example: 3
+            format: int64
           seatName:
             type: string
             example: "A-3"
 
-    SeatReservationRequest:
+    SeatReservationHttpRequest:
       type: object
       properties:
         userId:
           type: integer
           example: 1
-    SeatReservationResponse:
+          format: int64
+    SeatReservationHttpResponse:
       type: object
       properties:
         message:
           type: string
           example: "좌석이 임시 배정되었습니다."
 
-    PointChargeRequest:
+    PointChargeHttpRequest:
       type: object
       properties:
         userId:
           type: integer
           example: 1
+          format: int64
         amount:
           type: integer
           example: 20000
-    PointChargeResponse:
+    PointChargeHttpResponse:
       type: object
       properties:
         point:
-          type: integer
+          type: string
           example: 25000
+          format: decimal
 
-    PointSelectResponse:
+    PointSelectHttpResponse:
       type: object
       properties:
         point:
-          type: integer
+          type: string
           example: 25000
+          format: decimal
 
-    PaymentRequest:
+    PaymentHttpRequest:
       type: object
       properties:
         userId:
           type: integer
           example: 1
+          format: int64
         concertId:
           type: integer
           example: 1
+          format: int64
         seatId:
           type: integer
           example: 1
+          format: int64
         amount:
           type: integer
           example: 25000
-    PaymentResponse:
+    PaymentHttpResponse:
       type: object
       properties:
         message:
@@ -321,3 +333,4 @@ components:
         paymentId:
           type: integer
           example: 1
+          format: int64
