@@ -1,10 +1,7 @@
 package hanghaeplus.api.concert.controller;
 
 import org.openapi.api.ConcertsApi;
-import org.openapi.model.AvailableSeatsHttpResponseInner;
-import org.openapi.model.QueueCountHttpResponse;
-import org.openapi.model.SeatReservationHttpRequest;
-import org.openapi.model.SeatReservationHttpResponse;
+import org.openapi.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,9 +32,9 @@ public class ConcertController implements ConcertsApi {
     }
 
     @Override
-    public ResponseEntity<List<AvailableSeatsHttpResponseInner>> selectAvailableConcertSeats(Long concertId, String date, UUID X_USER_TOKEN) {
+    public ResponseEntity<List<AvailableSeatsHttpResponse>> selectAvailableConcertSeats(Long concertId, String date, UUID X_USER_TOKEN) {
         return ResponseEntity.ok(List.of(
-                new AvailableSeatsHttpResponseInner(1L, "A-1"),
-                new AvailableSeatsHttpResponseInner(2L, "A-2")));
+                new AvailableSeatsHttpResponse(1L, "A-1"),
+                new AvailableSeatsHttpResponse(2L, "A-2")));
     }
 }

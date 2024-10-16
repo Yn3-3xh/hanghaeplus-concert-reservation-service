@@ -112,7 +112,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AvailableSeatsHttpResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/AvailableSeatsHttpResponse'
 
   /concerts/{concertId}/performance-date/{date}/seats/{seatId}:
     post:
@@ -254,17 +256,15 @@ components:
         example: "2024-10-20"
 
     AvailableSeatsHttpResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          seatId:
-            type: integer
-            example: 3
-            format: int64
-          seatName:
-            type: string
-            example: "A-3"
+      type: object
+      properties:
+        seatId:
+          type: integer
+          example: 3
+          format: int64
+        seatName:
+          type: string
+          example: "A-3"
 
     SeatReservationHttpRequest:
       type: object
