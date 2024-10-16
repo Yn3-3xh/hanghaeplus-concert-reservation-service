@@ -5,6 +5,7 @@ import hanghaeplus.domain.token.entity.Token;
 import hanghaeplus.domain.token.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,11 +16,12 @@ public class TokenCommandService {
 
     private final TokenRepository tokenRepository;
 
+    @Transactional
     public Token generateToken(TokenCommand.Create command) {
         UUID tokenId = UUID.randomUUID();
         LocalDateTime expiredAt = LocalDateTime.now().plusHours(1);
 
-        Token token = Token.create(tokenId, command.userId(), expiredAt);
+        Token token = Token.create(tokenId.toString(), command.userId(), expiredAt);
         tokenRepository.save(token);
 
         return token;

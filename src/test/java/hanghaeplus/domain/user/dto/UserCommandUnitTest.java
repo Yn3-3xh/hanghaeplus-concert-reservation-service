@@ -1,17 +1,18 @@
-package hanghaeplus.domain.token.dto;
+package hanghaeplus.domain.user.dto;
 
+import hanghaeplus.domain.token.dto.TokenCommand;
 import hanghaeplus.domain.token.error.TokenErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("TokenCommand 단위 테스트")
-class TokenCommandUnitTest {
+@DisplayName("UserCommand 유닛 테스트")
+class UserCommandUnitTest {
 
     @Test
-    @DisplayName("TokenCommand.Create 성공")
-    void pass_createTest() {
+    @DisplayName("UserCommand.Create 성공")
+    void createTest() {
         // given
         Long userId = 1L;
 
@@ -23,7 +24,7 @@ class TokenCommandUnitTest {
     }
 
     @Test
-    @DisplayName("TokenCommand.Create 실패 - userId가 null인 경우")
+    @DisplayName("UserCommand.Create 실패 - userId가 null인 경우")
     void fail_createTest1() {
         // given
         Long userId = null;
@@ -38,7 +39,7 @@ class TokenCommandUnitTest {
     }
 
     @Test
-    @DisplayName("TokenCommand.Create 실패 - userId가 0 이하인 경우")
+    @DisplayName("UserCommand.Create 실패 - userId가 0 이하인 경우")
     void fail_createTest2() {
         // given
         Long userId = 0L;

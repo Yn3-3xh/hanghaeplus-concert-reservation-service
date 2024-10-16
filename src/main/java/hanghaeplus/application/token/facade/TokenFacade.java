@@ -14,9 +14,9 @@ public class TokenFacade {
 
     private final TokenCommandService tokenService;
 
-    public TokenResponse.EnrollToken generateToken(TokenRequest.EnrollToken enrollToken) {
+    public TokenResponse.EnrollToken generateToken(TokenRequest.EnrollToken request) {
         Token token = tokenService.generateToken(
-                new TokenCommand.Create(enrollToken.userId()));
+                new TokenCommand.Create(request.userId()));
 
         return new TokenResponse.EnrollToken(token.getId());
     }

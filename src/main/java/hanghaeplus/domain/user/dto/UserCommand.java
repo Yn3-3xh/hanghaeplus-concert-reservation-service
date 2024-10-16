@@ -1,13 +1,13 @@
-package hanghaeplus.domain.token.dto;
+package hanghaeplus.domain.user.dto;
 
-import static hanghaeplus.domain.token.error.TokenErrorCode.INVALID_USER_ID;
+import static hanghaeplus.domain.user.error.UserErrorCode.INVALID_USER_ID;
 
-public class TokenCommand {
+public class UserCommand {
 
-    public record Create(
+    public record CreateUser (
             Long userId
     ) {
-        public Create {
+        public CreateUser {
             if (userId == null || userId <= 0) {
                 throw new IllegalArgumentException(INVALID_USER_ID.getMessage());
             }

@@ -1,0 +1,41 @@
+package hanghaeplus.domain.queue.entity;
+
+import hanghaeplus.domain.common.AbstractAuditable;
+import hanghaeplus.domain.queue.entity.enums.QueueTokenStatus;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+import static hanghaeplus.domain.queue.entity.enums.QueuePolicy.ACTIVATED_EXPIRED_MINUTE;
+
+@Entity
+@Table(name = "queue_token")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+public class QueueToken extends AbstractAuditable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long queueId;
+
+    private String tokenId;
+
+    private QueueTokenStatus status;
+
+    private LocalDateTime expiredAt;
+
+    public static QueueToken createWaiting(Long queueId, String tokenId) {
+        return new QueueToken(null, queueId, tokenId, QueueTokenStatus.WAITING, null);
+    }
+
+    public static QueueToken createActivated(Long id, Long queueId, String tokenId, LocalDateTime expiredAt) {
+        return new QueueToken(id, queueId, tokenId, QueueTokenStatus.ACTIVATED, expiredAt);
+    }
+}

@@ -10,8 +10,6 @@ import org.openapi.model.TokenHttpResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
-
 @RestController
 @RequiredArgsConstructor
 public class TokenController implements TokensApi {
@@ -20,9 +18,9 @@ public class TokenController implements TokensApi {
     private final TokenMapper tokenMapper;
 
     @Override
-    public ResponseEntity<TokenHttpResponse> enrollToken(UUID X_USER_TOKEN, TokenHttpRequest tokenHttpRequest) {
-        TokenRequest.EnrollToken enrollTokenRequest = tokenMapper.toDto(tokenHttpRequest);
+    public ResponseEntity<TokenHttpResponse> enrollToken(String tokenId, TokenHttpRequest tokenHttpRequest) {
+        TokenRequest.EnrollToken request = tokenMapper.toDto(tokenHttpRequest);
         return ResponseEntity.ok(
-                tokenMapper.fromDto(tokenFacade.generateToken(enrollTokenRequest)));
+                tokenMapper.fromDto(tokenFacade.generateToken(request)));
     }
 }
