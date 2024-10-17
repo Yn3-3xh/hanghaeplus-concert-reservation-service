@@ -1,9 +1,10 @@
 package hanghaeplus.domain.token.dto;
 
-import hanghaeplus.domain.token.error.TokenErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static hanghaeplus.domain.token.error.TokenErrorCode.INVALID_USER_ID;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("TokenCommand 단위 테스트")
@@ -19,7 +20,7 @@ class TokenCommandUnitTest {
         TokenCommand.Create command = new TokenCommand.Create(userId);
 
         // then
-        assertNotNull(command);
+        assertThat(command).isNotNull();
     }
 
     @Test
@@ -34,7 +35,7 @@ class TokenCommandUnitTest {
         });
 
         // then
-        assertEquals(TokenErrorCode.INVALID_USER_ID.getMessage(), exception.getMessage());
+        assertThat(exception.getMessage()).isEqualTo(INVALID_USER_ID.getMessage());
     }
 
     @Test
@@ -49,6 +50,6 @@ class TokenCommandUnitTest {
         });
 
         // then
-        assertEquals(TokenErrorCode.INVALID_USER_ID.getMessage(), exception.getMessage());
+        assertEquals(INVALID_USER_ID.getMessage(), exception.getMessage());
     }
 }

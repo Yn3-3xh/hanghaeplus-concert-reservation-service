@@ -3,6 +3,9 @@ package hanghaeplus.domain.concert.dto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static hanghaeplus.domain.concert.error.ConcertErrorCode.INVALID_SEAT_ID;
+import static hanghaeplus.domain.concert.error.ConcertErrorCode.INVALID_USER_ID;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("ReservationCommand 단위 테스트")
@@ -19,7 +22,7 @@ class ReservationCommandUnitTest {
         ReservationCommand.Create command = new ReservationCommand.Create(seatId, userId);
 
         // then
-        assertNotNull(command);
+        assertThat(command).isNotNull();
     }
 
     @Test
@@ -35,7 +38,7 @@ class ReservationCommandUnitTest {
         });
 
         // then
-        assertNotNull(exception);
+        assertThat(exception.getMessage()).isEqualTo(INVALID_SEAT_ID.getMessage());
     }
 
     @Test
@@ -51,7 +54,7 @@ class ReservationCommandUnitTest {
         });
 
         // then
-        assertNotNull(exception);
+        assertThat(exception.getMessage()).isEqualTo(INVALID_SEAT_ID.getMessage());
     }
 
     @Test
@@ -67,7 +70,7 @@ class ReservationCommandUnitTest {
         });
 
         // then
-        assertNotNull(exception);
+        assertThat(exception.getMessage()).isEqualTo(INVALID_USER_ID.getMessage());
     }
 
     @Test
@@ -83,6 +86,6 @@ class ReservationCommandUnitTest {
         });
 
         // then
-        assertNotNull(exception);
+        assertThat(exception.getMessage()).isEqualTo(INVALID_USER_ID.getMessage());
     }
 }

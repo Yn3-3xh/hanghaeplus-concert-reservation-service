@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static hanghaeplus.domain.queue.error.QueueErrorCode.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("QueueQuery 단위 테스트")
@@ -23,7 +24,7 @@ class QueueQueryUnitTest {
             QueueQuery.Create query = new QueueQuery.Create(concertId);
 
             // then
-            assertNotNull(query);
+            assertThat(query).isNotNull();
         }
 
         @Test
@@ -38,7 +39,7 @@ class QueueQueryUnitTest {
             });
 
             // then
-            assertEquals(INVALID_CONCERT_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_CONCERT_ID.getMessage());
         }
 
         @Test
@@ -53,7 +54,7 @@ class QueueQueryUnitTest {
             });
 
             // then
-            assertEquals(INVALID_CONCERT_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_CONCERT_ID.getMessage());
         }
     }
 
@@ -71,7 +72,7 @@ class QueueQueryUnitTest {
             QueueQuery.CreateTokenWaiting query = new QueueQuery.CreateTokenWaiting(tokenId, queueId);
 
             // then
-            assertNotNull(query);
+            assertThat(query).isNotNull();
         }
 
         @Test
@@ -87,7 +88,7 @@ class QueueQueryUnitTest {
             });
 
             // then
-            assertEquals(INVALID_TOKEN_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_TOKEN_ID.getMessage());
         }
 
         @Test
@@ -103,7 +104,7 @@ class QueueQueryUnitTest {
             });
 
             // then
-            assertEquals(INVALID_TOKEN_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_TOKEN_ID.getMessage());
         }
 
         @Test
@@ -119,7 +120,7 @@ class QueueQueryUnitTest {
             });
 
             // then
-            assertEquals(INVALID_QUEUE_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_QUEUE_ID.getMessage());
         }
 
         @Test
@@ -135,7 +136,7 @@ class QueueQueryUnitTest {
             });
 
             // then
-            assertEquals(INVALID_QUEUE_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_QUEUE_ID.getMessage());
         }
     }
 }

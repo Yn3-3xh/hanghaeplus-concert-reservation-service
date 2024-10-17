@@ -1,10 +1,10 @@
 package hanghaeplus.domain.user.dto;
 
-import hanghaeplus.domain.token.dto.TokenCommand;
-import hanghaeplus.domain.token.error.TokenErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static hanghaeplus.domain.user.error.UserErrorCode.INVALID_USER_ID;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("UserCommand 유닛 테스트")
@@ -17,10 +17,10 @@ class UserCommandUnitTest {
         Long userId = 1L;
 
         // when
-        TokenCommand.Create command = new TokenCommand.Create(userId);
+        UserCommand.Create command = new UserCommand.Create(userId);
 
         // then
-        assertNotNull(command);
+        assertThat(command).isNotNull();
     }
 
     @Test
@@ -31,11 +31,11 @@ class UserCommandUnitTest {
 
         // when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            new TokenCommand.Create(userId);
+            new UserCommand.Create(userId);
         });
 
         // then
-        assertEquals(TokenErrorCode.INVALID_USER_ID.getMessage(), exception.getMessage());
+        assertThat(exception.getMessage()).isEqualTo(INVALID_USER_ID.getMessage());
     }
 
     @Test
@@ -46,10 +46,10 @@ class UserCommandUnitTest {
 
         // when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            new TokenCommand.Create(userId);
+            new UserCommand.Create(userId);
         });
 
         // then
-        assertEquals(TokenErrorCode.INVALID_USER_ID.getMessage(), exception.getMessage());
+        assertThat(exception.getMessage()).isEqualTo(INVALID_USER_ID.getMessage());
     }
 }

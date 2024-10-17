@@ -14,7 +14,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User selectUser(UserCommand.CreateUser command) {
+    public User selectUser(UserCommand.Create command) {
         return userRepository.findById(command.userId())
                 .orElseThrow(() -> new NoSuchElementException("등록된 사용자가 아닙니다."));
     }

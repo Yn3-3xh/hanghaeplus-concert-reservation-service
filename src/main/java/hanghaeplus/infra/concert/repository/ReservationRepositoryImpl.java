@@ -13,7 +13,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     private final ReservationJpaRepository reservationJpaRepository;
 
     @Override
-    public void save(Reservation reservation) {
+    public void saveReservation(Reservation reservation) {
         reservationJpaRepository.save(reservation);
     }
 }

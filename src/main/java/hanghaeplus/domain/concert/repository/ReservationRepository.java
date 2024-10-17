@@ -4,5 +4,5 @@ import hanghaeplus.domain.concert.entity.Reservation;
 
 public interface ReservationRepository {
 
-    void save(Reservation reservation);
+    void saveReservation(Reservation reservation);
 }

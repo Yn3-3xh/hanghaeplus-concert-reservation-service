@@ -20,6 +20,6 @@ public class ReservationCommandService {
         seatValidator.checkConcertAvailableSeat(command.seatId());
 
         Reservation reservation = Reservation.createPending(command.seatId(), command.userId());
-        reservationRepository.save(reservation);
+        reservationRepository.saveReservation(reservation);
     }
 }

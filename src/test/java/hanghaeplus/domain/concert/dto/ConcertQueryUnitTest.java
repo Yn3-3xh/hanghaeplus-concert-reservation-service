@@ -4,6 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static hanghaeplus.domain.concert.error.ConcertErrorCode.INVALID_CONCERT_ID;
+import static hanghaeplus.domain.concert.error.ConcertErrorCode.INVALID_USER_ID;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("ConcertQuery 단위 테스트")
@@ -19,7 +21,7 @@ class ConcertQueryUnitTest {
         ConcertQuery.CreateConcertAvailableDates query = new ConcertQuery.CreateConcertAvailableDates(concertId);
 
         // then
-        assertNotNull(query);
+        assertThat(query).isNotNull();
     }
 
     @Test
@@ -34,7 +36,7 @@ class ConcertQueryUnitTest {
         });
 
         // then
-        assertEquals(INVALID_CONCERT_ID.getMessage(), exception.getMessage());
+        assertThat(exception.getMessage()).isEqualTo(INVALID_CONCERT_ID.getMessage());
     }
 
     @Test
@@ -49,6 +51,6 @@ class ConcertQueryUnitTest {
         });
 
         // then
-        assertEquals(INVALID_CONCERT_ID.getMessage(), exception.getMessage());
+        assertThat(exception.getMessage()).isEqualTo(INVALID_CONCERT_ID.getMessage());
     }
 }

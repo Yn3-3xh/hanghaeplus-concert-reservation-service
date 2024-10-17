@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static hanghaeplus.domain.queue.error.QueueErrorCode.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("QueueCommand 단위 테스트")
@@ -25,7 +26,7 @@ class QueueCommandUnitTest {
             QueueCommand.CreateTokenWaiting command = new QueueCommand.CreateTokenWaiting(tokenId, queueId);
 
             // then
-            assertNotNull(command);
+            assertThat(command).isNotNull();
         }
 
         @Test
@@ -41,7 +42,7 @@ class QueueCommandUnitTest {
             });
 
             // then
-            assertEquals(INVALID_TOKEN_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_TOKEN_ID.getMessage());
         }
 
         @Test
@@ -57,7 +58,7 @@ class QueueCommandUnitTest {
             });
 
             // then
-            assertEquals(INVALID_TOKEN_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_TOKEN_ID.getMessage());
         }
 
         @Test
@@ -73,7 +74,7 @@ class QueueCommandUnitTest {
             });
 
             // then
-            assertEquals(INVALID_QUEUE_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_QUEUE_ID.getMessage());
         }
 
         @Test
@@ -89,7 +90,7 @@ class QueueCommandUnitTest {
             });
 
             // then
-            assertEquals(INVALID_QUEUE_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_QUEUE_ID.getMessage());
         }
     }
 
@@ -109,7 +110,7 @@ class QueueCommandUnitTest {
             QueueCommand.CreateTokenActivated command = new QueueCommand.CreateTokenActivated(queueTokenId, tokenId, queueId);
 
             // then
-            assertNotNull(command);
+            assertThat(command).isNotNull();
         }
 
         @Test
@@ -126,7 +127,7 @@ class QueueCommandUnitTest {
             });
 
             // then
-            assertEquals(INVALID_QUEUE_TOKEN_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_QUEUE_TOKEN_ID.getMessage());
         }
 
         @Test
@@ -143,7 +144,7 @@ class QueueCommandUnitTest {
             });
 
             // then
-            assertEquals(INVALID_QUEUE_TOKEN_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_QUEUE_TOKEN_ID.getMessage());
         }
 
         @Test
@@ -160,7 +161,7 @@ class QueueCommandUnitTest {
             });
 
             // then
-            assertEquals(INVALID_TOKEN_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_TOKEN_ID.getMessage());
         }
 
         @Test
@@ -177,7 +178,7 @@ class QueueCommandUnitTest {
             });
 
             // then
-            assertEquals(INVALID_TOKEN_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_TOKEN_ID.getMessage());
         }
 
         @Test
@@ -194,7 +195,7 @@ class QueueCommandUnitTest {
             });
 
             // then
-            assertEquals(INVALID_QUEUE_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_QUEUE_ID.getMessage());
         }
 
         @Test
@@ -211,7 +212,7 @@ class QueueCommandUnitTest {
             });
 
             // then
-            assertEquals(INVALID_QUEUE_ID.getMessage(), exception.getMessage());
+            assertThat(exception.getMessage()).isEqualTo(INVALID_QUEUE_ID.getMessage());
         }
     }
 }
