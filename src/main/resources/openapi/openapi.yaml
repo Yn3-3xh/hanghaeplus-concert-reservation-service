@@ -181,7 +181,7 @@ paths:
               $ref: '#/components/schemas/PointChargeHttpRequest'
       responses:
         '200':
-          description: 충전 완료 후 잔액 반환
+          description: 충전 완료
           content:
             application/json:
               schema:
@@ -300,10 +300,9 @@ components:
     PointChargeHttpResponse:
       type: object
       properties:
-        point:
+        message:
           type: string
-          example: 25000
-          format: decimal
+          example: "포인트 충전이 완료되었습니다."
 
     PointSelectHttpResponse:
       type: object

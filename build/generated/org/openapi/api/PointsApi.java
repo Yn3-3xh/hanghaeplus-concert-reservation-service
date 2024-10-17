@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T06:25:33.385941+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T17:09:25.125631+09:00[Asia/Seoul]")
 @Validated
 @Tag(name = "points", description = "the points API")
 public interface PointsApi {
@@ -44,13 +44,13 @@ public interface PointsApi {
      *
      * @param tokenId  (optional)
      * @param pointChargeHttpRequest  (optional)
-     * @return 충전 완료 후 잔액 반환 (status code 200)
+     * @return 충전 완료 (status code 200)
      */
     @Operation(
         operationId = "chargePoint",
         summary = "잔액 충전 API",
         responses = {
-            @ApiResponse(responseCode = "200", description = "충전 완료 후 잔액 반환", content = {
+            @ApiResponse(responseCode = "200", description = "충전 완료", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = PointChargeHttpResponse.class))
             })
         }

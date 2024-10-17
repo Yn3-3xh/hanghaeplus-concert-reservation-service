@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import java.math.BigDecimal;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
@@ -22,31 +21,31 @@ import jakarta.annotation.Generated;
  */
 @lombok.AllArgsConstructor @lombok.NoArgsConstructor
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T06:25:33.385941+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T17:09:25.125631+09:00[Asia/Seoul]")
 public class PointChargeHttpResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  private BigDecimal point;
+  private String message;
 
-  public PointChargeHttpResponse point(BigDecimal point) {
-    this.point = point;
+  public PointChargeHttpResponse message(String message) {
+    this.message = message;
     return this;
   }
 
   /**
-   * Get point
-   * @return point
+   * Get message
+   * @return message
   */
-  @Valid 
-  @Schema(name = "point", example = "25000", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("point")
-  public BigDecimal getPoint() {
-    return point;
+  
+  @Schema(name = "message", example = "포인트 충전이 완료되었습니다.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("message")
+  public String getMessage() {
+    return message;
   }
 
-  public void setPoint(BigDecimal point) {
-    this.point = point;
+  public void setMessage(String message) {
+    this.message = message;
   }
 
   @Override
@@ -58,19 +57,19 @@ public class PointChargeHttpResponse implements Serializable {
       return false;
     }
     PointChargeHttpResponse pointChargeHttpResponse = (PointChargeHttpResponse) o;
-    return Objects.equals(this.point, pointChargeHttpResponse.point);
+    return Objects.equals(this.message, pointChargeHttpResponse.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(point);
+    return Objects.hash(message);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PointChargeHttpResponse {\n");
-    sb.append("    point: ").append(toIndentedString(point)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();
   }
