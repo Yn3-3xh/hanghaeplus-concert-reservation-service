@@ -9,7 +9,7 @@ public class QueueCommand {
             Long queueId
     ) {
         public CreateTokenWaiting {
-            if (tokenId == null || tokenId.isEmpty()) {
+            if (tokenId == null || tokenId.trim().isEmpty()) {
                 throw new IllegalArgumentException(INVALID_TOKEN_ID.getMessage());
             }
             if (queueId == null || queueId <= 0) {
@@ -27,7 +27,7 @@ public class QueueCommand {
             if (queueTokenId == null || queueTokenId <= 0) {
                 throw new IllegalArgumentException(INVALID_QUEUE_TOKEN_ID.getMessage());
             }
-            if (tokenId == null || tokenId.isEmpty()) {
+            if (tokenId == null || tokenId.trim().isEmpty()) {
                 throw new IllegalArgumentException(INVALID_TOKEN_ID.getMessage());
             }
             if (queueId == null || queueId <= 0) {

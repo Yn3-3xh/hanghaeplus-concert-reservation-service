@@ -15,7 +15,7 @@ class QueueQueryUnitTest {
     class CreateQueueQueryTests {
         @Test
         @DisplayName("QueueQuery.Create 성공")
-        void createQueueQueryTest() {
+        void pass_createQueueQueryTest() {
             // given
             Long concertId = 1L;
 

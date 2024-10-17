@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
+import static hanghaeplus.application.queue.error.QueueErrorCode.NO_SUCH_CONCERT_QUEUE;
+
 @Service
 @RequiredArgsConstructor
 public class QueueQueryService {
@@ -18,6 +20,6 @@ public class QueueQueryService {
     @Transactional(readOnly = true)
     public Queue getQueue(QueueQuery.Create query) {
         return queueRepository.findByConcertId(query.concertId())
-                .orElseThrow(() -> new NoSuchElementException("콘서트의 대기열이 존재하지 않습니다."));
+                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_CONCERT_QUEUE.getMessage()));
     }
 }

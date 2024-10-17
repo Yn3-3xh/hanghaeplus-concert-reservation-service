@@ -12,7 +12,7 @@ class UserCommandUnitTest {
 
     @Test
     @DisplayName("UserCommand.Create 성공")
-    void createTest() {
+    void pass_createTest() {
         // given
         Long userId = 1L;
 

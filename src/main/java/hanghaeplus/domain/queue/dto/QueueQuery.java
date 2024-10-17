@@ -19,7 +19,7 @@ public class QueueQuery {
             Long queueId
     ) {
         public CreateTokenWaiting {
-            if (tokenId == null || tokenId.isEmpty()) {
+            if (tokenId == null || tokenId.trim().isEmpty()) {
                 throw new IllegalArgumentException(INVALID_TOKEN_ID.getMessage());
             }
             if (queueId == null || queueId <= 0) {

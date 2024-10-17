@@ -1,11 +1,12 @@
-package hanghaeplus.domain.user.error;
+package hanghaeplus.application.queue.error;
 
-import hanghaeplus.domain.common.error.ErrorCode;
+import hanghaeplus.application.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum UserErrorCode implements ErrorCode {
-    INVALID_USER_ID("유효하지 않은 사용자ID 입니다."),
+public enum QueueErrorCode implements ErrorCode {
+
+    NO_SUCH_CONCERT_QUEUE("콘서트의 대기열이 존재하지 않습니다."),
     ;
 
     private final String message;

@@ -16,7 +16,7 @@ class QueueCommandUnitTest {
 
         @Test
         @DisplayName("QueueCommand.CreateTokenWaiting 성공")
-        void createTokenWaitingTest() {
+        void pass_createTokenWaitingTest() {
             // given
             String tokenId = "UUID";
             Long queueId = 1L;
@@ -99,7 +99,7 @@ class QueueCommandUnitTest {
 
         @Test
         @DisplayName("QueueCommand.CreateTokenActivated 성공")
-        void createTokenActivatedTest() {
+        void pass_createTokenActivatedTest() {
             // given
             Long queueTokenId = 1L;
             String tokenId = "UUID";

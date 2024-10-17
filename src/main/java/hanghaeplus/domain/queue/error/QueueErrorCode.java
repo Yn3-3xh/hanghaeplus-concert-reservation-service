@@ -16,11 +16,11 @@ public enum QueueErrorCode implements ErrorCode {
 
     @Override
     public String getCode() {
-        return null;
+        return name();
     }
 
     @Override
     public String getMessage() {
-        return null;
+        return this.message;
     }
 }

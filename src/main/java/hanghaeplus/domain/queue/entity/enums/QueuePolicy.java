@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum QueuePolicy {
     ACTIVATED_EXPIRED_MINUTE(30),
-    RESERVATION_EXPIRED_MINUTE(5);
+    ;
 
     private final int minute;
 }
