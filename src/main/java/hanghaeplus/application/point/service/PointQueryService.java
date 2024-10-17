@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 
 import static hanghaeplus.application.point.error.PointErrorCode.NOT_FOUND_POINT;
@@ -20,7 +19,7 @@ public class PointQueryService {
     private final PointRepository pointRepository;
 
     @Transactional(readOnly = true)
-    public BigDecimal selectPoint(PointQuery.Create query) {
+    public int selectPoint(PointQuery.Create query) {
         Point point = pointRepository.findByUserId(query.userId())
                 .orElseThrow(() -> new NoSuchElementException(NOT_FOUND_POINT.getMessage()));
 

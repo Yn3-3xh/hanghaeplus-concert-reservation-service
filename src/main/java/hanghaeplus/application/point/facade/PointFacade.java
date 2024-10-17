@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-
 @Component
 @RequiredArgsConstructor
 public class PointFacade {
@@ -23,7 +21,7 @@ public class PointFacade {
     private final PointHistoryCommandService pointHistoryCommandService;
 
     public PointResponse.PointSelection selectPoint(PointRequest.PointSelection request) {
-        BigDecimal point = pointQueryService.selectPoint(
+        int point = pointQueryService.selectPoint(
                 new PointQuery.Create(request.userId()));
 
         return new PointResponse.PointSelection(point);
