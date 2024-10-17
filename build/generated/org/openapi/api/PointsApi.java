@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-18T02:37:45.757780+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-18T07:00:19.556575+09:00[Asia/Seoul]")
 @Validated
 @Tag(name = "points", description = "the points API")
 public interface PointsApi {
@@ -42,8 +42,8 @@ public interface PointsApi {
     /**
      * POST /points : 잔액 충전 API
      *
+     * @param pointChargeHttpRequest  (required)
      * @param tokenId  (optional)
-     * @param pointChargeHttpRequest  (optional)
      * @return 충전 완료 (status code 200)
      */
     @Operation(
@@ -63,8 +63,8 @@ public interface PointsApi {
     )
     
     ResponseEntity<PointChargeHttpResponse> chargePoint(
-        @Parameter(name = "tokenId", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = false) String tokenId,
-        @Parameter(name = "PointChargeHttpRequest", description = "") @Valid @RequestBody(required = false) PointChargeHttpRequest pointChargeHttpRequest
+        @Parameter(name = "PointChargeHttpRequest", description = "", required = true) @Valid @RequestBody PointChargeHttpRequest pointChargeHttpRequest,
+        @Parameter(name = "tokenId", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = false) String tokenId
     );
 
 

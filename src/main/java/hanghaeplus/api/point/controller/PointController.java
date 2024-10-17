@@ -9,14 +9,16 @@ import org.openapi.model.PointChargeHttpRequest;
 import org.openapi.model.PointChargeHttpResponse;
 import org.openapi.model.PointSelectHttpResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 @RequiredArgsConstructor
 public class PointController implements PointsApi {
 
     private final PointFacade pointFacade;
 
     @Override
-    public ResponseEntity<PointChargeHttpResponse> chargePoint(String tokenId, PointChargeHttpRequest pointChargeHttpRequest) {
+    public ResponseEntity<PointChargeHttpResponse> chargePoint(PointChargeHttpRequest pointChargeHttpRequest, String tokenId) {
         PointRequest.PointCharge request = new PointRequest.PointCharge(tokenId, pointChargeHttpRequest.getUserId(), pointChargeHttpRequest.getAmount());
         pointFacade.chargePoint(request);
 

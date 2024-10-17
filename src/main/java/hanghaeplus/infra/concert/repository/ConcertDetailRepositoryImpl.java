@@ -5,6 +5,7 @@ import hanghaeplus.infra.concert.jpa.ConcertDetailJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,6 +17,8 @@ public class ConcertDetailRepositoryImpl implements ConcertDetailRepository {
 
     @Override
     public List<LocalDate> selectConcertAvailableDates(Long concertId) {
-        return concertDetailJpaRepository.findAvailableDatesByConcertId(concertId);
+        return concertDetailJpaRepository.findAvailableDatesByConcertId(concertId).stream()
+                .map(Date::toLocalDate)
+                .toList();
     }
 }

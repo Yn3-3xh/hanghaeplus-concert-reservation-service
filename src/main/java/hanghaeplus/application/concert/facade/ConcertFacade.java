@@ -41,10 +41,6 @@ public class ConcertFacade {
     private final ReservationQueryService reservationQueryService;
 
     public ConcertResponse.ConcertQueuePosition getConcertQueuePosition(ConcertRequest.ConcertQueuePosition request) {
-        QueueToken queueToken = queueTokenQueryService.getQueueToken(
-                new QueueQuery.CreateToken(request.tokenId()));
-        queueToken.checkExpired();
-
         Queue queue = queueQueryService.getQueue(
                 new QueueQuery.Create(request.concertId()));
 

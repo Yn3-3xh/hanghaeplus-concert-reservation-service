@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 import static hanghaeplus.domain.queue.entity.enums.QueuePolicy.ACTIVATED_EXPIRED_MINUTE;
+import static hanghaeplus.domain.queue.entity.enums.QueuePolicy.WAITING_EXPIRED_MINUTE;
 import static hanghaeplus.domain.queue.error.QueueErrorCode.EXPIRED_QUEUE_TOKEN;
 
 @Entity
@@ -34,7 +35,8 @@ public class QueueToken extends AbstractAuditable {
     private LocalDateTime expiredAt;
 
     public static QueueToken createWaiting(Long queueId, String tokenId) {
-        return new QueueToken(null, queueId, tokenId, QueueTokenStatus.WAITING, null);
+        return new QueueToken(null, queueId, tokenId, QueueTokenStatus.WAITING,
+                LocalDateTime.now().plusMinutes(WAITING_EXPIRED_MINUTE.getMinute()));
     }
 
     public static QueueToken createActivated(Long id, Long queueId, String tokenId) {

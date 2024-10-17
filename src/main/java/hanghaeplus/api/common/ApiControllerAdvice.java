@@ -10,8 +10,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 class ApiControllerAdvice extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<ApiErrorResponse> handleException(Exception e) {
-        return ResponseEntity.status(500).body(new ApiErrorResponse(ApiErrorCode.SERVER_ERROR));
-    }
+//    @ExceptionHandler(value = RuntimeException.class)
+//    public ResponseEntity<ApiErrorResponse> handleException(Exception e) {
+//        return ResponseEntity.status(500).body(new ApiErrorResponse(ApiErrorCode.SERVER_ERROR));
+//    }
 }
