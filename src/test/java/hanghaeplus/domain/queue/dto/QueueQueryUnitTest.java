@@ -139,4 +139,52 @@ class QueueQueryUnitTest {
             assertThat(exception.getMessage()).isEqualTo(INVALID_QUEUE_ID.getMessage());
         }
     }
+
+    @Nested
+    @DisplayName("CreateToken 테스트")
+    class CreateTokenTests {
+
+        @Test
+        @DisplayName("CreateToken 성공")
+        void pass_createTokenTest() {
+            // given
+            String tokenId = "UUID";
+
+            // when
+            QueueQuery.CreateToken createToken = new QueueQuery.CreateToken(tokenId);
+
+            // then
+            assertThat(createToken).isNotNull();
+        }
+
+        @Test
+        @DisplayName("CreateToken 실패 - tokenId가 null인 경우")
+        void fail_createTokenTest1() {
+            // given
+            String tokenId = null;
+
+            // when
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+                new QueueQuery.CreateToken(tokenId);
+            });
+
+            // then
+            assertThat(exception.getMessage()).isEqualTo(INVALID_TOKEN_ID.getMessage());
+        }
+
+        @Test
+        @DisplayName("CreateToken 실패 - tokenId가 빈 문자열인 경우")
+        void fail_createTokenTest2() {
+            // given
+            String tokenId = "";
+
+            // when
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+                new QueueQuery.CreateToken(tokenId);
+            });
+
+            // then
+            assertThat(exception.getMessage()).isEqualTo(INVALID_TOKEN_ID.getMessage());
+        }
+    }
 }
