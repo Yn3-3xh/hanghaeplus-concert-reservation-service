@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum TokenErrorCode implements ErrorCode {
-    NO_SUCH_TOKEN("토큰이 존재하지 않습니다.")
+    NOT_FOUND_TOKEN("토큰이 존재하지 않습니다."),
     ;
 
     private final String message;

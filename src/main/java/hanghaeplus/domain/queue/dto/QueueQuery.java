@@ -27,4 +27,14 @@ public class QueueQuery {
             }
         }
     }
+
+    public record CreateToken (
+            String tokenId
+    ) {
+        public CreateToken {
+            if (tokenId == null || tokenId.trim().isEmpty()) {
+                throw new IllegalArgumentException(INVALID_TOKEN_ID.getMessage());
+            }
+        }
+    }
 }

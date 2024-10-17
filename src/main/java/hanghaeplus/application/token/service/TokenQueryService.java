@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
-import static hanghaeplus.application.token.error.TokenErrorCode.NO_SUCH_TOKEN;
+import static hanghaeplus.application.token.error.TokenErrorCode.NOT_FOUND_TOKEN;
 
 @Service
 @RequiredArgsConstructor
@@ -18,10 +18,8 @@ public class TokenQueryService {
     private final TokenRepository tokenRepository;
 
     @Transactional(readOnly = true)
-    public Long getUserId(TokenQuery.Create query) {
-        Token token = tokenRepository.findByTokenId(query.tokenId())
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_TOKEN.getMessage()));
-
-        return token.getUserId();
+    public Token getToken(TokenQuery.Create query) {
+        return tokenRepository.findByTokenId(query.tokenId())
+                .orElseThrow(() -> new NoSuchElementException(NOT_FOUND_TOKEN.getMessage()));
     }
 }

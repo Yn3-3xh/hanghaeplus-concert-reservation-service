@@ -8,7 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+
+import static hanghaeplus.domain.token.error.TokenErrorCode.EXPIRED_TOKEN;
 
 @Entity
 @Table(name = "token")
@@ -29,5 +30,11 @@ public class Token extends AbstractAuditable {
 
     public static Token create(String tokenId, Long userId, LocalDateTime expiredAt) {
         return new Token(null, tokenId, userId, expiredAt);
+    }
+
+    public void checkExpired() {
+        if (this.expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException(EXPIRED_TOKEN.getMessage());
+        }
     }
 }

@@ -5,9 +5,12 @@ import hanghaeplus.application.point.dto.PointResponse;
 import hanghaeplus.application.point.service.PointCommandService;
 import hanghaeplus.application.point.service.PointHistoryCommandService;
 import hanghaeplus.application.point.service.PointQueryService;
+import hanghaeplus.application.token.service.TokenQueryService;
 import hanghaeplus.domain.point.dto.PointCommand;
 import hanghaeplus.domain.point.dto.PointQuery;
 import hanghaeplus.domain.point.entity.enums.PointStatus;
+import hanghaeplus.domain.token.dto.TokenQuery;
+import hanghaeplus.domain.token.entity.Token;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +23,13 @@ public class PointFacade {
     private final PointCommandService pointCommandService;
     private final PointHistoryCommandService pointHistoryCommandService;
 
+    private final TokenQueryService tokenQueryService;
+
     public PointResponse.PointSelection selectPoint(PointRequest.PointSelection request) {
+        Token token = tokenQueryService.getToken(
+                new TokenQuery.Create(request.tokenId()));
+        token.checkExpired();
+
         int point = pointQueryService.selectPoint(
                 new PointQuery.Create(request.userId()));
 
@@ -29,6 +38,10 @@ public class PointFacade {
 
     @Transactional
     public void chargePoint(PointRequest.PointCharge request) {
+        Token token = tokenQueryService.getToken(
+                new TokenQuery.Create(request.tokenId()));
+        token.checkExpired();
+
         pointCommandService.chargePoint(
                 new PointCommand.Create(request.userId(), request.amount()));
 

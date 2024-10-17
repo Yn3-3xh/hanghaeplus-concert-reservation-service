@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 import static hanghaeplus.domain.queue.entity.enums.QueuePolicy.ACTIVATED_EXPIRED_MINUTE;
+import static hanghaeplus.domain.queue.error.QueueErrorCode.EXPIRED_QUEUE_TOKEN;
 
 @Entity
 @Table(name = "queue_token")
@@ -43,5 +44,11 @@ public class QueueToken extends AbstractAuditable {
 
     public void updateStatus(QueueTokenStatus status) {
         this.status = status;
+    }
+
+    public void checkExpired() {
+        if (this.expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException(EXPIRED_QUEUE_TOKEN.getMessage());
+        }
     }
 }

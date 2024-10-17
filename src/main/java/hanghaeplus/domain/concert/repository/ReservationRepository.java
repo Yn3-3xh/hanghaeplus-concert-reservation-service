@@ -9,4 +9,5 @@ public interface ReservationRepository {
     void saveReservation(Reservation reservation);
 
     Optional<Reservation> findById(Long reservationId);
+
 }
