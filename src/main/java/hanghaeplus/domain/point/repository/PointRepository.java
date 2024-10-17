@@ -1,0 +1,12 @@
+package hanghaeplus.domain.point.repository;
+
+import hanghaeplus.domain.point.entity.Point;
+
+import java.util.Optional;
+
+public interface PointRepository {
+
+    Optional<Point> findByUserId(Long userId);
+
+    void savePoint(Point point);
+}

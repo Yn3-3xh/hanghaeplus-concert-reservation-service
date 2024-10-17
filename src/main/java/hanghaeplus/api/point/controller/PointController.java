@@ -1,21 +1,34 @@
 package hanghaeplus.api.point.controller;
 
+import hanghaeplus.application.point.dto.PointRequest;
+import hanghaeplus.application.point.dto.PointResponse;
+import hanghaeplus.application.point.facade.PointFacade;
+import lombok.RequiredArgsConstructor;
 import org.openapi.api.PointsApi;
 import org.openapi.model.PointChargeHttpRequest;
 import org.openapi.model.PointChargeHttpResponse;
 import org.openapi.model.PointSelectHttpResponse;
 import org.springframework.http.ResponseEntity;
 
-import java.math.BigDecimal;
-
+@RequiredArgsConstructor
 public class PointController implements PointsApi {
+
+    private final PointFacade pointFacade;
+
     @Override
     public ResponseEntity<PointChargeHttpResponse> chargePoint(String tokenId, PointChargeHttpRequest pointChargeHttpRequest) {
-        return ResponseEntity.ok(new PointChargeHttpResponse(BigDecimal.ZERO));
+        PointRequest.PointCharge request = new PointRequest.PointCharge(pointChargeHttpRequest.getUserId(), pointChargeHttpRequest.getAmount());
+        pointFacade.chargePoint(request);
+
+        return ResponseEntity.ok(new PointChargeHttpResponse("포인트 충전이 완료되었습니다."));
     }
 
     @Override
     public ResponseEntity<PointSelectHttpResponse> selectPoint(String tokenId, Long userId) {
-        return ResponseEntity.ok(new PointSelectHttpResponse(BigDecimal.ZERO));
+        PointRequest.PointSelection request = new PointRequest.PointSelection(userId);
+        PointResponse.PointSelection response = pointFacade.selectPoint(request);
+
+        return ResponseEntity.ok(
+                new PointSelectHttpResponse(response.point()));
     }
 }
