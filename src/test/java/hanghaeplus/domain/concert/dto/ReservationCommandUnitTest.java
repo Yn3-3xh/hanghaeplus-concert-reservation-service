@@ -16,10 +16,10 @@ class ReservationCommandUnitTest {
         Long userId = 1L;
 
         // when
-        ReservationCommand.Create reservationCommand = new ReservationCommand.Create(seatId, userId);
+        ReservationCommand.Create command = new ReservationCommand.Create(seatId, userId);
 
         // then
-        assertNotNull(reservationCommand);
+        assertNotNull(command);
     }
 
     @Test

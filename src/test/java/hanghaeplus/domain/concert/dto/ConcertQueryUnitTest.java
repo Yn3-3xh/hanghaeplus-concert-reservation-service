@@ -16,10 +16,10 @@ class ConcertQueryUnitTest {
         Long concertId = 1L;
 
         // when
-        ConcertQuery.CreateConcertAvailableDates createConcertAvailableDates = new ConcertQuery.CreateConcertAvailableDates(concertId);
+        ConcertQuery.CreateConcertAvailableDates query = new ConcertQuery.CreateConcertAvailableDates(concertId);
 
         // then
-        assertNotNull(createConcertAvailableDates);
+        assertNotNull(query);
     }
 
     @Test

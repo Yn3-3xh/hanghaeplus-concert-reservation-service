@@ -16,10 +16,10 @@ class TokenCommandUnitTest {
         Long userId = 1L;
 
         // when
-        TokenCommand.Create createCommand = new TokenCommand.Create(userId);
+        TokenCommand.Create command = new TokenCommand.Create(userId);
 
         // then
-        assertNotNull(createCommand);
+        assertNotNull(command);
     }
 
     @Test

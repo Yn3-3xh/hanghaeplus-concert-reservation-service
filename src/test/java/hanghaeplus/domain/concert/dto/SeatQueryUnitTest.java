@@ -16,10 +16,10 @@ class SeatQueryUnitTest {
         Long detailId = 1L;
 
         // when
-        SeatQuery.CreateConcertAvailableSeats createConcertAvailableSeats = new SeatQuery.CreateConcertAvailableSeats(detailId);
+        SeatQuery.CreateConcertAvailableSeats query = new SeatQuery.CreateConcertAvailableSeats(detailId);
 
         // then
-        assertNotNull(createConcertAvailableSeats);
+        assertNotNull(query);
     }
 
     @Test

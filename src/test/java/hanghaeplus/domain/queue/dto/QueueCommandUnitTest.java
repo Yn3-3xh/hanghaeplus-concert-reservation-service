@@ -22,10 +22,10 @@ class QueueCommandUnitTest {
             Long queueId = 1L;
 
             // when
-            QueueCommand.CreateTokenWaiting createTokenWaiting = new QueueCommand.CreateTokenWaiting(tokenId, queueId);
+            QueueCommand.CreateTokenWaiting command = new QueueCommand.CreateTokenWaiting(tokenId, queueId);
 
             // then
-            assertNotNull(createTokenWaiting);
+            assertNotNull(command);
         }
 
         @Test
@@ -106,10 +106,10 @@ class QueueCommandUnitTest {
             Long queueId = 1L;
 
             // when
-            QueueCommand.CreateTokenActivated createTokenActivated = new QueueCommand.CreateTokenActivated(queueTokenId, tokenId, queueId);
+            QueueCommand.CreateTokenActivated command = new QueueCommand.CreateTokenActivated(queueTokenId, tokenId, queueId);
 
             // then
-            assertNotNull(createTokenActivated);
+            assertNotNull(command);
         }
 
         @Test

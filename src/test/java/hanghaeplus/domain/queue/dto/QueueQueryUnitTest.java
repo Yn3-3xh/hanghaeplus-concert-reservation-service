@@ -20,10 +20,10 @@ class QueueQueryUnitTest {
             Long concertId = 1L;
 
             // when
-            QueueQuery.Create createQueueQuery = new QueueQuery.Create(concertId);
+            QueueQuery.Create query = new QueueQuery.Create(concertId);
 
             // then
-            assertNotNull(createQueueQuery);
+            assertNotNull(query);
         }
 
         @Test
@@ -68,10 +68,10 @@ class QueueQueryUnitTest {
             Long queueId = 1L;
 
             // when
-            QueueQuery.CreateTokenWaiting createTokenWaiting = new QueueQuery.CreateTokenWaiting(tokenId, queueId);
+            QueueQuery.CreateTokenWaiting query = new QueueQuery.CreateTokenWaiting(tokenId, queueId);
 
             // then
-            assertNotNull(createTokenWaiting);
+            assertNotNull(query);
         }
 
         @Test
