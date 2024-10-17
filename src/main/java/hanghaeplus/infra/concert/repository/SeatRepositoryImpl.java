@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,5 +18,10 @@ public class SeatRepositoryImpl implements SeatRepository {
     @Override
     public List<Seat> selectConcertAvailableSeats(Long detailId) {
         return seatJpaRepository.findAvailableSeatsByConcertDetailId(detailId);
+    }
+
+    @Override
+    public Optional<Seat> findAvailableSeatById(Long seatId) {
+        return seatJpaRepository.findAvailableSeatById(seatId);
     }
 }

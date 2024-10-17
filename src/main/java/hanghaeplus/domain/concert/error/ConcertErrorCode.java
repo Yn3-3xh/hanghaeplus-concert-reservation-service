@@ -8,17 +8,18 @@ public enum ConcertErrorCode implements ErrorCode {
 
     INVALID_CONCERT_ID("유효하지 않은 콘서트ID 입니다."),
     INVALID_CONCERT_DETAIL_ID("유효하지 않은 콘서트 세부사항 ID 입니다."),
+    INVALID_SEAT_ID("유효하지 않은 콘서트 세부사항 ID 입니다."),
     ;
 
     private final String message;
 
     @Override
     public String getCode() {
-        return null;
+        return name();
     }
 
     @Override
     public String getMessage() {
-        return null;
+        return this.message;
     }
-    }
+}

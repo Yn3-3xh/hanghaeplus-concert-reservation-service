@@ -18,6 +18,6 @@ public class TokenFacade {
         Token token = tokenService.generateToken(
                 new TokenCommand.Create(request.userId()));
 
-        return new TokenResponse.EnrollToken(token.getId());
+        return new TokenResponse.EnrollToken(token.getTokenId());
     }
 }

@@ -38,7 +38,11 @@ public class ConcertController implements ConcertsApi {
 
     @Override
     public ResponseEntity<SeatReservationHttpResponse> reserveConcertSeat(Long concertId, Long detailId, Long seatId, String tokenId) {
-        return ResponseEntity.ok(new SeatReservationHttpResponse("좌석이 임시 배정되었습니다."));
+        ConcertRequest.SeatReservation request = new ConcertRequest.SeatReservation(tokenId, concertId, detailId, seatId);
+        concertFacade.reserveConcertSeat(request);
+
+        return ResponseEntity.ok(
+                new SeatReservationHttpResponse("좌석이 임시 배정되었습니다."));
     }
 
     @Override

@@ -1,9 +1,7 @@
 package hanghaeplus.domain.token.entity;
 
 import hanghaeplus.domain.common.AbstractAuditable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,13 +18,16 @@ import java.util.UUID;
 public class Token extends AbstractAuditable {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String tokenId;
 
     private Long userId;
 
     private LocalDateTime expiredAt;
 
-    public static Token create(String id, Long userId, LocalDateTime expiredAt) {
-        return new Token(id, userId, expiredAt);
+    public static Token create(String tokenId, Long userId, LocalDateTime expiredAt) {
+        return new Token(null, tokenId, userId, expiredAt);
     }
 }

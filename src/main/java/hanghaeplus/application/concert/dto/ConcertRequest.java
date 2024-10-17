@@ -37,4 +37,13 @@ public class ConcertRequest {
     ) {
 
     }
+
+    public record SeatReservation (
+            String tokenId,
+            Long concertId,
+            Long detailId,
+            Long seatId
+    ) {
+
+    }
 }

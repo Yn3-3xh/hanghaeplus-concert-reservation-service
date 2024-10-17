@@ -1,5 +1,6 @@
 package hanghaeplus.domain.concert.entity;
 
+import hanghaeplus.domain.common.AbstractAuditable;
 import hanghaeplus.domain.concert.entity.enums.SeatStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Seat {
+public class Seat extends AbstractAuditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

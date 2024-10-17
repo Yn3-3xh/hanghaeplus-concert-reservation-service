@@ -11,7 +11,7 @@ class SeatQueryUnitTest {
 
     @Test
     @DisplayName("SeatQuery.CreateConcertAvailableSeats 성공")
-    void createConcertAvailableSeatsTest() {
+    void pass_createConcertAvailableSeatsTest() {
         // given
         Long detailId = 1L;
 

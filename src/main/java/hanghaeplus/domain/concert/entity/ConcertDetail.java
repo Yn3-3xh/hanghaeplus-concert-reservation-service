@@ -1,5 +1,6 @@
 package hanghaeplus.domain.concert.entity;
 
+import hanghaeplus.domain.common.AbstractAuditable;
 import hanghaeplus.domain.concert.entity.enums.ConcertDetailStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class ConcertDetail {
+public class ConcertDetail extends AbstractAuditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

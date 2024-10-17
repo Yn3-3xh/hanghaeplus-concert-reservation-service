@@ -14,6 +14,6 @@ public class TokenMapper {
     }
 
     public TokenHttpResponse fromDto(TokenResponse.EnrollToken enrollTokenResponse) {
-        return new TokenHttpResponse(enrollTokenResponse.id());
+        return new TokenHttpResponse(enrollTokenResponse.tokenId());
     }
 }

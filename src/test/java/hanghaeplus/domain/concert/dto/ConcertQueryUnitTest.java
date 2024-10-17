@@ -11,7 +11,7 @@ class ConcertQueryUnitTest {
 
     @Test
     @DisplayName("ConcertQuery.CreateConcertAvailableDates 성공")
-    void createConcertAvailableDatesTest() {
+    void pass_createConcertAvailableDatesTest() {
         // given
         Long concertId = 1L;
 

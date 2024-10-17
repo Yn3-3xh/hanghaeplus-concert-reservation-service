@@ -1,12 +1,11 @@
-package hanghaeplus.domain.token.error;
+package hanghaeplus.application.token.error;
 
 import hanghaeplus.domain.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum TokenErrorCode implements ErrorCode {
-    INVALID_USER_ID("유효하지 않은 사용자ID 입니다."),
-    INVALID_TOKEN_ID("유효하지 않은 토큰ID 입니다."),
+    NO_SUCH_TOKEN("토큰이 존재하지 않습니다.")
     ;
 
     private final String message;
