@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static hanghaeplus.application.queue.error.QueueErrorCode.NOT_FOUND_CONCERT_QUEUE;
@@ -21,5 +22,9 @@ public class QueueQueryService {
     public Queue getQueue(QueueQuery.Create query) {
         return queueRepository.findByConcertId(query.concertId())
                 .orElseThrow(() -> new NoSuchElementException(NOT_FOUND_CONCERT_QUEUE.getMessage()));
+    }
+
+    public List<Queue> selectQueues() {
+        return queueRepository.selectQueues();
     }
 }

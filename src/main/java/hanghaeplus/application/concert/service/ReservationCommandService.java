@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static hanghaeplus.application.concert.error.ConcertErrorCode.NOT_FOUND_AVAILABLE_RESERVATION;
@@ -34,5 +35,15 @@ public class ReservationCommandService {
         reservation.updateStatus(ReservationStatus.COMPLETED);
 
         reservationRepository.saveReservation(reservation);
+    }
+
+    public void updateReservationsExpired(ReservationCommand.CreateExpiredPendingReservations command) {
+        List<Reservation> reservations = command.reservations().stream()
+                .map(reservation -> {
+                    reservation.updateStatus(ReservationStatus.EXPIRED);
+                    return reservation;
+                }).toList();
+
+        reservationRepository.saveReservations(reservations);
     }
 }

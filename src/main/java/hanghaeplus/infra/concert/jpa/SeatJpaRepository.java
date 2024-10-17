@@ -25,4 +25,6 @@ public interface SeatJpaRepository extends CrudRepository<Seat, Long> {
         AND s.status = 'EMPTY'
     """)
     Optional<Seat> findAvailableSeatById(@Param("seatId") Long seatId);
+
+    List<Seat> findByIdIn(List<Long> seatIds);
 }

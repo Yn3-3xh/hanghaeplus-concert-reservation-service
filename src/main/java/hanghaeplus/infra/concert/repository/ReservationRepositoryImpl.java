@@ -6,6 +6,7 @@ import hanghaeplus.infra.concert.jpa.ReservationJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,5 +23,15 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     @Override
     public Optional<Reservation> findById(Long reservationId) {
         return reservationJpaRepository.findById(reservationId);
+    }
+
+    @Override
+    public List<Reservation> selectExpiredPendingReservations() {
+        return reservationJpaRepository.selectExpiredPendingReservations();
+    }
+
+    @Override
+    public void saveReservations(List<Reservation> reservations) {
+        reservationJpaRepository.saveAll(reservations);
     }
 }

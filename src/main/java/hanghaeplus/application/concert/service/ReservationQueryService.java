@@ -5,6 +5,7 @@ import hanghaeplus.domain.concert.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static hanghaeplus.application.concert.error.ConcertErrorCode.NOT_FOUND_AVAILABLE_RESERVATION;
@@ -18,5 +19,9 @@ public class ReservationQueryService {
     public Reservation getReservation(Long reservationId) {
         return reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_FOUND_AVAILABLE_RESERVATION.getMessage()));
+    }
+
+    public List<Reservation> selectExpiredPendingReservations() {
+        return reservationRepository.selectExpiredPendingReservations();
     }
 }

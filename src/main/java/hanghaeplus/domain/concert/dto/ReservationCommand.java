@@ -1,5 +1,9 @@
 package hanghaeplus.domain.concert.dto;
 
+import hanghaeplus.domain.concert.entity.Reservation;
+
+import java.util.List;
+
 import static hanghaeplus.domain.concert.error.ConcertErrorCode.INVALID_SEAT_ID;
 import static hanghaeplus.domain.concert.error.ConcertErrorCode.INVALID_USER_ID;
 
@@ -17,5 +21,11 @@ public class ReservationCommand {
                 throw new IllegalArgumentException(INVALID_USER_ID.getMessage());
             }
         }
+    }
+
+    public record CreateExpiredPendingReservations (
+            List<Reservation> reservations
+    ) {
+
     }
 }

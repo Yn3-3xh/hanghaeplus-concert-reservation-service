@@ -34,4 +34,14 @@ public class SeatRepositoryImpl implements SeatRepository {
     public void save(Seat seat) {
         seatJpaRepository.save(seat);
     }
+
+    @Override
+    public List<Seat> selectSeats(List<Long> seatIds) {
+        return seatJpaRepository.findByIdIn(seatIds);
+    }
+
+    @Override
+    public void saveSeats(List<Seat> seats) {
+        seatJpaRepository.saveAll(seats);
+    }
 }

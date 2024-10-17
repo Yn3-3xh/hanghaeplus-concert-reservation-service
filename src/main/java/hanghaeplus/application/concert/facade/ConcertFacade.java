@@ -2,16 +2,16 @@ package hanghaeplus.application.concert.facade;
 
 import hanghaeplus.application.concert.dto.ConcertRequest;
 import hanghaeplus.application.concert.dto.ConcertResponse;
-import hanghaeplus.application.concert.service.ConcertDetailQueryService;
-import hanghaeplus.application.concert.service.ReservationCommandService;
-import hanghaeplus.application.concert.service.SeatQueryService;
+import hanghaeplus.application.concert.service.*;
 import hanghaeplus.application.queue.service.QueueQueryService;
 import hanghaeplus.application.queue.service.QueueTokenCommandService;
 import hanghaeplus.application.queue.service.QueueTokenQueryService;
 import hanghaeplus.application.token.service.TokenQueryService;
 import hanghaeplus.domain.concert.dto.ConcertQuery;
 import hanghaeplus.domain.concert.dto.ReservationCommand;
+import hanghaeplus.domain.concert.dto.SeatCommand;
 import hanghaeplus.domain.concert.dto.SeatQuery;
+import hanghaeplus.domain.concert.entity.Reservation;
 import hanghaeplus.domain.concert.entity.Seat;
 import hanghaeplus.domain.queue.dto.QueueCommand;
 import hanghaeplus.domain.queue.dto.QueueQuery;
@@ -30,16 +30,15 @@ import java.util.List;
 public class ConcertFacade {
 
     private final ConcertDetailQueryService concertDetailQueryService;
-
-    private final SeatQueryService seatQueryService;
-
     private final ReservationCommandService reservationCommandService;
+    private final SeatCommandService seatCommandService;
 
+    private final TokenQueryService tokenQueryService;
+    private final SeatQueryService seatQueryService;
     private final QueueQueryService queueQueryService;
     private final QueueTokenQueryService queueTokenQueryService;
     private final QueueTokenCommandService queueTokenCommandService;
-
-    private final TokenQueryService tokenQueryService;
+    private final ReservationQueryService reservationQueryService;
 
     public ConcertResponse.ConcertQueuePosition getConcertQueuePosition(ConcertRequest.ConcertQueuePosition request) {
         QueueToken queueToken = queueTokenQueryService.getQueueToken(
@@ -99,11 +98,29 @@ public class ConcertFacade {
                 new ReservationCommand.Create(request.seatId(), token.getUserId()));
     }
 
-    public void concertQueueScheduler() {
-        // 토큰 만료 체크 > 대기열 진입
+    // 스케줄러 - 활성화된 대기열 토큰 만료
+    public void expireConcertQueueScheduler() {
+        List<Queue> queues = queueQueryService.selectQueues();
+        queues.stream()
+                .peek(queue -> {
+                    queueTokenCommandService.updateQueueToken(queue.getId());
+                });
     }
 
-    public void concertReservationScheduler() {
-        // 예약 만료시간 체크 > 예약 만료로 수정 > Seat는 빈공간으로 수정
+    // 스케줄러 - 임시 예약한 좌석 만료
+    public void expireConcertReservationScheduler() {
+        List<Reservation> expiredPendingReservations = reservationQueryService.selectExpiredPendingReservations();
+        if (expiredPendingReservations.isEmpty()) {
+            return;
+        }
+
+        reservationCommandService.updateReservationsExpired(
+                new ReservationCommand.CreateExpiredPendingReservations(expiredPendingReservations));
+
+        List<Long> seatIds = expiredPendingReservations.stream()
+                .map(Reservation::getSeatId)
+                .toList();
+        seatCommandService.updateSeatsEmpty(
+                new SeatCommand.CreateEmptySeats(seatIds));
     }
 }

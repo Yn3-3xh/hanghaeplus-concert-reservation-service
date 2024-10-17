@@ -14,4 +14,8 @@ public interface SeatRepository {
     Optional<Seat> findById(Long seatId);
 
     void save(Seat seat);
+
+    List<Seat> selectSeats(List<Long> longs);
+
+    void saveSeats(List<Seat> seats);
 }
