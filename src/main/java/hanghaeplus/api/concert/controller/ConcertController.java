@@ -19,7 +19,7 @@ public class ConcertController implements ConcertsApi {
     private final ConcertFacade concertFacade;
 
     @Override
-    public ResponseEntity<QueuePositionHttpResponse> getConcertQueuePosition(String tokenId, Long concertId) {
+    public ResponseEntity<QueuePositionHttpResponse> getConcertQueuePosition(Long concertId, String tokenId) {
         ConcertRequest.ConcertQueuePosition request = new ConcertRequest.ConcertQueuePosition(tokenId, concertId);
         ConcertResponse.ConcertQueuePosition response = concertFacade.getConcertQueuePosition(request);
 
@@ -28,7 +28,7 @@ public class ConcertController implements ConcertsApi {
     }
 
     @Override
-    public ResponseEntity<QueueEnrollmentHttpResponse> enrollConcertQueue(String tokenId, Long concertId) {
+    public ResponseEntity<QueueEnrollmentHttpResponse> enrollConcertQueue(Long concertId, String tokenId) {
         ConcertRequest.ConcertQueueEnrollment request = new ConcertRequest.ConcertQueueEnrollment(tokenId, concertId);
         concertFacade.enrollConcertQueue(request);
 
