@@ -21,36 +21,12 @@ import jakarta.annotation.Generated;
  */
 @lombok.AllArgsConstructor @lombok.NoArgsConstructor
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T20:00:48.652007+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-18T02:37:45.757780+09:00[Asia/Seoul]")
 public class PaymentHttpRequest implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  private Long userId;
-
   private Long orderId;
-
-  private Integer amount;
-
-  public PaymentHttpRequest userId(Long userId) {
-    this.userId = userId;
-    return this;
-  }
-
-  /**
-   * Get userId
-   * @return userId
-  */
-  
-  @Schema(name = "userId", example = "1", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("userId")
-  public Long getUserId() {
-    return userId;
-  }
-
-  public void setUserId(Long userId) {
-    this.userId = userId;
-  }
 
   public PaymentHttpRequest orderId(Long orderId) {
     this.orderId = orderId;
@@ -72,26 +48,6 @@ public class PaymentHttpRequest implements Serializable {
     this.orderId = orderId;
   }
 
-  public PaymentHttpRequest amount(Integer amount) {
-    this.amount = amount;
-    return this;
-  }
-
-  /**
-   * Get amount
-   * @return amount
-  */
-  
-  @Schema(name = "amount", example = "25000", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("amount")
-  public Integer getAmount() {
-    return amount;
-  }
-
-  public void setAmount(Integer amount) {
-    this.amount = amount;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -101,23 +57,19 @@ public class PaymentHttpRequest implements Serializable {
       return false;
     }
     PaymentHttpRequest paymentHttpRequest = (PaymentHttpRequest) o;
-    return Objects.equals(this.userId, paymentHttpRequest.userId) &&
-        Objects.equals(this.orderId, paymentHttpRequest.orderId) &&
-        Objects.equals(this.amount, paymentHttpRequest.amount);
+    return Objects.equals(this.orderId, paymentHttpRequest.orderId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userId, orderId, amount);
+    return Objects.hash(orderId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PaymentHttpRequest {\n");
-    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    orderId: ").append(toIndentedString(orderId)).append("\n");
-    sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("}");
     return sb.toString();
   }

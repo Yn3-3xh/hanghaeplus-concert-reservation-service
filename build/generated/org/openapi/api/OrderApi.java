@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T20:00:48.652007+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-18T02:37:45.757780+09:00[Asia/Seoul]")
 @Validated
 @Tag(name = "order", description = "the order API")
 public interface OrderApi {

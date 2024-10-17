@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: 콘서트 예약 서비스 OPEN API
+  title: 콘서트 예약 서비스 API
   version: 1.0.0
 paths:
   /tokens:
@@ -36,7 +36,6 @@ paths:
       parameters:
         - in: header
           name: tokenId
-          required: true
           schema:
             type: string
         - in: path
@@ -59,7 +58,6 @@ paths:
       parameters:
         - in: header
           name: tokenId
-          required: true
           schema:
             type: string
         - in: path

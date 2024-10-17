@@ -3,19 +3,15 @@ package hanghaeplus.application.order.facade;
 import hanghaeplus.application.concert.service.ReservationCommandService;
 import hanghaeplus.application.concert.service.ReservationQueryService;
 import hanghaeplus.application.concert.service.SeatCommandService;
-import hanghaeplus.application.concert.service.SeatQueryService;
 import hanghaeplus.application.order.dto.OrderRequest;
 import hanghaeplus.application.order.service.OrderCommandService;
 import hanghaeplus.application.order.service.OrderQueryService;
 import hanghaeplus.application.order.service.PaymentCommandService;
 import hanghaeplus.application.queue.service.QueueTokenCommandService;
-import hanghaeplus.domain.concert.dto.ReservationCommand;
 import hanghaeplus.domain.concert.entity.Reservation;
-import hanghaeplus.domain.concert.entity.Seat;
 import hanghaeplus.domain.order.dto.OrderQuery;
 import hanghaeplus.domain.order.dto.PaymentCommand;
 import hanghaeplus.domain.order.entity.Order;
-import hanghaeplus.domain.queue.dto.QueueCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,12 +38,9 @@ public class OrderFacade {
                 new PaymentCommand.Create(order.getUserId(), order.getId(), order.getAmount()));
 
         orderCommandService.updateOrderCompleted(order.getId());
-
         Reservation reservation = reservationQueryService.getReservation(order.getReservationId());
         reservationCommandService.updateReservationCompleted(reservation.getId());
-
         seatCommandService.updateSeatCompleted(reservation.getSeatId());
-
         queueTokenCommandService.updateQueueTokenExpired(request.tokenId());
     }
 }

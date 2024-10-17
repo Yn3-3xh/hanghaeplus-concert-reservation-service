@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T20:00:48.652007+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-18T02:37:45.757780+09:00[Asia/Seoul]")
 @Validated
 @Tag(name = "concerts", description = "the concerts API")
 public interface ConcertsApi {
@@ -43,8 +43,8 @@ public interface ConcertsApi {
     /**
      * POST /concerts/{concertId}/queues : 대기열 추가 API
      *
-     * @param tokenId  (required)
      * @param concertId  (required)
+     * @param tokenId  (optional)
      * @return 좌석 임시 배정 완료 (status code 200)
      */
     @Operation(
@@ -63,16 +63,16 @@ public interface ConcertsApi {
     )
     
     ResponseEntity<QueueEnrollmentHttpResponse> enrollConcertQueue(
-        @NotNull @Parameter(name = "tokenId", description = "", required = true, in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = true) String tokenId,
-        @Parameter(name = "concertId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("concertId") Long concertId
+        @Parameter(name = "concertId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("concertId") Long concertId,
+        @Parameter(name = "tokenId", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = false) String tokenId
     );
 
 
     /**
      * GET /concerts/{concertId}/queues : 대기열 확인 API
      *
-     * @param tokenId  (required)
      * @param concertId  (required)
+     * @param tokenId  (optional)
      * @return 대기열 남은 순서 반환 (status code 200)
      */
     @Operation(
@@ -91,8 +91,8 @@ public interface ConcertsApi {
     )
     
     ResponseEntity<QueuePositionHttpResponse> getConcertQueuePosition(
-        @NotNull @Parameter(name = "tokenId", description = "", required = true, in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = true) String tokenId,
-        @Parameter(name = "concertId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("concertId") Long concertId
+        @Parameter(name = "concertId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("concertId") Long concertId,
+        @Parameter(name = "tokenId", description = "", in = ParameterIn.HEADER) @RequestHeader(value = "tokenId", required = false) String tokenId
     );
 
 
