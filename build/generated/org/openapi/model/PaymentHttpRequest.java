@@ -21,16 +21,14 @@ import jakarta.annotation.Generated;
  */
 @lombok.AllArgsConstructor @lombok.NoArgsConstructor
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T19:17:29.458938+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T20:00:48.652007+09:00[Asia/Seoul]")
 public class PaymentHttpRequest implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   private Long userId;
 
-  private Long concertId;
-
-  private Long seatId;
+  private Long orderId;
 
   private Integer amount;
 
@@ -54,44 +52,24 @@ public class PaymentHttpRequest implements Serializable {
     this.userId = userId;
   }
 
-  public PaymentHttpRequest concertId(Long concertId) {
-    this.concertId = concertId;
+  public PaymentHttpRequest orderId(Long orderId) {
+    this.orderId = orderId;
     return this;
   }
 
   /**
-   * Get concertId
-   * @return concertId
+   * Get orderId
+   * @return orderId
   */
   
-  @Schema(name = "concertId", example = "1", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("concertId")
-  public Long getConcertId() {
-    return concertId;
+  @Schema(name = "orderId", example = "1", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("orderId")
+  public Long getOrderId() {
+    return orderId;
   }
 
-  public void setConcertId(Long concertId) {
-    this.concertId = concertId;
-  }
-
-  public PaymentHttpRequest seatId(Long seatId) {
-    this.seatId = seatId;
-    return this;
-  }
-
-  /**
-   * Get seatId
-   * @return seatId
-  */
-  
-  @Schema(name = "seatId", example = "1", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("seatId")
-  public Long getSeatId() {
-    return seatId;
-  }
-
-  public void setSeatId(Long seatId) {
-    this.seatId = seatId;
+  public void setOrderId(Long orderId) {
+    this.orderId = orderId;
   }
 
   public PaymentHttpRequest amount(Integer amount) {
@@ -124,14 +102,13 @@ public class PaymentHttpRequest implements Serializable {
     }
     PaymentHttpRequest paymentHttpRequest = (PaymentHttpRequest) o;
     return Objects.equals(this.userId, paymentHttpRequest.userId) &&
-        Objects.equals(this.concertId, paymentHttpRequest.concertId) &&
-        Objects.equals(this.seatId, paymentHttpRequest.seatId) &&
+        Objects.equals(this.orderId, paymentHttpRequest.orderId) &&
         Objects.equals(this.amount, paymentHttpRequest.amount);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userId, concertId, seatId, amount);
+    return Objects.hash(userId, orderId, amount);
   }
 
   @Override
@@ -139,8 +116,7 @@ public class PaymentHttpRequest implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class PaymentHttpRequest {\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
-    sb.append("    concertId: ").append(toIndentedString(concertId)).append("\n");
-    sb.append("    seatId: ").append(toIndentedString(seatId)).append("\n");
+    sb.append("    orderId: ").append(toIndentedString(orderId)).append("\n");
     sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("}");
     return sb.toString();

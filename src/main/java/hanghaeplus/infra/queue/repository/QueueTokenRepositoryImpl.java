@@ -6,6 +6,8 @@ import hanghaeplus.infra.queue.jpa.QueueTokenJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class QueueTokenRepositoryImpl implements QueueTokenRepository {
@@ -20,5 +22,10 @@ public class QueueTokenRepositoryImpl implements QueueTokenRepository {
     @Override
     public void save(QueueToken queueToken) {
         queueTokenJpaRepository.save(queueToken);
+    }
+
+    @Override
+    public Optional<QueueToken> findByTokenId(String tokenId) {
+        return queueTokenJpaRepository.findByTokenId(tokenId);
     }
 }

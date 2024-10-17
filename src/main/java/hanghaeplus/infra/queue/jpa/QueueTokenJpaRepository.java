@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface QueueTokenJpaRepository extends CrudRepository<QueueToken, Long> {
 
     @Query("""
@@ -18,4 +20,6 @@ public interface QueueTokenJpaRepository extends CrudRepository<QueueToken, Long
         )
     """)
     int getWaitingPosition(@Param("tokenId") String tokenId, @Param("queueId") Long queueId);
+
+    Optional<QueueToken> findByTokenId(String tokenId);
 }

@@ -27,6 +27,7 @@ public class QueueToken extends AbstractAuditable {
 
     private String tokenId;
 
+    @Enumerated(EnumType.STRING)
     private QueueTokenStatus status;
 
     private LocalDateTime expiredAt;
@@ -35,7 +36,12 @@ public class QueueToken extends AbstractAuditable {
         return new QueueToken(null, queueId, tokenId, QueueTokenStatus.WAITING, null);
     }
 
-    public static QueueToken createActivated(Long id, Long queueId, String tokenId, LocalDateTime expiredAt) {
-        return new QueueToken(id, queueId, tokenId, QueueTokenStatus.ACTIVATED, expiredAt);
+    public static QueueToken createActivated(Long id, Long queueId, String tokenId) {
+        return new QueueToken(id, queueId, tokenId, QueueTokenStatus.ACTIVATED,
+                LocalDateTime.now().plusMinutes(ACTIVATED_EXPIRED_MINUTE.getMinute()));
+    }
+
+    public void updateStatus(QueueTokenStatus status) {
+        this.status = status;
     }
 }

@@ -10,4 +10,8 @@ public interface SeatRepository {
     List<Seat> selectConcertAvailableSeats(Long detailId);
 
     Optional<Seat> findAvailableSeatById(Long seatId);
+
+    Optional<Seat> findById(Long seatId);
+
+    void save(Seat seat);
 }

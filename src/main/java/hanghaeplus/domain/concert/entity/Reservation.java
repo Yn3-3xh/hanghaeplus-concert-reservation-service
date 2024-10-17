@@ -23,16 +23,15 @@ public class Reservation extends AbstractAuditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Long seatId;
 
+    @Column(nullable = false)
     private Long userId;
-
-    private Long orderId;
 
     private LocalDateTime expiredAt;
 
-    private LocalDateTime reservedAt;
-
+    @Enumerated(EnumType.STRING)
     private ReservationStatus status;
 
     public static Reservation createPending(Long seatId, Long userId) {
@@ -40,9 +39,11 @@ public class Reservation extends AbstractAuditable {
                 null,
                 seatId,
                 userId,
-                null,
                 LocalDateTime.now().plusMinutes(RESERVATION_EXPIRED_MINUTE.getMinute()),
-                null,
                 ReservationStatus.PENDING);
+    }
+
+    public void updateStatus(ReservationStatus status) {
+        this.status = status;
     }
 }

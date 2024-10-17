@@ -314,28 +314,13 @@ components:
     PaymentHttpRequest:
       type: object
       properties:
-        userId:
+        orderId:
           type: integer
           example: 1
           format: int64
-        concertId:
-          type: integer
-          example: 1
-          format: int64
-        seatId:
-          type: integer
-          example: 1
-          format: int64
-        amount:
-          type: integer
-          example: 25000
     PaymentHttpResponse:
       type: object
       properties:
         message:
           type: string
           example: 결제가 완료되었습니다.
-        paymentId:
-          type: integer
-          example: 1
-          format: int64

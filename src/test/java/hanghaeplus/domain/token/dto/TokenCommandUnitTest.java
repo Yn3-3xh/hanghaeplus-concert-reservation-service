@@ -50,6 +50,6 @@ class TokenCommandUnitTest {
         });
 
         // then
-        assertEquals(INVALID_USER_ID.getMessage(), exception.getMessage());
+        assertThat(exception.getMessage()).isEqualTo(INVALID_USER_ID.getMessage());
     }
 }

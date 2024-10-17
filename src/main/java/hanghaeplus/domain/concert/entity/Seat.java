@@ -19,11 +19,17 @@ public class Seat extends AbstractAuditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Long concertDetailId;
 
     private String name;
 
     private int price;
 
+    @Enumerated(EnumType.STRING)
     private SeatStatus status;
+
+    public void updateStatus(SeatStatus status) {
+        this.status = status;
+    }
 }

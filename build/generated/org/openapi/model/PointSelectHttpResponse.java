@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  */
 @lombok.AllArgsConstructor @lombok.NoArgsConstructor
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T19:17:29.458938+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T20:00:48.652007+09:00[Asia/Seoul]")
 public class PointSelectHttpResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;

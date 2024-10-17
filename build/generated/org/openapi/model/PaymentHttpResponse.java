@@ -21,14 +21,12 @@ import jakarta.annotation.Generated;
  */
 @lombok.AllArgsConstructor @lombok.NoArgsConstructor
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T19:17:29.458938+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T20:00:48.652007+09:00[Asia/Seoul]")
 public class PaymentHttpResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   private String message;
-
-  private Long paymentId;
 
   public PaymentHttpResponse message(String message) {
     this.message = message;
@@ -50,26 +48,6 @@ public class PaymentHttpResponse implements Serializable {
     this.message = message;
   }
 
-  public PaymentHttpResponse paymentId(Long paymentId) {
-    this.paymentId = paymentId;
-    return this;
-  }
-
-  /**
-   * Get paymentId
-   * @return paymentId
-  */
-  
-  @Schema(name = "paymentId", example = "1", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("paymentId")
-  public Long getPaymentId() {
-    return paymentId;
-  }
-
-  public void setPaymentId(Long paymentId) {
-    this.paymentId = paymentId;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -79,13 +57,12 @@ public class PaymentHttpResponse implements Serializable {
       return false;
     }
     PaymentHttpResponse paymentHttpResponse = (PaymentHttpResponse) o;
-    return Objects.equals(this.message, paymentHttpResponse.message) &&
-        Objects.equals(this.paymentId, paymentHttpResponse.paymentId);
+    return Objects.equals(this.message, paymentHttpResponse.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(message, paymentId);
+    return Objects.hash(message);
   }
 
   @Override
@@ -93,7 +70,6 @@ public class PaymentHttpResponse implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class PaymentHttpResponse {\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
-    sb.append("    paymentId: ").append(toIndentedString(paymentId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

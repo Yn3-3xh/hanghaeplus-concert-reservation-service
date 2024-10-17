@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum PointErrorCode implements ErrorCode {
 
-    NOT_FOUND_POINT("포인트 정보가 존재하지 않습니다.")
+    NOT_FOUND_POINT("포인트 정보가 존재하지 않습니다."),
+    INSUFFICIENT_POINTS("포인트가 부족합니다."),
     ;
 
     private final String message;

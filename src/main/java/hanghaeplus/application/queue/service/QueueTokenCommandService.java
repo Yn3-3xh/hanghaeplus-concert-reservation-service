@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
-import static hanghaeplus.domain.queue.entity.enums.QueuePolicy.ACTIVATED_EXPIRED_MINUTE;
+import static hanghaeplus.application.queue.error.QueueErrorCode.NOT_FOUND_QUEUE_TOKEN;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +28,17 @@ public class QueueTokenCommandService {
 
     @Transactional
     public void updateQueueTokenActivated(QueueCommand.CreateTokenActivated command) {
-        LocalDateTime expiredAt = LocalDateTime.now().plusMinutes(ACTIVATED_EXPIRED_MINUTE.getMinute());
         QueueToken queueToken = QueueToken.createActivated(
-                command.queueTokenId(), command.queueId(), command.tokenId(), expiredAt);
+                command.queueTokenId(), command.queueId(), command.tokenId());
+
+        queueTokenRepository.save(queueToken);
+    }
+
+    @Transactional
+    public void updateQueueTokenExpired(String tokenId) {
+        QueueToken queueToken = queueTokenRepository.findByTokenId(tokenId)
+                .orElseThrow(() -> new NoSuchElementException(NOT_FOUND_QUEUE_TOKEN.getMessage()));
+        queueToken.updateStatus(QueueTokenStatus.EXPIRED);
 
         queueTokenRepository.save(queueToken);
     }

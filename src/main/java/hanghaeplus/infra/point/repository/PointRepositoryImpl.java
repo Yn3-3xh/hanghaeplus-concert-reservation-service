@@ -23,4 +23,9 @@ public class PointRepositoryImpl implements PointRepository {
     public void savePoint(Point point) {
         pointJpaRepository.save(point);
     }
+
+    @Override
+    public Optional<Point> findAvailableWithdraw(Long userId, int amount) {
+        return pointJpaRepository.findAvailableWithdraw(userId, amount);
+    }
 }

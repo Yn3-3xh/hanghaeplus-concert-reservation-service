@@ -9,4 +9,6 @@ public interface PointRepository {
     Optional<Point> findByUserId(Long userId);
 
     void savePoint(Point point);
+
+    Optional<Point> findAvailableWithdraw(Long userId, int amount);
 }

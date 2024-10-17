@@ -14,7 +14,7 @@ public interface SeatJpaRepository extends CrudRepository<Seat, Long> {
         SELECT s
         FROM Seat s
         WHERE s.concertDetailId = :detailId
-        AND s.status = "EMPTY"
+        AND s.status = 'EMPTY'
     """)
     List<Seat> findAvailableSeatsByConcertDetailId(@Param("detailId") Long detailId);
 
@@ -22,7 +22,7 @@ public interface SeatJpaRepository extends CrudRepository<Seat, Long> {
         SELECT s
         FROM Seat s
         WHERE s.id = :seatId
-        AND s.status = "EMPTY"
+        AND s.status = 'EMPTY'
     """)
     Optional<Seat> findAvailableSeatById(@Param("seatId") Long seatId);
 }

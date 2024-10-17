@@ -2,7 +2,7 @@ package hanghaeplus.domain.user.dto;
 
 import static hanghaeplus.domain.user.error.UserErrorCode.INVALID_USER_ID;
 
-public class UserCommand {
+public class UserQuery {
 
     public record Create (
             Long userId

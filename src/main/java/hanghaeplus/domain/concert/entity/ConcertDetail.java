@@ -3,6 +3,7 @@ package hanghaeplus.domain.concert.entity;
 import hanghaeplus.domain.common.AbstractAuditable;
 import hanghaeplus.domain.concert.entity.enums.ConcertDetailStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class ConcertDetail extends AbstractAuditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Long concertId;
 
     private String hall;
@@ -33,5 +35,6 @@ public class ConcertDetail extends AbstractAuditable {
 
     private LocalDate reservationEndedAt;
 
+    @Enumerated(EnumType.STRING)
     private ConcertDetailStatus status;
 }
