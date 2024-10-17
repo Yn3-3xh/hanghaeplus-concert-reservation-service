@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import java.math.BigDecimal;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
@@ -22,14 +21,14 @@ import jakarta.annotation.Generated;
  */
 @lombok.AllArgsConstructor @lombok.NoArgsConstructor
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T17:09:25.125631+09:00[Asia/Seoul]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-17T19:17:29.458938+09:00[Asia/Seoul]")
 public class PointSelectHttpResponse implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  private BigDecimal point;
+  private Integer point;
 
-  public PointSelectHttpResponse point(BigDecimal point) {
+  public PointSelectHttpResponse point(Integer point) {
     this.point = point;
     return this;
   }
@@ -38,14 +37,14 @@ public class PointSelectHttpResponse implements Serializable {
    * Get point
    * @return point
   */
-  @Valid 
+  
   @Schema(name = "point", example = "25000", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("point")
-  public BigDecimal getPoint() {
+  public Integer getPoint() {
     return point;
   }
 
-  public void setPoint(BigDecimal point) {
+  public void setPoint(Integer point) {
     this.point = point;
   }
 
