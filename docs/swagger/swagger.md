@@ -1,0 +1,1 @@
+![API Swagger](../images/swagger-api-capture.png)
