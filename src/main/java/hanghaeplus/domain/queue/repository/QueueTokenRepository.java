@@ -20,4 +20,6 @@ public interface QueueTokenRepository {
     void saveQueueTokens(List<QueueToken> activatedToExpiredQueueTokens);
 
     int getActivatedQueueTokenCount(Long queueId);
+
+    List<QueueToken> findByQueueId(Long queueId);
 }

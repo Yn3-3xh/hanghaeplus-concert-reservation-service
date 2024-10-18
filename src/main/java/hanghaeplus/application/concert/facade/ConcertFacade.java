@@ -85,13 +85,16 @@ public class ConcertFacade {
     public void reserveConcertSeat(ConcertRequest.SeatReservation request) {
         QueueToken queueToken = queueTokenQueryService.getQueueToken(
                 new QueueQuery.CreateToken(request.tokenId()));
-        queueToken.checkExpired();
+        queueToken.checkReservation();
 
         Token token = tokenQueryService.getToken(
                 new TokenQuery.Create(request.tokenId()));
 
         reservationCommandService.reserveConcertSeat(
                 new ReservationCommand.Create(request.seatId(), token.getUserId()));
+
+        seatCommandService.pendConcertSeat(
+                new SeatCommand.CreatePending(request.seatId()));
     }
 
     // 스케줄러 - 활성화된 대기열 토큰 만료

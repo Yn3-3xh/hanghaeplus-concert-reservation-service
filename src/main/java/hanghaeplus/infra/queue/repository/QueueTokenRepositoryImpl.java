@@ -53,4 +53,9 @@ public class QueueTokenRepositoryImpl implements QueueTokenRepository {
         return queueTokenJpaRepository.getActivatedQueueTokenCount(queueId);
     }
 
+    @Override
+    public List<QueueToken> findByQueueId(Long queueId) {
+        return queueTokenJpaRepository.findByQueueId(queueId);
+    }
+
 }

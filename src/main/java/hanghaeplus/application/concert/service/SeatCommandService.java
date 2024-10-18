@@ -34,4 +34,12 @@ public class SeatCommandService {
                 }).toList();
         seatRepository.saveSeats(seats);
     }
+
+    public void pendConcertSeat(SeatCommand.CreatePending command) {
+        Seat seat = seatRepository.findById(command.seatId())
+                .orElseThrow(() -> new NoSuchElementException(NOT_FOUND_SEAT.getMessage()));
+        seat.updateStatus(SeatStatus.PENDING);
+
+        seatRepository.save(seat);
+    }
 }

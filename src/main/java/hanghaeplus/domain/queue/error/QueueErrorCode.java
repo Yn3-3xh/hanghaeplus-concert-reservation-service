@@ -11,6 +11,7 @@ public enum QueueErrorCode implements ErrorCode {
     INVALID_CONCERT_ID("유효하지 않은 콘서트ID 입니다."),
     INVALID_TOKEN_ID("토큰은 필수입니다."),
     EXPIRED_QUEUE_TOKEN("대기열 토큰이 만료되었습니다."),
+    NOT_USED_QUEUE_TOKEN("사용할 수 없는 대기열 토큰입니다."),
     ;
 
     private final String message;

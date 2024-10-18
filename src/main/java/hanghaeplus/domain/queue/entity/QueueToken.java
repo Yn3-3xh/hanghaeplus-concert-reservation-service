@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import static hanghaeplus.domain.queue.entity.enums.QueuePolicy.ACTIVATED_EXPIRED_MINUTE;
 import static hanghaeplus.domain.queue.entity.enums.QueuePolicy.WAITING_EXPIRED_MINUTE;
 import static hanghaeplus.domain.queue.error.QueueErrorCode.EXPIRED_QUEUE_TOKEN;
+import static hanghaeplus.domain.queue.error.QueueErrorCode.NOT_USED_QUEUE_TOKEN;
 
 @Entity
 @Table(name = "queue_token")
@@ -51,6 +52,12 @@ public class QueueToken extends AbstractAuditable {
     public void checkExpired() {
         if (this.expiredAt.isBefore(LocalDateTime.now())) {
             throw new IllegalStateException(EXPIRED_QUEUE_TOKEN.getMessage());
+        }
+    }
+
+    public void checkReservation() {
+        if (this.status.equals(QueueTokenStatus.WAITING) || this.status.equals(QueueTokenStatus.EXPIRED)) {
+            throw new IllegalStateException(NOT_USED_QUEUE_TOKEN.getMessage());
         }
     }
 }

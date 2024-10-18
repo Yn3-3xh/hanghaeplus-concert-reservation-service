@@ -9,4 +9,10 @@ public class SeatCommand {
     ) {
 
     }
+
+    public record CreatePending(
+            Long seatId
+    ) {
+
+    }
 }

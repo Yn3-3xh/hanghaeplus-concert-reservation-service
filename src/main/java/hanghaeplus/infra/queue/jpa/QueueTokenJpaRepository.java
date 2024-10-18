@@ -15,6 +15,7 @@ public interface QueueTokenJpaRepository extends CrudRepository<QueueToken, Long
         SELECT COUNT(qt)
         FROM QueueToken qt
         WHERE qt.queueId = :queueId
+        AND qt.status = 'WAITING'
         AND qt.createdAt <= (
             SELECT qt2.createdAt
             FROM QueueToken qt2
@@ -50,4 +51,6 @@ public interface QueueTokenJpaRepository extends CrudRepository<QueueToken, Long
         AND qt.status = 'ACTIVATED'
     """)
     int getActivatedQueueTokenCount(@Param("queueId") Long queueId);
+
+    List<QueueToken> findByQueueId(Long queueId);
 }

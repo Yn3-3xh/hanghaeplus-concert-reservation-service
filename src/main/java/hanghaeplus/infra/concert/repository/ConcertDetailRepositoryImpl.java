@@ -1,5 +1,6 @@
 package hanghaeplus.infra.concert.repository;
 
+import hanghaeplus.domain.concert.entity.ConcertDetail;
 import hanghaeplus.domain.concert.repository.ConcertDetailRepository;
 import hanghaeplus.infra.concert.jpa.ConcertDetailJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,10 @@ public class ConcertDetailRepositoryImpl implements ConcertDetailRepository {
         return concertDetailJpaRepository.findAvailableDatesByConcertId(concertId).stream()
                 .map(Date::toLocalDate)
                 .toList();
+    }
+
+    @Override
+    public void saveConcertDetail(ConcertDetail concertDetail) {
+        concertDetailJpaRepository.save(concertDetail);
     }
 }
