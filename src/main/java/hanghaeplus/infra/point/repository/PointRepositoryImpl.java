@@ -15,6 +15,11 @@ public class PointRepositoryImpl implements PointRepository {
     private final PointJpaRepository pointJpaRepository;
 
     @Override
+    public Optional<Point> findByUserIdLock(Long userId) {
+        return pointJpaRepository.findByUserIdLock(userId);
+    }
+
+    @Override
     public Optional<Point> findByUserId(Long userId) {
         return pointJpaRepository.findByUserId(userId);
     }
@@ -27,5 +32,10 @@ public class PointRepositoryImpl implements PointRepository {
     @Override
     public Optional<Point> findAvailableWithdraw(Long userId, int amount) {
         return pointJpaRepository.findAvailableWithdraw(userId, amount);
+    }
+
+    @Override
+    public void deleteAll() {
+        pointJpaRepository.deleteAll();
     }
 }

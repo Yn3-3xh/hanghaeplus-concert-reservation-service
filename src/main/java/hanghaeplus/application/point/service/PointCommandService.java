@@ -15,7 +15,7 @@ public class PointCommandService {
     private final PointRepository pointRepository;
 
     public void chargePoint(PointCommand.Create command) {
-        Point point = pointRepository.findByUserId(command.userId())
+        Point point = pointRepository.findByUserIdLock(command.userId())
                 .orElseThrow(() -> new CoreException(PointErrorCode.NOT_FOUND_POINT));
         point.charge(command.amount());
 

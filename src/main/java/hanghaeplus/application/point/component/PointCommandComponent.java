@@ -14,7 +14,7 @@ public class PointCommandComponent {
     private final PointRepository pointRepository;
 
     public void withdrawPoint(Long userId, int amount) {
-        Point point = pointRepository.findByUserId(userId)
+        Point point = pointRepository.findByUserIdLock(userId)
                 .orElseThrow(() -> new CoreException(PointErrorCode.NOT_FOUND_POINT));
         point.withdraw(amount);
 
