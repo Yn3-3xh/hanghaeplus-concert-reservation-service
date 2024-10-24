@@ -1,12 +1,13 @@
 package hanghaeplus.domain.point.entity;
 
+import hanghaeplus.domain.common.error.CoreException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static hanghaeplus.application.point.error.PointErrorCode.INSUFFICIENT_POINTS;
 import static hanghaeplus.domain.point.error.PointErrorCode.INVALID_AMOUNT;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Point 단위 테스트")
 class PointUnitTest {
@@ -19,13 +20,13 @@ class PointUnitTest {
         Long userId = 1L;
         int hasPoint = 1000;
         int amount = 500;
-        Point point = new Point(pointId, userId, hasPoint);
+        Point sut = new Point(pointId, userId, hasPoint, null);
 
         // when
-        point.charge(amount);
+        sut.charge(amount);
 
         // then
-        assertThat(point.getPoint()).isEqualTo(hasPoint + amount);
+        assertThat(sut.getPoint()).isEqualTo(hasPoint + amount);
     }
 
     @Test
@@ -36,15 +37,15 @@ class PointUnitTest {
         Long userId = 1L;
         int hasPoint = 1000;
         int amount = 0;
-        Point point = new Point(pointId, userId, hasPoint);
+        Point point = new Point(pointId, userId, hasPoint, null);
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        CoreException sut = assertThrows(CoreException.class, () -> {
             point.charge(amount);
         });
 
         // then
-        assertThat(exception.getMessage()).isEqualTo(INVALID_AMOUNT.getMessage());
+        assertThat(sut.getMessage()).isEqualTo(INVALID_AMOUNT.getMessage());
     }
 
     @Test
@@ -55,13 +56,13 @@ class PointUnitTest {
         Long userId = 1L;
         int hasPoint = 1000;
         int amount = 500;
-        Point point = new Point(pointId, userId, hasPoint);
+        Point sut = new Point(pointId, userId, hasPoint, null);
 
         // when
-        point.withdraw(amount);
+        sut.withdraw(amount);
 
         // then
-        assertThat(point.getPoint()).isEqualTo(hasPoint - amount);
+        assertThat(sut.getPoint()).isEqualTo(hasPoint - amount);
     }
 
     @Test
@@ -72,15 +73,15 @@ class PointUnitTest {
         Long userId = 1L;
         int hasPoint = 1000;
         int amount = 0;
-        Point point = new Point(pointId, userId, hasPoint);
+        Point point = new Point(pointId, userId, hasPoint, null);
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        CoreException sut = assertThrows(CoreException.class, () -> {
             point.withdraw(amount);
         });
 
         // then
-        assertThat(exception.getMessage()).isEqualTo(INVALID_AMOUNT.getMessage());
+        assertThat(sut.getMessage()).isEqualTo(INVALID_AMOUNT.getMessage());
     }
 
     @Test
@@ -91,14 +92,14 @@ class PointUnitTest {
         Long userId = 1L;
         int hasPoint = 300;
         int amount = 500;
-        Point point = new Point(pointId, userId, hasPoint);
+        Point point = new Point(pointId, userId, hasPoint, null);
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        CoreException sut = assertThrows(CoreException.class, () -> {
             point.withdraw(amount);
         });
 
         // then
-        assertThat(exception.getMessage()).isEqualTo(INSUFFICIENT_POINTS.getMessage());
+        assertThat(sut.getMessage()).isEqualTo(INSUFFICIENT_POINTS.getMessage());
     }
 }

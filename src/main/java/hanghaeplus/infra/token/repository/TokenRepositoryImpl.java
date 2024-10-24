@@ -23,4 +23,14 @@ public class TokenRepositoryImpl implements TokenRepository {
     public void save(Token token) {
         tokenJpaRepository.save(token);
     }
+
+    @Override
+    public Optional<Token> findByUserId(Long userId) {
+        return tokenJpaRepository.findByUserId(userId);
+    }
+
+    @Override
+    public void deleteAll() {
+        tokenJpaRepository.deleteAll();
+    }
 }

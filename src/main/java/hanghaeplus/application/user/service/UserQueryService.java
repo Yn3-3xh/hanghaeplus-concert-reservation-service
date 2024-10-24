@@ -1,21 +1,23 @@
 package hanghaeplus.application.user.service;
 
+import hanghaeplus.application.user.error.UserErrorCode;
+import hanghaeplus.domain.common.error.CoreException;
 import hanghaeplus.domain.user.dto.UserQuery;
 import hanghaeplus.domain.user.entity.User;
 import hanghaeplus.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserQueryService {
 
     private final UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     public User selectUser(UserQuery.Create query) {
         return userRepository.findById(query.userId())
-                .orElseThrow(() -> new NoSuchElementException("등록된 사용자가 아닙니다."));
+                .orElseThrow(() -> new CoreException(UserErrorCode.NOT_FOUND_USER));
     }
 }

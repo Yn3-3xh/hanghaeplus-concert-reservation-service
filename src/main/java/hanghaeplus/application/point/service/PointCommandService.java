@@ -1,14 +1,12 @@
 package hanghaeplus.application.point.service;
 
+import hanghaeplus.application.point.error.PointErrorCode;
+import hanghaeplus.domain.common.error.CoreException;
 import hanghaeplus.domain.point.dto.PointCommand;
 import hanghaeplus.domain.point.entity.Point;
 import hanghaeplus.domain.point.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
-
-import static hanghaeplus.application.point.error.PointErrorCode.NOT_FOUND_POINT;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +16,7 @@ public class PointCommandService {
 
     public void chargePoint(PointCommand.Create command) {
         Point point = pointRepository.findByUserId(command.userId())
-                .orElseThrow(() -> new NoSuchElementException(NOT_FOUND_POINT.getMessage()));
+                .orElseThrow(() -> new CoreException(PointErrorCode.NOT_FOUND_POINT));
         point.charge(command.amount());
 
         pointRepository.savePoint(point);

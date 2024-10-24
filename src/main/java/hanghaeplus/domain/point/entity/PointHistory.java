@@ -2,16 +2,14 @@ package hanghaeplus.domain.point.entity;
 
 import hanghaeplus.domain.point.entity.enums.PointStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "point_history")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@EqualsAndHashCode
 public class PointHistory {
 
     @Id

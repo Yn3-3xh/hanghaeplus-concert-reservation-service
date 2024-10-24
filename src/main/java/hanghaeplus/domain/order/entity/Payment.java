@@ -3,16 +3,14 @@ package hanghaeplus.domain.order.entity;
 import hanghaeplus.domain.order.entity.enums.PaymentStatus;
 import hanghaeplus.domain.order.entity.enums.PaymentType;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "payment")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Payment {
 
     @Id
@@ -33,11 +31,14 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentType type;
 
+    @Version
+    private Integer version;
+
     public static Payment createPayed(
             Long userId,
             Long orderId,
             int amount,
             PaymentType type) {
-        return new Payment(null, userId, orderId, amount, PaymentStatus.PAYED, type);
+        return new Payment(null, userId, orderId, amount, PaymentStatus.PAYED, type, null);
     }
 }

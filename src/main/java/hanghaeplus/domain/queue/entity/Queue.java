@@ -22,4 +22,11 @@ public class Queue extends AbstractAuditable {
 
     private int runningLimitedCount;
 
+    public int calculateUpdatedRunningCount(int expiredCnt, int activatedCount) {
+        int waitingToActivatedCount = expiredCnt;
+        if (activatedCount < this.getRunningLimitedCount()) {
+            waitingToActivatedCount += this.getRunningLimitedCount() - activatedCount;
+        }
+        return waitingToActivatedCount;
+    }
 }

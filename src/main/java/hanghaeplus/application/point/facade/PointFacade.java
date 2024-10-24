@@ -15,37 +15,33 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 public class PointFacade {
 
+    private final TokenQueryService tokenQueryService;
     private final PointQueryService pointQueryService;
+
     private final PointCommandService pointCommandService;
     private final PointHistoryCommandService pointHistoryCommandService;
 
-    private final TokenQueryService tokenQueryService;
-
     public PointResponse.PointSelection selectPoint(PointRequest.PointSelection request) {
-        Token token = tokenQueryService.getToken(
-                new TokenQuery.Create(request.tokenId()));
-        token.checkExpired();
+        Token token = tokenQueryService.getToken(new TokenQuery.Create(request.tokenId()));
+        token.checkExpired(LocalDateTime.now());
 
-        int point = pointQueryService.selectPoint(
-                new PointQuery.Create(request.userId()));
+        int point = pointQueryService.selectPoint(new PointQuery.Create(request.userId()));
 
         return new PointResponse.PointSelection(point);
     }
 
     @Transactional
     public void chargePoint(PointRequest.PointCharge request) {
-        Token token = tokenQueryService.getToken(
-                new TokenQuery.Create(request.tokenId()));
-        token.checkExpired();
+        Token token = tokenQueryService.getToken(new TokenQuery.Create(request.tokenId()));
+        token.checkExpired(LocalDateTime.now());
 
-        pointCommandService.chargePoint(
-                new PointCommand.Create(request.userId(), request.amount()));
-
-        pointHistoryCommandService.insertHistory(
-                new PointCommand.CreatePointHistory(request.userId(), request.amount(), PointStatus.CHARGE));
+        pointCommandService.chargePoint(new PointCommand.Create(request.userId(), request.amount()));
+        pointHistoryCommandService.insertHistory(new PointCommand.CreatePointHistory(request.userId(), request.amount(), PointStatus.CHARGE));
     }
 }

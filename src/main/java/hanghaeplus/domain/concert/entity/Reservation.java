@@ -43,7 +43,19 @@ public class Reservation extends AbstractAuditable {
                 ReservationStatus.PENDING);
     }
 
-    public void updateStatus(ReservationStatus status) {
-        this.status = status;
+    public void updatePending() {
+        this.status = ReservationStatus.PENDING;
+    }
+
+    public void updateCanceled() {
+        this.status = ReservationStatus.CANCELED;
+    }
+
+    public void updateCompleted() {
+        this.status = ReservationStatus.COMPLETED;
+    }
+
+    public void updateExpired() {
+        this.status = ReservationStatus.EXPIRED;
     }
 }

@@ -10,12 +10,12 @@ import java.util.Optional;
 public interface OrderJpaRepository extends CrudRepository<Order, Long> {
 
     @Query(value = """
-        SELECT o.*
-        FROM `order` o
-        JOIN reservation r 
-        ON o.reservation_id = r.id
-        WHERE o.id = :orderId
-        AND r.status = 'PENDING'
-        """, nativeQuery = true)
+            SELECT o.*
+            FROM orders o
+            JOIN reservation r 
+            ON o.reservation_id = r.id
+            WHERE o.id = :orderId
+            AND r.status = 'PENDING'
+            """, nativeQuery = true)
     Optional<Order> findAvailableOrderById(@Param("orderId") Long orderId);
 }

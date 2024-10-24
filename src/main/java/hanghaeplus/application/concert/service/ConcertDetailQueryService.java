@@ -1,7 +1,6 @@
 package hanghaeplus.application.concert.service;
 
 import hanghaeplus.domain.concert.dto.ConcertQuery;
-import hanghaeplus.domain.concert.entity.ConcertDetail;
 import hanghaeplus.domain.concert.repository.ConcertDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

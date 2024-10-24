@@ -1,13 +1,16 @@
 package hanghaeplus.domain.token.entity;
 
+import hanghaeplus.domain.common.error.CoreException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
+import static hanghaeplus.domain.token.entity.enums.TokenPolicy.TOKEN_EXPIRED_HOUR;
 import static hanghaeplus.domain.token.error.TokenErrorCode.EXPIRED_TOKEN;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Token 단위 테스트")
 class TokenUnitTest {
@@ -18,11 +21,11 @@ class TokenUnitTest {
         // given
         String tokenId = "UUID";
         Long userId = 1L;
-        LocalDateTime expiredAt = LocalDateTime.of(2024, 10, 18, 11, 0);
-        Token token = Token.create(tokenId, userId, expiredAt);
+        LocalDateTime now = LocalDateTime.now().plusHours(TOKEN_EXPIRED_HOUR.getHour()).minusMinutes(1);
+        Token sut = Token.create(tokenId, userId);
 
         // when & then
-        assertDoesNotThrow(token::checkExpired);
+        assertDoesNotThrow(() -> sut.checkExpired(now));
     }
 
     @Test
@@ -31,13 +34,13 @@ class TokenUnitTest {
         // given
         String tokenId = "UUID";
         Long userId = 1L;
-        LocalDateTime expiredAt = LocalDateTime.of(2024, 10, 17, 11, 0);
-        Token token = Token.create(tokenId, userId, expiredAt);
+        LocalDateTime now = LocalDateTime.now().plusHours(TOKEN_EXPIRED_HOUR.getHour()).plusMinutes(1);
+        Token token = Token.create(tokenId, userId);
 
         // when
-        IllegalStateException exception = assertThrows(IllegalStateException.class, token::checkExpired);
+        CoreException sut = assertThrows(CoreException.class, () -> token.checkExpired(now));
 
         // then
-        assertThat(exception.getMessage()).isEqualTo(EXPIRED_TOKEN.getMessage());
+        assertThat(sut.getMessage()).isEqualTo(EXPIRED_TOKEN.getMessage());
     }
 }

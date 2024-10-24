@@ -1,49 +1,64 @@
 package hanghaeplus.application.concert.service;
 
-import hanghaeplus.application.concert.validator.SeatValidator;
+import hanghaeplus.application.concert.component.SeatCommandComponent;
+import hanghaeplus.application.concert.component.SeatQueryComponent;
+import hanghaeplus.application.concert.error.ConcertErrorCode;
+import hanghaeplus.domain.common.error.CoreException;
 import hanghaeplus.domain.concert.dto.ReservationCommand;
+import hanghaeplus.domain.concert.dto.SeatCommand;
 import hanghaeplus.domain.concert.entity.Reservation;
-import hanghaeplus.domain.concert.entity.enums.ReservationStatus;
+import hanghaeplus.domain.concert.entity.Seat;
 import hanghaeplus.domain.concert.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-
-import static hanghaeplus.application.concert.error.ConcertErrorCode.NOT_FOUND_AVAILABLE_RESERVATION;
 
 @Service
 @RequiredArgsConstructor
 public class ReservationCommandService {
 
     private final ReservationRepository reservationRepository;
-    private final SeatValidator seatValidator;
 
-    @Transactional
+    private final SeatCommandComponent seatCommandComponent;
+    private final SeatQueryComponent seatQueryComponent;
+
     public void reserveConcertSeat(ReservationCommand.Create command) {
-        seatValidator.checkConcertAvailableSeat(command.seatId());
+        Seat seat = seatQueryComponent.getAvailableSeatLock(command.seatId());
 
-        Reservation reservation = Reservation.createPending(command.seatId(), command.userId());
+        Reservation reservation = Reservation.createPending(seat.getId(), command.userId());
         reservationRepository.saveReservation(reservation);
     }
 
-    public void updateReservationCompleted(Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new NoSuchElementException(NOT_FOUND_AVAILABLE_RESERVATION.getMessage()));
-        reservation.updateStatus(ReservationStatus.COMPLETED);
+    public void updateReservationCompleted(ReservationCommand.CreateReservationCompleted command) {
+        Reservation reservation = reservationRepository.findById(command.reservationId())
+                .orElseThrow(() -> new CoreException(ConcertErrorCode.NOT_FOUND_AVAILABLE_RESERVATION));
+        reservation.updateCompleted();
 
         reservationRepository.saveReservation(reservation);
     }
 
-    public void updateReservationsExpired(ReservationCommand.CreateExpiredPendingReservations command) {
-        List<Reservation> reservations = command.reservations().stream()
+    // 스케줄러에 사용할 메서드 - 임시 예약(+좌석) 만료
+    @Transactional
+    public void refreshExpiredReservations() {
+        List<Reservation> expiredPendingReservations = reservationRepository.selectExpiredPendingReservations();
+        if (expiredPendingReservations.isEmpty()) {
+            // log 넣어줄까?
+            return;
+        }
+
+        List<Reservation> reservations = expiredPendingReservations.stream()
                 .map(reservation -> {
-                    reservation.updateStatus(ReservationStatus.EXPIRED);
+                    reservation.updateExpired();
                     return reservation;
                 }).toList();
-
         reservationRepository.saveReservations(reservations);
+
+        List<Long> seatIds = expiredPendingReservations.stream()
+                .map(Reservation::getSeatId)
+                .toList();
+        seatCommandComponent.updateSeatsEmpty(new SeatCommand.CreateEmptySeats(seatIds));
     }
+
 }

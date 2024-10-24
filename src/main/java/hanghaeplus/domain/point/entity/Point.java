@@ -1,13 +1,12 @@
 package hanghaeplus.domain.point.entity;
 
+import hanghaeplus.domain.common.error.CoreException;
+import hanghaeplus.domain.point.error.PointErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import static hanghaeplus.application.point.error.PointErrorCode.INSUFFICIENT_POINTS;
-import static hanghaeplus.domain.point.error.PointErrorCode.INVALID_AMOUNT;
 
 @Entity
 @Table(name = "point")
@@ -25,9 +24,12 @@ public class Point {
 
     private int point;
 
+    @Version
+    private Integer version;
+
     public void charge(int amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException(INVALID_AMOUNT.getMessage());
+            throw new CoreException(PointErrorCode.INVALID_AMOUNT);
         }
 
         this.point += amount;
@@ -35,10 +37,10 @@ public class Point {
 
     public void withdraw(int amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException(INVALID_AMOUNT.getMessage());
+            throw new CoreException(PointErrorCode.INVALID_AMOUNT);
         }
         if (point < amount) {
-            throw new IllegalArgumentException(INSUFFICIENT_POINTS.getMessage());
+            throw new CoreException(PointErrorCode.INSUFFICIENT_POINTS);
         }
 
         this.point -= amount;

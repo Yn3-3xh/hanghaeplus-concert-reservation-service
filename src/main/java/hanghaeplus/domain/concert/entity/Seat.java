@@ -29,7 +29,15 @@ public class Seat extends AbstractAuditable {
     @Enumerated(EnumType.STRING)
     private SeatStatus status;
 
-    public void updateStatus(SeatStatus status) {
-        this.status = status;
+    public void updateEmpty() {
+        this.status = SeatStatus.EMPTY;
+    }
+
+    public void updatePending() {
+        this.status = SeatStatus.PENDING;
+    }
+
+    public void updateReservation() {
+        this.status = SeatStatus.RESERVATION;
     }
 }
