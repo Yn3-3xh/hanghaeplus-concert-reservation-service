@@ -9,9 +9,10 @@ paths:
       operationId: enrollToken
       parameters:
         - in: header
-          name: tokenId
+          name: X-USER-TOKEN
           schema:
             type: string
+            minLength: 1
       requestBody:
         content:
           application/json:
@@ -35,10 +36,11 @@ paths:
       operationId: getConcertQueuePosition
       parameters:
         - in: header
-          name: tokenId
+          name: X-QUEUE-TOKEN
           required: true
           schema:
             type: string
+            minLength: 1
         - in: path
           name: concertId
           required: true
@@ -59,10 +61,11 @@ paths:
       operationId: enrollConcertQueue
       parameters:
         - in: header
-          name: tokenId
+          name: X-USER-TOKEN
           required: true
           schema:
             type: string
+            minLength: 1
         - in: path
           name: concertId
           required: true
@@ -84,10 +87,11 @@ paths:
       operationId: selectConcertAvailableDates
       parameters:
         - in: header
-          name: tokenId
+          name: X-QUEUE-TOKEN
           required: true
           schema:
             type: string
+            minLength: 1
         - in: path
           name: concertId
           required: true
@@ -109,10 +113,11 @@ paths:
       operationId: selectConcertAvailableSeats
       parameters:
         - in: header
-          name: tokenId
+          name: X-QUEUE-TOKEN
           required: true
           schema:
             type: string
+            minLength: 1
         - in: path
           name: concertId
           required: true
@@ -143,10 +148,11 @@ paths:
       operationId: reserveConcertSeat
       parameters:
         - in: header
-          name: tokenId
+          name: X-QUEUE-TOKEN
           required: true
           schema:
             type: string
+            minLength: 1
         - in: path
           name: concertId
           required: true
@@ -182,10 +188,11 @@ paths:
       operationId: chargePoint
       parameters:
         - in: header
-          name: tokenId
+          name: X-USER-TOKEN
           required: true
           schema:
             type: string
+            minLength: 1
       requestBody:
         required: true
         content:
@@ -205,10 +212,11 @@ paths:
       operationId: selectPoint
       parameters:
         - in: header
-          name: tokenId
+          name: X-USER-TOKEN
           required: true
           schema:
             type: string
+            minLength: 1
         - in: query
           name: userId
           required: true
@@ -230,10 +238,11 @@ paths:
       operationId: executePayment
       parameters:
         - in: header
-          name: tokenId
+          name: X-QUEUE-TOKEN
           required: true
           schema:
             type: string
+            minLength: 1
       requestBody:
         content:
           application/json:

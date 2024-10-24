@@ -12,4 +12,6 @@ public interface QueueRepository {
     void save(Queue queue);
 
     List<Queue> selectQueues();
+
+    void deleteAll();
 }

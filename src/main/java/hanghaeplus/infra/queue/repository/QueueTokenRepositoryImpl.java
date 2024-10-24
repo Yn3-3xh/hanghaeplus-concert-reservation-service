@@ -58,4 +58,9 @@ public class QueueTokenRepositoryImpl implements QueueTokenRepository {
         return queueTokenJpaRepository.findByQueueId(queueId);
     }
 
+    @Override
+    public void deleteAll() {
+        queueTokenJpaRepository.deleteAll();
+    }
+
 }

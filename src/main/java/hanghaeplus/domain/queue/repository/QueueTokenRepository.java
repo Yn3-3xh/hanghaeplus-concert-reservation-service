@@ -22,4 +22,6 @@ public interface QueueTokenRepository {
     int getActivatedQueueTokenCount(Long queueId);
 
     List<QueueToken> findByQueueId(Long queueId);
+
+    void deleteAll();
 }

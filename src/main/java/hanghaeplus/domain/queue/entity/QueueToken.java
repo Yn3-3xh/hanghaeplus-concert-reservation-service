@@ -60,8 +60,16 @@ public class QueueToken extends AbstractAuditable {
     }
 
     public void checkReservation() {
-        if (this.status.equals(QueueTokenStatus.WAITING) || this.status.equals(QueueTokenStatus.EXPIRED)) {
+        if (!this.status.equals(QueueTokenStatus.ACTIVATED)) {
             throw new CoreException(QueueErrorCode.NOT_USED_QUEUE_TOKEN);
         }
+    }
+
+    public boolean isActivated() {
+        return this.status.equals(QueueTokenStatus.ACTIVATED);
+    }
+
+    public boolean isWaiting() {
+        return this.status.equals(QueueTokenStatus.WAITING);
     }
 }
