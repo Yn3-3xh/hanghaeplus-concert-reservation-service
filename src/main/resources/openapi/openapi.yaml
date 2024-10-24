@@ -36,6 +36,7 @@ paths:
       parameters:
         - in: header
           name: tokenId
+          required: true
           schema:
             type: string
         - in: path
@@ -44,6 +45,7 @@ paths:
           schema:
             type: integer
             format: int64
+            minimum: 1
       responses:
         '200':
           description: 대기열 남은 순서 반환
@@ -58,6 +60,7 @@ paths:
       parameters:
         - in: header
           name: tokenId
+          required: true
           schema:
             type: string
         - in: path
@@ -66,6 +69,7 @@ paths:
           schema:
             type: integer
             format: int64
+            minimum: 1
       responses:
         '200':
           description: 좌석 임시 배정 완료
@@ -81,6 +85,7 @@ paths:
       parameters:
         - in: header
           name: tokenId
+          required: true
           schema:
             type: string
         - in: path
@@ -89,6 +94,7 @@ paths:
           schema:
             type: integer
             format: int64
+            minimum: 1
       responses:
         '200':
           description: 예약 가능한 날짜 목록 반환
@@ -104,6 +110,7 @@ paths:
       parameters:
         - in: header
           name: tokenId
+          required: true
           schema:
             type: string
         - in: path
@@ -112,12 +119,14 @@ paths:
           schema:
             type: integer
             format: int64
+            minimum: 1
         - in: path
           name: detailId
           required: true
           schema:
             type: integer
             format: int64
+            minimum: 1
       responses:
         '200':
           description: 예약 가능한 좌석 목록 반환
@@ -135,6 +144,7 @@ paths:
       parameters:
         - in: header
           name: tokenId
+          required: true
           schema:
             type: string
         - in: path
@@ -143,18 +153,21 @@ paths:
           schema:
             type: integer
             format: int64
+            minimum: 1
         - in: path
           name: detailId
           required: true
           schema:
             type: integer
             format: int64
+            minimum: 1
         - in: path
           name: seatId
           required: true
           schema:
             type: integer
             format: int64
+            minimum: 1
       responses:
         '200':
           description: 좌석 임시 배정 완료
@@ -170,6 +183,7 @@ paths:
       parameters:
         - in: header
           name: tokenId
+          required: true
           schema:
             type: string
       requestBody:
@@ -192,13 +206,16 @@ paths:
       parameters:
         - in: header
           name: tokenId
+          required: true
           schema:
             type: string
         - in: query
           name: userId
+          required: true
           schema:
             type: integer
             format: int64
+            minimum: 1
       responses:
         '200':
           description: 현재 잔액 반환
@@ -207,13 +224,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/PointSelectHttpResponse'
 
-  /order/payments:
+  /orders/payments:
     post:
       summary: 결제 API
       operationId: executePayment
       parameters:
         - in: header
           name: tokenId
+          required: true
           schema:
             type: string
       requestBody:
@@ -233,11 +251,14 @@ components:
   schemas:
     TokenHttpRequest:
       type: object
+      required:
+        - userId
       properties:
         userId:
           type: integer
           example: 1
           format: int64
+          minimum: 1
     TokenHttpResponse:
       type: object
       properties:
@@ -288,14 +309,19 @@ components:
 
     PointChargeHttpRequest:
       type: object
+      required:
+        - userId
+        - amount
       properties:
         userId:
           type: integer
           example: 1
           format: int64
+          minimum: 1
         amount:
           type: integer
           example: 20000
+          minimum: 1
     PointChargeHttpResponse:
       type: object
       properties:
@@ -312,11 +338,14 @@ components:
 
     PaymentHttpRequest:
       type: object
+      required:
+        - orderId
       properties:
         orderId:
           type: integer
           example: 1
           format: int64
+          minimum: 1
     PaymentHttpResponse:
       type: object
       properties:

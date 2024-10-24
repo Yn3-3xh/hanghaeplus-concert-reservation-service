@@ -39,22 +39,20 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     runtimeOnly 'com.mysql:mysql-connector-j'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // springdoc-openapi 적용
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
-    implementation 'io.swagger.core.v3:swagger-annotations:2.2.11'
+    implementation 'org.openapitools:openapi-generator-gradle-plugin:7.2.0'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 
     // openapi generator 적용
-    implementation 'org.openapitools:openapi-generator:7.2.0'
-    implementation 'org.openapitools:openapi-generator-gradle-plugin:7.2.0'
-
-    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
-    implementation 'jakarta.validation:jakarta.validation-api:3.0.0'
-    implementation 'jakarta.annotation:jakarta.annotation-api:2.0.0'
-    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
-    implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
+//    implementation 'io.swagger.core.v3:swagger-annotations:2.2.11'
+//    implementation 'org.openapitools:openapi-generator:7.2.0'
+//    implementation 'jakarta.validation:jakarta.validation-api:3.0.0'
+//    implementation 'jakarta.annotation:jakarta.annotation-api:2.0.0'
+//    implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
 }
 
 openApiGenerate {
@@ -66,18 +64,19 @@ openApiGenerate {
     apiPackage.set("org.openapi.api")
     modelPackage.set("org.openapi.model")
     configOptions.set([
-            interfaceOnly: "true",
-            useBeanValidation: "true",
+            interfaceOnly        : "true",
+            useBeanValidation    : "true",
             performBeanValidation: "true",
-            serializableModel: "true",
-            sourceFolder:"",
-            implFolder: "/java",
-            useSpringBoot3: "true",
-            useJakarta: "true",
-            useJakartaEe: "true",
-            skipDefaultInterface: "true",
-            dateLibrary: "java17",
-            additionalModelTypeAnnotations: "@lombok.AllArgsConstructor @lombok.NoArgsConstructor",
+            serializableModel    : "true",
+            sourceFolder         : "",
+            implFolder           : "/java",
+            useSpringBoot3       : "true",
+            useJakarta           : "true",
+            useJakartaEe         : "true",
+            skipDefaultInterface : "true",
+            dateLibrary          : "java17",
+//            skipDefaultConstructor: "false",
+//            additionalModelTypeAnnotations: "@lombok.AllArgsConstructor @lombok.NoArgsConstructor",
     ])
 }
 
