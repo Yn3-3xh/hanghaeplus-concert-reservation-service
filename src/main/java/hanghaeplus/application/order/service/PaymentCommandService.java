@@ -21,9 +21,9 @@ public class PaymentCommandService {
     public void executePayment(PaymentCommand.Create command) {
         pointQueryComponent.checkAvailableWithdraw(command.userId(), command.amount());
 
+        pointCommandComponent.withdrawPoint(command.userId(), command.amount());
+
         Payment payment = Payment.createPayed(command.userId(), command.orderId(), command.amount(), PaymentType.POINT);
         paymentRepository.savePayment(payment);
-
-        pointCommandComponent.withdrawPoint(command.userId(), command.amount());
     }
 }

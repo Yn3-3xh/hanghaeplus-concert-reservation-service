@@ -31,14 +31,11 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentType type;
 
-    @Version
-    private Integer version;
-
     public static Payment createPayed(
             Long userId,
             Long orderId,
             int amount,
             PaymentType type) {
-        return new Payment(null, userId, orderId, amount, PaymentStatus.PAYED, type, null);
+        return new Payment(null, userId, orderId, amount, PaymentStatus.PAYED, type);
     }
 }
