@@ -1,14 +1,16 @@
 package hanghaeplus.domain.queue.entity;
 
-import hanghaeplus.domain.queue.entity.enums.QueueTokenStatus;
+import hanghaeplus.domain.common.error.CoreException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
+import static hanghaeplus.domain.queue.entity.enums.QueuePolicy.ACTIVATED_EXPIRED_MINUTE;
 import static hanghaeplus.domain.queue.error.QueueErrorCode.EXPIRED_QUEUE_TOKEN;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("QueueToken 단위 테스트")
 class QueueTokenUnitTest {
@@ -20,13 +22,12 @@ class QueueTokenUnitTest {
         Long queueTokenId = 1L;
         Long queueId = 1L;
         String tokenId = "UUID";
-        QueueTokenStatus status = QueueTokenStatus.ACTIVATED;
-        LocalDateTime expiredAt = LocalDateTime.of(2024, 10, 18, 11, 0);
+        LocalDateTime now = LocalDateTime.now().plusMinutes(ACTIVATED_EXPIRED_MINUTE.getMinute()).minusMinutes(1);
 
-        QueueToken queueToken = new QueueToken(queueTokenId, queueId, tokenId, status, expiredAt);
+        QueueToken sut = QueueToken.createActivated(queueTokenId, queueId, tokenId);
 
         // when & then
-        assertDoesNotThrow(queueToken::checkExpired);
+        assertDoesNotThrow(() -> sut.checkExpired(now));
     }
 
     @Test
@@ -36,15 +37,14 @@ class QueueTokenUnitTest {
         Long queueTokenId = 1L;
         Long queueId = 1L;
         String tokenId = "UUID";
-        QueueTokenStatus status = QueueTokenStatus.EXPIRED;
-        LocalDateTime expiredAt = LocalDateTime.of(2024, 10, 17, 11, 0);
+        LocalDateTime now = LocalDateTime.now().plusMinutes(ACTIVATED_EXPIRED_MINUTE.getMinute()).plusMinutes(1);
 
-        QueueToken queueToken = new QueueToken(queueTokenId, queueId, tokenId, status, expiredAt);
+        QueueToken queueToken = QueueToken.createActivated(queueTokenId, queueId, tokenId);
 
         // when
-        IllegalStateException exception = assertThrows(IllegalStateException.class, queueToken::checkExpired);
+        CoreException sut = assertThrows(CoreException.class, () -> queueToken.checkExpired(now));
 
         // then
-        assertThat(exception.getMessage()).isEqualTo(EXPIRED_QUEUE_TOKEN.getMessage());
+        assertThat(sut.getMessage()).isEqualTo(EXPIRED_QUEUE_TOKEN.getMessage());
     }
 }

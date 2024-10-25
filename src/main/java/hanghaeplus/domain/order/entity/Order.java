@@ -1,7 +1,6 @@
 package hanghaeplus.domain.order.entity;
 
 import hanghaeplus.domain.order.entity.enums.OrderStatus;
-
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "`order`")
+@Table(name = "orders")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -30,7 +29,23 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    public void updateStatus(OrderStatus status) {
-        this.status = status;
+    public void updateProcessing() {
+        this.status = OrderStatus.PROCESSING;
+    }
+
+    public void updateCompleted() {
+        this.status = OrderStatus.COMPLETED;
+    }
+
+    public void updateCanceled() {
+        this.status = OrderStatus.CANCELED;
+    }
+
+    public void updateRefunded() {
+        this.status = OrderStatus.REFUNDED;
+    }
+
+    public void updateFailed() {
+        this.status = OrderStatus.FAILED;
     }
 }

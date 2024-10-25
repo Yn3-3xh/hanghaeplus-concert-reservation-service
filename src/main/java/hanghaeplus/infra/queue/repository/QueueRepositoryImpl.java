@@ -29,4 +29,9 @@ public class QueueRepositoryImpl implements QueueRepository {
     public List<Queue> selectQueues() {
         return queueJpaRepository.findAll();
     }
+
+    @Override
+    public void deleteAll() {
+        queueJpaRepository.deleteAll();
+    }
 }

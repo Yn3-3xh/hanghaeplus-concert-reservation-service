@@ -2,21 +2,16 @@ package hanghaeplus.application.concert.facade;
 
 import hanghaeplus.application.concert.dto.ConcertRequest;
 import hanghaeplus.application.concert.dto.ConcertResponse;
-import hanghaeplus.application.concert.service.*;
-import hanghaeplus.application.queue.service.QueueQueryService;
-import hanghaeplus.application.queue.service.QueueTokenCommandService;
-import hanghaeplus.application.queue.service.QueueTokenQueryService;
-import hanghaeplus.application.token.service.TokenQueryService;
 import hanghaeplus.domain.concert.entity.ConcertDetail;
+import hanghaeplus.domain.concert.entity.Reservation;
 import hanghaeplus.domain.concert.entity.Seat;
 import hanghaeplus.domain.concert.entity.enums.ConcertDetailStatus;
 import hanghaeplus.domain.concert.entity.enums.SeatStatus;
 import hanghaeplus.domain.concert.repository.ConcertDetailRepository;
+import hanghaeplus.domain.concert.repository.ReservationRepository;
 import hanghaeplus.domain.concert.repository.SeatRepository;
-import hanghaeplus.domain.queue.dto.QueueQuery;
 import hanghaeplus.domain.queue.entity.Queue;
 import hanghaeplus.domain.queue.entity.QueueToken;
-import hanghaeplus.domain.queue.entity.enums.QueueTokenStatus;
 import hanghaeplus.domain.queue.repository.QueueRepository;
 import hanghaeplus.domain.queue.repository.QueueTokenRepository;
 import hanghaeplus.domain.token.entity.Token;
@@ -24,27 +19,21 @@ import hanghaeplus.domain.token.repository.TokenRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
-import static hanghaeplus.application.concert.error.ConcertErrorCode.NOT_FOUND_SEAT;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
 
-@DisplayName("Concert 통합 테스트")
 @SpringBootTest
+@DisplayName("Concert 통합 테스트")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class ConcertFacadeIntegrationTest {
 
     @Autowired
@@ -65,27 +54,32 @@ class ConcertFacadeIntegrationTest {
     @Autowired
     private TokenRepository tokenRepository;
 
+    @Autowired
+    private ReservationRepository reservationRepository;
+
     private String tokenId = "b9df2619-18cc-4515-9864-df2527d6a7de";
 
     @BeforeEach
     void setUp() {
+        tokenRepository.deleteAll();
+
         Queue queue = new Queue(1L, 1L, 50);
         queueRepository.save(queue);
 
-        for (int i = 0; i < 5; i++) {
-            QueueToken queueToken2 = QueueToken.createWaiting(1L, tokenId+i);
-            queueTokenRepository.save(queueToken2);
+        for (int i = 0; i < 50; i++) {
+            QueueToken queueToken = QueueToken.createWaiting(1L, tokenId + i);
+            queueTokenRepository.save(queueToken);
         }
         QueueToken queueToken = QueueToken.createWaiting(1L, tokenId);
         queueTokenRepository.save(queueToken);
     }
 
     @Test
-    @DisplayName("콘서트 대기열 순서 조회")
+    @DisplayName("콘서트 대기열 순서 조회 테스트")
     void pass_getConcertQueuePositionTest() {
         // given
         Long concertId = 1L;
-        int position = 6;
+        int position = 51;
 
         ConcertRequest.ConcertQueuePosition request = new ConcertRequest.ConcertQueuePosition(tokenId, concertId);
 
@@ -97,7 +91,7 @@ class ConcertFacadeIntegrationTest {
     }
 
     @Test
-    @DisplayName("콘서트 대기열 등록")
+    @DisplayName("콘서트 대기열 등록 테스트")
     void pass_enrollConcertQueueTest() {
         // given
         Long concertId = 1L;
@@ -115,7 +109,7 @@ class ConcertFacadeIntegrationTest {
     }
 
     @Test
-    @DisplayName("콘서트 사용 가능한 날짜 조회")
+    @DisplayName("콘서트 사용 가능한 날짜 조회 테스트")
     void pass_selectConcertAvailableDatesTest() {
         // given
         Long concertId = 1L;
@@ -141,7 +135,7 @@ class ConcertFacadeIntegrationTest {
     }
 
     @Test
-    @DisplayName("콘서트 사용 가능한 좌석 조회")
+    @DisplayName("콘서트 사용 가능한 좌석 조회 테스트")
     void pass_selectConcertAvailableSeatsTest() {
         // given
         Long concertId = 1L;
@@ -162,7 +156,7 @@ class ConcertFacadeIntegrationTest {
     }
 
     @Test
-    @DisplayName("콘서트 좌석 예약")
+    @DisplayName("콘서트 좌석 예약 테스트")
     void pass_reserveConcertSeatTest() {
         // given
         Long concertId = 1L;
@@ -170,21 +164,18 @@ class ConcertFacadeIntegrationTest {
         Long seatId = 1L;
         Long queueId = 1L;
         Long userId = 1L;
-        LocalDateTime expiredAt = LocalDateTime.of(2024, 10, 18, 11, 0);
 
         ConcertRequest.SeatReservation request = new ConcertRequest.SeatReservation(tokenId, concertId, detailId, seatId);
 
-        Token token = Token.create(tokenId, userId, expiredAt);
+        Token token = Token.create(tokenId, userId);
         tokenRepository.save(token);
 
         Optional<QueueToken> queueTokenOpt = queueTokenRepository.findByTokenId(tokenId);
         QueueToken queueToken = QueueToken.createActivated(queueTokenOpt.get().getId(), queueId, tokenId);
         queueTokenRepository.save(queueToken);
 
-        Seat seat1 = new Seat(1L, 1L, "A-1", 20000, SeatStatus.EMPTY);
-        Seat seat2 = new Seat(2L, 1L, "C-1", 15000, SeatStatus.EMPTY);
-        seatRepository.save(seat1);
-        seatRepository.save(seat2);
+        Seat seat = new Seat(1L, 1L, "A-1", 20000, SeatStatus.EMPTY);
+        seatRepository.save(seat);
 
         // when
         sut.reserveConcertSeat(request);
@@ -192,5 +183,41 @@ class ConcertFacadeIntegrationTest {
         // then
         Optional<Seat> seatOpt = seatRepository.findById(seatId);
         assertThat(seatOpt.get().getStatus()).isEqualTo(SeatStatus.PENDING);
+    }
+
+    @Test
+    @DisplayName("콘서트 좌석 예약 동시성 테스트")
+    void reserveConcertSeatConcurrentTest() {
+        // given
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
+        Long concertId = 1L;
+        Long detailId = 1L;
+        Long seatId = 1L;
+        Long userId = 1L;
+
+        for (int i = 0; i < 30; i++) {
+            Token token = Token.create(tokenId + i, userId + i);
+            tokenRepository.save(token);
+
+            QueueToken queueToken = QueueToken.createActivated((long) i + 1, 1L, tokenId + i);
+            queueTokenRepository.save(queueToken);
+        }
+
+        Seat seat = new Seat(2L, 1L, "B-1", 15000, SeatStatus.EMPTY);
+        seatRepository.save(seat);
+
+        // when
+        for (int i = 0; i < 100; i++) {
+            int idx = i;
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                ConcertRequest.SeatReservation request = new ConcertRequest.SeatReservation(tokenId + idx, concertId, detailId, seatId);
+                sut.reserveConcertSeat(request);
+            });
+            futures.add(future);
+        }
+
+        // given
+        List<Reservation> reservations = reservationRepository.selectPendingReservations(seatId);
+        assertThat(reservations.size()).isEqualTo(1);
     }
 }

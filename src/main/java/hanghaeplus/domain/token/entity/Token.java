@@ -1,6 +1,8 @@
 package hanghaeplus.domain.token.entity;
 
 import hanghaeplus.domain.common.AbstractAuditable;
+import hanghaeplus.domain.common.error.CoreException;
+import hanghaeplus.domain.token.error.TokenErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-import static hanghaeplus.domain.token.error.TokenErrorCode.EXPIRED_TOKEN;
+import static hanghaeplus.domain.token.entity.enums.TokenPolicy.TOKEN_EXPIRED_HOUR;
 
 @Entity
 @Table(name = "token")
@@ -28,13 +30,13 @@ public class Token extends AbstractAuditable {
 
     private LocalDateTime expiredAt;
 
-    public static Token create(String tokenId, Long userId, LocalDateTime expiredAt) {
-        return new Token(null, tokenId, userId, expiredAt);
+    public static Token create(String tokenId, Long userId) {
+        return new Token(null, tokenId, userId, LocalDateTime.now().plusHours(TOKEN_EXPIRED_HOUR.getHour()));
     }
 
-    public void checkExpired() {
-        if (this.expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException(EXPIRED_TOKEN.getMessage());
+    public void checkExpired(LocalDateTime now) {
+        if (this.expiredAt.isBefore(now)) {
+            throw new CoreException(TokenErrorCode.EXPIRED_TOKEN);
         }
     }
 }

@@ -14,4 +14,6 @@ public interface ReservationRepository {
     List<Reservation> selectExpiredPendingReservations();
 
     void saveReservations(List<Reservation> reservations);
+
+    List<Reservation> selectPendingReservations(Long seatId);
 }

@@ -1,7 +1,9 @@
 package hanghaeplus.domain.queue.entity;
 
 import hanghaeplus.domain.common.AbstractAuditable;
+import hanghaeplus.domain.common.error.CoreException;
 import hanghaeplus.domain.queue.entity.enums.QueueTokenStatus;
+import hanghaeplus.domain.queue.error.QueueErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,8 +14,6 @@ import java.time.LocalDateTime;
 
 import static hanghaeplus.domain.queue.entity.enums.QueuePolicy.ACTIVATED_EXPIRED_MINUTE;
 import static hanghaeplus.domain.queue.entity.enums.QueuePolicy.WAITING_EXPIRED_MINUTE;
-import static hanghaeplus.domain.queue.error.QueueErrorCode.EXPIRED_QUEUE_TOKEN;
-import static hanghaeplus.domain.queue.error.QueueErrorCode.NOT_USED_QUEUE_TOKEN;
 
 @Entity
 @Table(name = "queue_token")
@@ -45,19 +45,31 @@ public class QueueToken extends AbstractAuditable {
                 LocalDateTime.now().plusMinutes(ACTIVATED_EXPIRED_MINUTE.getMinute()));
     }
 
-    public void updateStatus(QueueTokenStatus status) {
-        this.status = status;
+    public void updateActivated() {
+        this.status = QueueTokenStatus.ACTIVATED;
     }
 
-    public void checkExpired() {
-        if (this.expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException(EXPIRED_QUEUE_TOKEN.getMessage());
+    public void updateExpired() {
+        this.status = QueueTokenStatus.EXPIRED;
+    }
+
+    public void checkExpired(LocalDateTime now) {
+        if (this.expiredAt.isBefore(now)) {
+            throw new CoreException(QueueErrorCode.EXPIRED_QUEUE_TOKEN);
         }
     }
 
     public void checkReservation() {
-        if (this.status.equals(QueueTokenStatus.WAITING) || this.status.equals(QueueTokenStatus.EXPIRED)) {
-            throw new IllegalStateException(NOT_USED_QUEUE_TOKEN.getMessage());
+        if (!this.status.equals(QueueTokenStatus.ACTIVATED)) {
+            throw new CoreException(QueueErrorCode.NOT_USED_QUEUE_TOKEN);
         }
+    }
+
+    public boolean isActivated() {
+        return this.status.equals(QueueTokenStatus.ACTIVATED);
+    }
+
+    public boolean isWaiting() {
+        return this.status.equals(QueueTokenStatus.WAITING);
     }
 }

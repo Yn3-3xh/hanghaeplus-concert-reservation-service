@@ -34,4 +34,10 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     public void saveReservations(List<Reservation> reservations) {
         reservationJpaRepository.saveAll(reservations);
     }
+
+    @Override
+    public List<Reservation> selectPendingReservations(Long seatId) {
+        return reservationJpaRepository.findBySeatIdAndStatusPending(seatId);
+    }
+
 }

@@ -18,11 +18,11 @@ public class PointController implements PointsApi {
     private final PointFacade pointFacade;
 
     @Override
-    public ResponseEntity<PointChargeHttpResponse> chargePoint(PointChargeHttpRequest pointChargeHttpRequest, String tokenId) {
+    public ResponseEntity<PointChargeHttpResponse> chargePoint(String tokenId, PointChargeHttpRequest pointChargeHttpRequest) {
         PointRequest.PointCharge request = new PointRequest.PointCharge(tokenId, pointChargeHttpRequest.getUserId(), pointChargeHttpRequest.getAmount());
         pointFacade.chargePoint(request);
 
-        return ResponseEntity.ok(new PointChargeHttpResponse("포인트 충전이 완료되었습니다."));
+        return ResponseEntity.ok(new PointChargeHttpResponse().message("포인트 충전이 완료되었습니다."));
     }
 
     @Override
@@ -31,6 +31,6 @@ public class PointController implements PointsApi {
         PointResponse.PointSelection response = pointFacade.selectPoint(request);
 
         return ResponseEntity.ok(
-                new PointSelectHttpResponse(response.point()));
+                new PointSelectHttpResponse().point(response.point()));
     }
 }

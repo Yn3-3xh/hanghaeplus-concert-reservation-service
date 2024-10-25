@@ -1,6 +1,7 @@
 package hanghaeplus.application.order.service;
 
-import hanghaeplus.application.point.component.PointComponent;
+import hanghaeplus.application.point.component.PointCommandComponent;
+import hanghaeplus.application.point.component.PointQueryComponent;
 import hanghaeplus.domain.order.dto.PaymentCommand;
 import hanghaeplus.domain.order.entity.Payment;
 import hanghaeplus.domain.order.entity.enums.PaymentType;
@@ -14,14 +15,15 @@ public class PaymentCommandService {
 
     private final PaymentRepository paymentRepository;
 
-    private final PointComponent pointComponent;
+    private final PointCommandComponent pointCommandComponent;
+    private final PointQueryComponent pointQueryComponent;
 
     public void executePayment(PaymentCommand.Create command) {
-        pointComponent.checkAvailableWithdraw(command.userId(), command.amount());
+        pointQueryComponent.checkAvailableWithdraw(command.userId(), command.amount());
 
         Payment payment = Payment.createPayed(command.userId(), command.orderId(), command.amount(), PaymentType.POINT);
         paymentRepository.savePayment(payment);
 
-        pointComponent.withdrawPoint(command.userId(), command.amount());
+        pointCommandComponent.withdrawPoint(command.userId(), command.amount());
     }
 }

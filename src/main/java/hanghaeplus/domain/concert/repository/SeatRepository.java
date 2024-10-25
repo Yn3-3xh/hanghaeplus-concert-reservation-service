@@ -11,6 +11,8 @@ public interface SeatRepository {
 
     Optional<Seat> findAvailableSeatById(Long seatId);
 
+    Optional<Seat> findAvailableSeatByIdLock(Long seatId);
+
     Optional<Seat> findById(Long seatId);
 
     void save(Seat seat);
@@ -18,4 +20,5 @@ public interface SeatRepository {
     List<Seat> selectSeats(List<Long> longs);
 
     void saveSeats(List<Seat> seats);
+
 }
