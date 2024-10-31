@@ -1,5 +1,6 @@
 package hanghaeplus.application.concert.facade;
 
+import hanghaeplus.aop.annotation.DistributedLock;
 import hanghaeplus.application.concert.dto.ConcertRequest;
 import hanghaeplus.application.concert.dto.ConcertResponse;
 import hanghaeplus.application.concert.service.ConcertDetailQueryService;
@@ -23,7 +24,6 @@ import hanghaeplus.domain.token.dto.TokenQuery;
 import hanghaeplus.domain.token.entity.Token;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -75,7 +75,7 @@ public class ConcertFacade {
                 .toList();
     }
 
-    @Transactional
+    @DistributedLock(key = "#request.seatId()", keyPrefix = "SeatReservation")
     public void reserveConcertSeat(ConcertRequest.SeatReservation request) {
         QueueToken queueToken = queueTokenQueryService.getQueueToken(new QueueQuery.CreateToken(request.tokenId()));
         queueToken.checkReservation();
