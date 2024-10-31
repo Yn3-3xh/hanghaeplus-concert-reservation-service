@@ -21,8 +21,8 @@ public interface PointJpaRepository extends CrudRepository<Point, Long> {
             """)
     Optional<Point> findByUserIdWithOptimisticLock(@Param("userId") Long userId);
 
-    //    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Lock(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    @Lock(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
     @Query("""
                 SELECT p
                 FROM Point p
