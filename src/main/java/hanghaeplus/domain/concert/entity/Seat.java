@@ -29,6 +29,9 @@ public class Seat extends AbstractAuditable {
     @Enumerated(EnumType.STRING)
     private SeatStatus status;
 
+//    @Version
+//    private Integer version;
+
     public void updateEmpty() {
         this.status = SeatStatus.EMPTY;
     }

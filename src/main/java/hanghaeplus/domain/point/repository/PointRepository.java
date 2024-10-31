@@ -6,7 +6,9 @@ import java.util.Optional;
 
 public interface PointRepository {
 
-    Optional<Point> findByUserIdLock(Long userId);
+    Optional<Point> findByUserIdWithOptimisticLock(Long userId);
+
+    Optional<Point> findByUserIdWithPessimisticLock(Long userId);
 
     Optional<Point> findByUserId(Long userId);
 

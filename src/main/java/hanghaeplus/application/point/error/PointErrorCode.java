@@ -13,6 +13,7 @@ public enum PointErrorCode implements ErrorCode {
 
     NOT_FOUND_POINT(NOT_FOUND, "포인트 정보가 존재하지 않습니다.", LogLevel.INFO),
     INSUFFICIENT_POINTS(CONFLICT, "포인트가 부족합니다.", LogLevel.WARN),
+    CONCURRENCY_POINT(CONFLICT, "포인트 충전 요청이 여러 건 감지되어 한 건만 처리되었습니다.", LogLevel.WARN),
     ;
 
     private final ErrorStatus status;

@@ -26,8 +26,13 @@ public class SeatRepositoryImpl implements SeatRepository {
     }
 
     @Override
-    public Optional<Seat> findAvailableSeatByIdLock(Long seatId) {
-        return seatJpaRepository.findAvailableSeatByIdLock(seatId);
+    public Optional<Seat> findAvailableSeatByIdWithOptimisticLock(Long seatId) {
+        return seatJpaRepository.findAvailableSeatByIdWithOptimisticLock(seatId);
+    }
+
+    @Override
+    public Optional<Seat> findAvailableSeatByIdWithPessimisticLock(Long seatId) {
+        return seatJpaRepository.findAvailableSeatByIdWithPessimisticLock(seatId);
     }
 
     @Override
