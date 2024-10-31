@@ -15,8 +15,13 @@ public class PointRepositoryImpl implements PointRepository {
     private final PointJpaRepository pointJpaRepository;
 
     @Override
-    public Optional<Point> findByUserIdLock(Long userId) {
-        return pointJpaRepository.findByUserIdLock(userId);
+    public Optional<Point> findByUserIdWithOptimisticLock(Long userId) {
+        return pointJpaRepository.findByUserIdWithOptimisticLock(userId);
+    }
+
+    @Override
+    public Optional<Point> findByUserIdWithPessimisticLock(Long userId) {
+        return pointJpaRepository.findByUserIdWithPessimisticLock(userId);
     }
 
     @Override

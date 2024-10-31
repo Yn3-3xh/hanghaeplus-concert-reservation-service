@@ -14,10 +14,15 @@ public class PointCommandComponent {
     private final PointRepository pointRepository;
 
     public void withdrawPoint(Long userId, int amount) {
-        Point point = pointRepository.findByUserIdLock(userId)
+//        try {
+//            Point point = pointRepository.findByUserIdWithOptimisticLock(userId)
+        Point point = pointRepository.findByUserIdWithPessimisticLock(userId)
                 .orElseThrow(() -> new CoreException(PointErrorCode.NOT_FOUND_POINT));
         point.withdraw(amount);
 
-        pointRepository.savePoint(point);
+//        pointRepository.savePoint(point);
+//        } catch (OptimisticEntityLockException e) {
+//            throw new CoreException(PointErrorCode.CONCURRENCY_POINT);
+//        }
     }
 }
