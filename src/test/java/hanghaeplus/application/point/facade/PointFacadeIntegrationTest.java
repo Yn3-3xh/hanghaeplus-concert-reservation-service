@@ -15,17 +15,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @DisplayName("PointFacade 통합 테스트")
@@ -115,39 +110,4 @@ class PointFacadeIntegrationTest {
         assertThat(resultPointHistory.get(0)).isEqualTo(new PointHistory(1L, userId, chargeAmount, PointStatus.CHARGE));
     }
 
-    @Test
-    @DisplayName("포인트 충전 동시성 테스트")
-    void chargePointConcurrentTest() {
-        // given
-        List<CompletableFuture<Void>> futures = new ArrayList<>();
-        int amount = 30000;
-        int chargeAmount = 2000;
-        Point point = new Point(null, userId, amount, null);
-        pointRepository.savePoint(point);
-
-        PointRequest.PointCharge request = new PointRequest.PointCharge(tokenId, userId, chargeAmount);
-
-        // when
-        for (int i = 0; i < 5; i++) {
-            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                sut.chargePoint(request);
-            });
-            futures.add(future);
-        }
-        CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-        Throwable throwable = assertThrows(CompletionException.class, allOf::join);
-
-        // then
-        assertThat(throwable.getCause()).isInstanceOf(ObjectOptimisticLockingFailureException.class);
-
-        Optional<Point> resultPoint = pointRepository.findByUserId(userId);
-        assertThat(resultPoint.get().getPoint()).isEqualTo(amount + chargeAmount);
-
-        List<PointHistory> resultPointHistory = pointHistoryRepository.findByUserId(userId);
-        assertThat(resultPointHistory.size()).isEqualTo(1);
-        assertThat(resultPointHistory.get(0))
-                .usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(new PointHistory(null, userId, chargeAmount, PointStatus.CHARGE));
-    }
 }

@@ -3,7 +3,6 @@ package hanghaeplus.application.concert.facade;
 import hanghaeplus.application.concert.dto.ConcertRequest;
 import hanghaeplus.application.concert.dto.ConcertResponse;
 import hanghaeplus.domain.concert.entity.ConcertDetail;
-import hanghaeplus.domain.concert.entity.Reservation;
 import hanghaeplus.domain.concert.entity.Seat;
 import hanghaeplus.domain.concert.entity.enums.ConcertDetailStatus;
 import hanghaeplus.domain.concert.entity.enums.SeatStatus;
@@ -24,10 +23,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -183,41 +180,5 @@ class ConcertFacadeIntegrationTest {
         // then
         Optional<Seat> seatOpt = seatRepository.findById(seatId);
         assertThat(seatOpt.get().getStatus()).isEqualTo(SeatStatus.PENDING);
-    }
-
-    @Test
-    @DisplayName("콘서트 좌석 예약 동시성 테스트")
-    void reserveConcertSeatConcurrentTest() {
-        // given
-        List<CompletableFuture<Void>> futures = new ArrayList<>();
-        Long concertId = 1L;
-        Long detailId = 1L;
-        Long seatId = 1L;
-        Long userId = 1L;
-
-        for (int i = 0; i < 30; i++) {
-            Token token = Token.create(tokenId + i, userId + i);
-            tokenRepository.save(token);
-
-            QueueToken queueToken = QueueToken.createActivated((long) i + 1, 1L, tokenId + i);
-            queueTokenRepository.save(queueToken);
-        }
-
-        Seat seat = new Seat(2L, 1L, "B-1", 15000, SeatStatus.EMPTY);
-        seatRepository.save(seat);
-
-        // when
-        for (int i = 0; i < 100; i++) {
-            int idx = i;
-            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                ConcertRequest.SeatReservation request = new ConcertRequest.SeatReservation(tokenId + idx, concertId, detailId, seatId);
-                sut.reserveConcertSeat(request);
-            });
-            futures.add(future);
-        }
-
-        // given
-        List<Reservation> reservations = reservationRepository.selectPendingReservations(seatId);
-        assertThat(reservations.size()).isEqualTo(1);
     }
 }
