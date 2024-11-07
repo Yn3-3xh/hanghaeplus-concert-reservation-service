@@ -35,6 +35,10 @@ public class QueueToken extends AbstractAuditable {
 
     private LocalDateTime expiredAt;
 
+    public static QueueToken create(Long queueId, String tokenId) {
+        return new QueueToken(null, queueId, tokenId, null, null);
+    }
+
     public static QueueToken createWaiting(Long queueId, String tokenId) {
         return new QueueToken(null, queueId, tokenId, QueueTokenStatus.WAITING,
                 LocalDateTime.now().plusMinutes(WAITING_EXPIRED_MINUTE.getMinute()));

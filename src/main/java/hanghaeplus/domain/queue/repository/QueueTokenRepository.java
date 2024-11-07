@@ -11,17 +11,15 @@ public interface QueueTokenRepository {
 
     void save(QueueToken queueToken);
 
-    Optional<QueueToken> findByTokenId(String tokenId);
+    Optional<Integer> getExpiredActiveQueueTokenCount(Long queueId);
 
-    List<QueueToken> selectExpiredActiveQueueTokens(Long queueId);
+    List<QueueToken> popWaitingQueueToken(Long queueId, int waitingToActivatedCount);
 
-    List<QueueToken> selectSortedWaitingQueueTokens(Long queueId, int limit);
+    void insertActivatedQueueTokens(List<QueueToken> queueTokens);
 
-    void saveQueueTokens(List<QueueToken> activatedToExpiredQueueTokens);
+    void deleteQueueToken(Long queueId, String tokenId);
 
-    int getActivatedQueueTokenCount(Long queueId);
+    Optional<QueueToken> findWaitingQueueToken(Long queueId, String tokenId);
 
-    List<QueueToken> findByQueueId(Long queueId);
-
-    void deleteAll();
+    Optional<QueueToken> findActiveQueueToken(Long queueId, String tokenId);
 }

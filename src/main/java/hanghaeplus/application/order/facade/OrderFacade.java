@@ -1,22 +1,23 @@
 package hanghaeplus.application.order.facade;
 
-import hanghaeplus.application.concert.service.ReservationCommandService;
-import hanghaeplus.application.concert.service.ReservationQueryService;
-import hanghaeplus.application.concert.service.SeatCommandService;
+import hanghaeplus.application.concert.service.*;
 import hanghaeplus.application.order.dto.OrderRequest;
 import hanghaeplus.application.order.service.OrderCommandService;
 import hanghaeplus.application.order.service.OrderQueryService;
 import hanghaeplus.application.order.service.PaymentCommandService;
+import hanghaeplus.application.queue.service.QueueQueryService;
 import hanghaeplus.application.queue.service.QueueTokenCommandService;
-import hanghaeplus.domain.concert.dto.ReservationCommand;
-import hanghaeplus.domain.concert.dto.ReservationQuery;
-import hanghaeplus.domain.concert.dto.SeatCommand;
+import hanghaeplus.domain.concert.dto.*;
+import hanghaeplus.domain.concert.entity.ConcertDetail;
 import hanghaeplus.domain.concert.entity.Reservation;
+import hanghaeplus.domain.concert.entity.Seat;
 import hanghaeplus.domain.order.dto.OrderCommand;
 import hanghaeplus.domain.order.dto.OrderQuery;
 import hanghaeplus.domain.order.dto.PaymentCommand;
 import hanghaeplus.domain.order.entity.Order;
+import hanghaeplus.domain.queue.dto.QueueQuery;
 import hanghaeplus.domain.queue.dto.QueueTokenCommand;
+import hanghaeplus.domain.queue.entity.Queue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,9 @@ public class OrderFacade {
 
     private final OrderQueryService orderQueryService;
     private final ReservationQueryService reservationQueryService;
+    private final SeatQueryService seatQueryService;
+    private final ConcertDetailQueryService concertDetailQueryService;
+    private final QueueQueryService queueQueryService;
 
     private final PaymentCommandService paymentCommandService;
     private final OrderCommandService orderCommandService;
@@ -43,6 +47,12 @@ public class OrderFacade {
         Reservation reservation = reservationQueryService.getReservation(new ReservationQuery.CreateReservation(order.getReservationId()));
         reservationCommandService.updateReservationCompleted(new ReservationCommand.CreateReservationCompleted(reservation.getId()));
         seatCommandService.updateSeatCompleted(new SeatCommand.CreateSeatCompleted(reservation.getSeatId()));
-        queueTokenCommandService.updateQueueTokenExpired(new QueueTokenCommand.CreateQueueTokenExpired(request.tokenId()));
+
+        Seat seat = seatQueryService.getSeat(new SeatQuery.CreateSeat(reservation.getSeatId()));
+        ConcertDetail concertDetail = concertDetailQueryService.getConcertDetail(new ConcertQuery.CreateConcertDetail(seat.getConcertDetailId()));
+        Queue queue = queueQueryService.getQueue(new QueueQuery.Create(concertDetail.getConcertId()));
+        queueTokenCommandService.deleteQueueToken(new QueueTokenCommand.CreateQueueTokenDelete(queue.getId(), request.tokenId()));
+//        queueTokenCommandService.updateQueueTokenExpired(new QueueTokenCommand.CreateQueueTokenExpired(request.tokenId()));
+
     }
 }

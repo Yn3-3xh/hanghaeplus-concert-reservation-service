@@ -6,4 +6,9 @@ public class SeatQuery {
             Long detailId
     ) {
     }
+
+    public record CreateSeat(
+            Long seatId
+    ) {
+    }
 }

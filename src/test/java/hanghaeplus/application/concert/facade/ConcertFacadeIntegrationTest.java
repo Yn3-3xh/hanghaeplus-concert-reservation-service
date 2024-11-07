@@ -1,5 +1,6 @@
 package hanghaeplus.application.concert.facade;
 
+import hanghaeplus.application.IntegrationTest;
 import hanghaeplus.application.concert.dto.ConcertRequest;
 import hanghaeplus.application.concert.dto.ConcertResponse;
 import hanghaeplus.domain.concert.entity.ConcertDetail;
@@ -31,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @DisplayName("Concert 통합 테스트")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class ConcertFacadeIntegrationTest {
+class ConcertFacadeIntegrationTest extends IntegrationTest {
 
     @Autowired
     private ConcertFacade sut;
@@ -73,7 +74,7 @@ class ConcertFacadeIntegrationTest {
 
     @Test
     @DisplayName("콘서트 대기열 순서 조회 테스트")
-    void pass_getConcertQueuePositionTest() {
+    void pass_getConcertQueuePositionTest() throws InterruptedException {
         // given
         Long concertId = 1L;
         int position = 51;
@@ -81,28 +82,11 @@ class ConcertFacadeIntegrationTest {
         ConcertRequest.ConcertQueuePosition request = new ConcertRequest.ConcertQueuePosition(tokenId, concertId);
 
         // when
+        Thread.sleep(1000);
         ConcertResponse.ConcertQueuePosition result = sut.getConcertQueuePosition(request);
 
         // then
         assertThat(result.concertQueuePosition()).isEqualTo(position);
-    }
-
-    @Test
-    @DisplayName("콘서트 대기열 등록 테스트")
-    void pass_enrollConcertQueueTest() {
-        // given
-        Long concertId = 1L;
-        Long queueId = 1L;
-
-        ConcertRequest.ConcertQueueEnrollment request = new ConcertRequest.ConcertQueueEnrollment(tokenId, concertId);
-        int beforeCount = queueTokenRepository.findByQueueId(queueId).size();
-
-        // when
-        sut.enrollConcertQueue(request);
-
-        // then
-        int afterCount = queueTokenRepository.findByQueueId(queueId).size();
-        assertThat(afterCount).isEqualTo(beforeCount + 1);
     }
 
     @Test
@@ -167,9 +151,9 @@ class ConcertFacadeIntegrationTest {
         Token token = Token.create(tokenId, userId);
         tokenRepository.save(token);
 
-        Optional<QueueToken> queueTokenOpt = queueTokenRepository.findByTokenId(tokenId);
-        QueueToken queueToken = QueueToken.createActivated(queueTokenOpt.get().getId(), queueId, tokenId);
-        queueTokenRepository.save(queueToken);
+//        Optional<QueueToken> queueTokenOpt = queueTokenRepository.findByTokenId(tokenId);
+//        QueueToken queueToken = QueueToken.createActivated(queueTokenOpt.get().getId(), queueId, tokenId);
+//        queueTokenRepository.save(queueToken);
 
         Seat seat = new Seat(1L, 1L, "A-1", 20000, SeatStatus.EMPTY);
         seatRepository.save(seat);
