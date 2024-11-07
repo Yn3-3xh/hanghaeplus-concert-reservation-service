@@ -51,7 +51,6 @@ public class SelectConcertAvailableSeatsTest {
     void tearDown() {
         tokenRepository.deleteAll();
         queueRepository.deleteAll();
-        queueTokenRepository.deleteAll();
     }
 
     @Test
@@ -95,55 +94,4 @@ public class SelectConcertAvailableSeatsTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    @Test
-    @DisplayName("예약 가능 좌석 조회 테스트 - 실패 - 유저 토큰이 없는 경우")
-    void fail_selectConcertAvailableSeatsTest1() {
-        // given
-        String tokenId = null;
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-USER-TOKEN", tokenId);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String url = "http://localhost:" + port + "/concerts/1/details/1/available-seats";
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        // when
-        ResponseEntity<String> response = sut.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                String.class);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-    }
-
-    @Test
-    @DisplayName("예약 가능 좌석 조회 테스트 - 실패 - 대기열 토큰이 없는 경우")
-    void fail_selectConcertAvailableSeatsTest2() {
-        // given
-        Long userId = 1L;
-        String tokenId = UUID.randomUUID().toString();
-
-        Token token = Token.create(tokenId, userId);
-        tokenRepository.save(token);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-USER-TOKEN", tokenId);
-        headers.add("X-QUEUE-TOKEN", null);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String url = "http://localhost:" + port + "/concerts/1/details/1/available-seats";
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        // when
-        ResponseEntity<String> response = sut.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                String.class);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
 }

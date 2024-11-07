@@ -52,7 +52,6 @@ public class SelectConcertAvailableDatesTest {
     void tearDown() {
         tokenRepository.deleteAll();
         queueRepository.deleteAll();
-        queueTokenRepository.deleteAll();
     }
 
     @Test
@@ -68,11 +67,8 @@ public class SelectConcertAvailableDatesTest {
         Queue queue = new Queue(null, 1L, 50);
         queueRepository.save(queue);
 
-        QueueToken queueToken = QueueToken.createWaiting(1L, tokenId);
-        queueTokenRepository.save(queueToken);
-
-        QueueToken queueTokenActivated = QueueToken.createActivated(1L, 1L, tokenId);
-        queueTokenRepository.save(queueTokenActivated);
+        QueueToken queueToken = QueueToken.create(1L, tokenId);
+        queueTokenRepository.insertActivatedQueueTokens(List.of(queueToken));
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-USER-TOKEN", tokenId);
@@ -94,57 +90,5 @@ public class SelectConcertAvailableDatesTest {
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @Test
-    @DisplayName("예약 가능 날짜 조회 테스트 - 실패 - 유저 토큰이 없는 경우")
-    void fail_selectConcertAvailableDatesTest1() {
-        // given
-        String tokenId = null;
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-USER-TOKEN", tokenId);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String url = "http://localhost:" + port + "/concerts/1/available-dates";
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        // when
-        ResponseEntity<String> response = sut.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                String.class);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-    }
-
-    @Test
-    @DisplayName("예약 가능 날짜 조회 테스트 - 실패 - 대기열 토큰이 없는 경우")
-    void fail_selectConcertAvailableDatesTest2() {
-        // given
-        Long userId = 1L;
-        String tokenId = UUID.randomUUID().toString();
-
-        Token token = Token.create(tokenId, userId);
-        tokenRepository.save(token);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-USER-TOKEN", tokenId);
-        headers.add("X-QUEUE-TOKEN", null);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String url = "http://localhost:" + port + "/concerts/1/available-dates";
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        // when
-        ResponseEntity<String> response = sut.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                String.class);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 }

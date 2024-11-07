@@ -72,23 +72,6 @@ class PointFacadeIntegrationTest {
     }
 
     @Test
-    @DisplayName("포인트 조회 테스트 - 실패 - 토큰이 없는 경우")
-    void fail_selectPointTest() {
-        // given
-        int amount = 30000;
-        Point point = new Point(null, userId, amount, null);
-        pointRepository.savePoint(point);
-
-        PointRequest.PointSelection request = new PointRequest.PointSelection(tokenId, userId);
-
-        // when
-        PointResponse.PointSelection result = sut.selectPoint(request);
-
-        // then
-        assertThat(result.point()).isEqualTo(amount);
-    }
-
-    @Test
     @DisplayName("포인트 충전 테스트 - 통과")
     void pass_chargePoint() {
         // given

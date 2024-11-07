@@ -53,7 +53,6 @@ public class ReserveConcertSeatTest {
     void tearDown() {
         tokenRepository.deleteAll();
         queueRepository.deleteAll();
-        queueTokenRepository.deleteAll();
     }
 
     @Test
@@ -69,10 +68,10 @@ public class ReserveConcertSeatTest {
         Queue queue = new Queue(null, 1L, 50);
         queueRepository.save(queue);
 
-        QueueToken queueToken = QueueToken.createWaiting(1L, tokenId);
-        queueTokenRepository.save(queueToken);
+//        QueueToken queueToken = QueueToken.createWaiting(1L, tokenId);
+//        queueTokenRepository.save(queueToken);
 
-        QueueToken queueTokenActivated = QueueToken.createActivated(1L, 1L, tokenId);
+        QueueToken queueTokenActivated = QueueToken.create(1L, tokenId);
         queueTokenRepository.save(queueTokenActivated);
 
         HttpHeaders headers = new HttpHeaders();

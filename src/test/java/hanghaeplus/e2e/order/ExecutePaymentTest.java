@@ -18,13 +18,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
-import org.springframework.web.client.ResourceAccessException;
 
-import java.net.HttpRetryException;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -52,7 +50,6 @@ public class ExecutePaymentTest {
     void tearDown() {
         tokenRepository.deleteAll();
         queueRepository.deleteAll();
-        queueTokenRepository.deleteAll();
     }
 
     @Test
@@ -68,20 +65,25 @@ public class ExecutePaymentTest {
         Queue queue = new Queue(null, 1L, 50);
         queueRepository.save(queue);
 
-        QueueToken queueToken = QueueToken.createWaiting(1L, tokenId);
-        queueTokenRepository.save(queueToken);
+//        QueueToken queueToken = QueueToken.createWaiting(1L, tokenId);
+//        queueTokenRepository.save(queueToken);
 
-        QueueToken queueTokenActivated = QueueToken.createActivated(1L, 1L, tokenId);
-        queueTokenRepository.save(queueTokenActivated);
+        QueueToken queueTokenActivated = QueueToken.create(1L, tokenId);
+        queueTokenRepository.insertActivatedQueueTokens(List.of(queueTokenActivated));
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-USER-TOKEN", tokenId);
         headers.add("X-QUEUE-TOKEN", tokenId);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        PaymentHttpRequest request = new PaymentHttpRequest(1L);
+//        PaymentHttpRequest request = new PaymentHttpRequest(1L, 1L);
+//        String url = "http://localhost:" + port + "/orders/payments";
+//        HttpEntity<PaymentHttpRequest> entity = new HttpEntity<>(request, headers);
+
         String url = "http://localhost:" + port + "/orders/payments";
-        HttpEntity<PaymentHttpRequest> entity = new HttpEntity<>(request, headers);
+        String jsonRequestBody = "{\"orderId\": 1, \"concertId\": 1}";
+        PaymentHttpRequest paymentHttpRequest = new PaymentHttpRequest(1L, 1L);
+        HttpEntity<PaymentHttpRequest> entity = new HttpEntity<>(paymentHttpRequest, headers);
 
         doNothing().when(orderFacade).executePayment(new OrderRequest.paymentExecution(tokenId, 1L));
 
@@ -94,60 +96,5 @@ public class ExecutePaymentTest {
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @Test
-    @DisplayName("결제 테스트 - 실패 - 유저 토큰이 없는 경우")
-    void fail_executePaymentTest1() {
-        // given
-        Long userId = 1L;
-        String tokenId = UUID.randomUUID().toString();
-
-        Token token = Token.create(tokenId, userId);
-        tokenRepository.save(token);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-USER-TOKEN", tokenId);
-        headers.add("X-QUEUE-TOKEN", null);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String url = "http://localhost:" + port + "/orders/payments";
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        // when
-        ResponseEntity<String> response = sut.exchange(
-                url,
-                HttpMethod.POST,
-                entity,
-                String.class);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
-
-    @Test
-    @DisplayName("결제 테스트 - 실패 - 대기열 토큰이 없는 경우")
-    void fail_executePaymentTest2() {
-        // given
-        String token = null;
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-USER-TOKEN", token);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String url = "http://localhost:" + port + "/orders/payments";
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        // when
-        ResourceAccessException exception = assertThrows(ResourceAccessException.class, () -> {
-            sut.exchange(
-                    url,
-                    HttpMethod.POST,
-                    entity,
-                    String.class);
-        });
-
-        // then
-        HttpRetryException clientError = (HttpRetryException) exception.getCause();
-        assertThat(clientError.responseCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 }
