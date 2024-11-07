@@ -58,7 +58,7 @@ class ConcertFacadeIntegrationTest extends IntegrationTest {
     private String tokenId = "b9df2619-18cc-4515-9864-df2527d6a7de";
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws InterruptedException {
         tokenRepository.deleteAll();
 
         Queue queue = new Queue(1L, 1L, 50);
@@ -70,11 +70,13 @@ class ConcertFacadeIntegrationTest extends IntegrationTest {
         }
         QueueToken queueToken = QueueToken.createWaiting(1L, tokenId);
         queueTokenRepository.save(queueToken);
+
+        Thread.sleep(1000);
     }
 
     @Test
     @DisplayName("콘서트 대기열 순서 조회 테스트")
-    void pass_getConcertQueuePositionTest() throws InterruptedException {
+    void pass_getConcertQueuePositionTest() {
         // given
         Long concertId = 1L;
         int position = 51;
@@ -82,7 +84,6 @@ class ConcertFacadeIntegrationTest extends IntegrationTest {
         ConcertRequest.ConcertQueuePosition request = new ConcertRequest.ConcertQueuePosition(tokenId, concertId);
 
         // when
-        Thread.sleep(1000);
         ConcertResponse.ConcertQueuePosition result = sut.getConcertQueuePosition(request);
 
         // then
