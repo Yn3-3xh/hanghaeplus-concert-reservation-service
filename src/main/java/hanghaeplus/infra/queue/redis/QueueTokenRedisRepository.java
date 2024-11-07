@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class QueueTokenRedisRepository {
 
+    
     private final RedisTemplate<String, String> redisTemplate;
 
     private ZSetOperations<String, String> zSetOperations;
