@@ -30,6 +30,11 @@ spring:
     data:
       host: 127.0.0.1
       port: 6379
+    cache:
+      ttl-minute: 1
+
+  cache:
+    type: redis
 
 logging:
   level:

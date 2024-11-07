@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
@@ -108,8 +109,8 @@ public class PaymentConcurrencyTest extends IntegrationTest {
         queueRepository.save(queue);
 
         Long queueTokenId = 1L;
-        QueueToken queueToken = QueueToken.createActivated(queueTokenId, queueId, tokenId);
-        queueTokenRepository.save(queueToken);
+        QueueToken queueToken = QueueToken.create(queueTokenId, tokenId);
+        queueTokenRepository.insertActivatedQueueTokens(List.of(queueToken));
 
         Long seatId = 1L;
         Seat seat = new Seat(null, concertDetailId, "A-1", seatAmount, SeatStatus.PENDING);

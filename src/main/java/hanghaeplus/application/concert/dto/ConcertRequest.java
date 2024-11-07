@@ -2,35 +2,35 @@ package hanghaeplus.application.concert.dto;
 
 public class ConcertRequest {
 
-    public record ConcertQueuePosition (
+    public record ConcertQueuePosition(
             String tokenId,
             Long concertId
     ) {
 
     }
 
-    public record ConcertQueue (
+    public record ConcertQueue(
             String tokenId,
             Long concertId
     ) {
 
     }
 
-    public record ConcertQueueEnrollment (
+    public record ConcertQueueEnrollment(
             String tokenId,
             Long concertId
     ) {
 
     }
 
-    public record ConcertAvailableDates (
+    public record ConcertAvailableDates(
             String tokenId,
             Long concertId
     ) {
 
     }
 
-    public record ConcertAvailableSeats (
+    public record ConcertAvailableSeats(
             String tokenId,
             Long concertId,
             Long detailId
@@ -38,11 +38,12 @@ public class ConcertRequest {
 
     }
 
-    public record SeatReservation (
+    public record SeatReservation(
             String tokenId,
             Long concertId,
             Long detailId,
             Long seatId
+//            @DistribbutedLockKey Long seatId
     ) {
 
     }

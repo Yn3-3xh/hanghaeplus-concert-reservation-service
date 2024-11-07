@@ -349,8 +349,14 @@ components:
       type: object
       required:
         - orderId
+        - concertId
       properties:
         orderId:
+          type: integer
+          example: 1
+          format: int64
+          minimum: 1
+        concertId:
           type: integer
           example: 1
           format: int64

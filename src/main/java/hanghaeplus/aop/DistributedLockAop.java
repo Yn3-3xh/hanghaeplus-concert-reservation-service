@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 
 @Aspect
+//@Order(1) AopForTransaction 클래스 사용 안하고, 메서드에 @Transactionl 처리
 @Slf4j
 @Component
 @RequiredArgsConstructor

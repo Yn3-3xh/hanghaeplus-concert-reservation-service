@@ -2,10 +2,8 @@ package hanghaeplus.infra.queue.repository;
 
 import hanghaeplus.domain.queue.entity.QueueToken;
 import hanghaeplus.domain.queue.repository.QueueTokenRepository;
-import hanghaeplus.infra.queue.jpa.QueueTokenJpaRepository;
+import hanghaeplus.infra.queue.redis.QueueTokenRedisRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,52 +13,48 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QueueTokenRepositoryImpl implements QueueTokenRepository {
 
-    private final QueueTokenJpaRepository queueTokenJpaRepository;
+//    private final QueueTokenJpaRepository queueTokenJpaRepository;
+
+    private final QueueTokenRedisRepository queueTokenRedisRepository;
 
     @Override
     public int getWaitingPosition(String tokenId, Long queueId) {
-        return queueTokenJpaRepository.getWaitingPosition(tokenId, queueId);
+        return queueTokenRedisRepository.getWaitingPosition(tokenId, queueId);
     }
 
     @Override
     public void save(QueueToken queueToken) {
-        queueTokenJpaRepository.save(queueToken);
+        queueTokenRedisRepository.save(queueToken);
     }
 
     @Override
-    public Optional<QueueToken> findByTokenId(String tokenId) {
-        return queueTokenJpaRepository.findByTokenId(tokenId);
+    public Optional<Integer> getExpiredActiveQueueTokenCount(Long queueId) {
+        return queueTokenRedisRepository.getExpiredActiveQueueTokenCount(queueId);
     }
 
     @Override
-    public List<QueueToken> selectExpiredActiveQueueTokens(Long queueId) {
-        return queueTokenJpaRepository.selectExpiredActiveQueueTokens(queueId);
+    public List<QueueToken> popWaitingQueueToken(Long queueId, int waitingToActivatedCount) {
+        return queueTokenRedisRepository.popWaitingQueueToken(queueId, waitingToActivatedCount);
     }
 
     @Override
-    public List<QueueToken> selectSortedWaitingQueueTokens(Long queueId, int limit) {
-        Pageable pageable = PageRequest.of(0, limit);
-        return queueTokenJpaRepository.selectSortedWaitingQueueTokens(queueId, pageable);
+    public void insertActivatedQueueTokens(List<QueueToken> queueTokens) {
+        queueTokenRedisRepository.insertActivatedQueueToken(queueTokens);
     }
 
     @Override
-    public void saveQueueTokens(List<QueueToken> activatedToExpiredQueueTokens) {
-        queueTokenJpaRepository.saveAll(activatedToExpiredQueueTokens);
+    public void deleteQueueToken(Long queueId, String tokenId) {
+        queueTokenRedisRepository.deleteQueueToken(queueId, tokenId);
     }
 
     @Override
-    public int getActivatedQueueTokenCount(Long queueId) {
-        return queueTokenJpaRepository.getActivatedQueueTokenCount(queueId);
+    public Optional<QueueToken> findWaitingQueueToken(Long queueId, String tokenId) {
+        return queueTokenRedisRepository.findWaitingQueueToken(queueId, tokenId);
     }
 
     @Override
-    public List<QueueToken> findByQueueId(Long queueId) {
-        return queueTokenJpaRepository.findByQueueId(queueId);
-    }
-
-    @Override
-    public void deleteAll() {
-        queueTokenJpaRepository.deleteAll();
+    public Optional<QueueToken> findActiveQueueToken(Long queueId, String tokenId) {
+        return queueTokenRedisRepository.findActiveQueueToken(queueId, tokenId);
     }
 
 }

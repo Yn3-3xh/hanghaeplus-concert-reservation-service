@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,5 +27,10 @@ public class ConcertDetailRepositoryImpl implements ConcertDetailRepository {
     @Override
     public void saveConcertDetail(ConcertDetail concertDetail) {
         concertDetailJpaRepository.save(concertDetail);
+    }
+
+    @Override
+    public Optional<ConcertDetail> findById(Long concertDetailId) {
+        return concertDetailJpaRepository.findById(concertDetailId);
     }
 }

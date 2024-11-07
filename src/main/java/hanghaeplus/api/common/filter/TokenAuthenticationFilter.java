@@ -1,5 +1,6 @@
 package hanghaeplus.api.common.filter;
 
+import hanghaeplus.api.common.interceptor.ReadableRequestBodyWrapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +21,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String uri = request.getRequestURI();
-        if (isSwaggerPath(uri) && uri.equals("/tokens")) {
+        if (isSwaggerPath(uri) || uri.equals("/tokens")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -28,11 +29,14 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         try {
             String requestToken = request.getHeader("X-USER-TOKEN");
             UUID.fromString(requestToken);
+
+            ReadableRequestBodyWrapper wrapper = new ReadableRequestBodyWrapper(request);
+            filterChain.doFilter(wrapper, response);
         } catch (IllegalArgumentException e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증에 실패했습니다.");
-            return;
+//            return;
         }
-        filterChain.doFilter(request, response);
+//        filterChain.doFilter(request, response);
     }
 
     private boolean isSwaggerPath(String uri) {

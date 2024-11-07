@@ -14,6 +14,7 @@ public enum ConcertErrorCode implements ErrorCode {
     NOT_FOUND_AVAILABLE_RESERVATION(NOT_FOUND, "예약 정보가 존재하지 않습니다.", LogLevel.INFO),
     NOT_FOUND_SEAT(NOT_FOUND, "좌석 정보가 존재하지 않습니다.", LogLevel.INFO),
     NOT_FOUND_EXPIRED_RESERVATION(NOT_FOUND, "만료될 예약 정보가 존재하지 않습니다.", LogLevel.INFO),
+    NOT_FOUND_CONCERT_DETAIL(NOT_FOUND, "콘서트 정보가 존재하지 않습니다.", LogLevel.INFO),
     ;
 
     private final ErrorStatus status;
