@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Repeat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -61,25 +62,27 @@ class ConcertFacadeIntegrationTest extends IntegrationTest {
     void setUp() throws InterruptedException {
         tokenRepository.deleteAll();
 
-        Queue queue = new Queue(1L, 1L, 50);
+        Queue queue = new Queue(1L, 1L, 500);
         queueRepository.save(queue);
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 500; i++) {
             QueueToken queueToken = QueueToken.createWaiting(1L, tokenId + i);
             queueTokenRepository.save(queueToken);
         }
         QueueToken queueToken = QueueToken.createWaiting(1L, tokenId);
         queueTokenRepository.save(queueToken);
 
-        Thread.sleep(1000);
+//        Thread.sleep(1500);
     }
 
     @Test
     @DisplayName("콘서트 대기열 순서 조회 테스트")
-    void pass_getConcertQueuePositionTest() {
+    @Repeat(value = 10)
+    void pass_getConcertQueuePositionTest() throws InterruptedException {
         // given
         Long concertId = 1L;
-        int position = 51;
+        int position = 501;
+        Thread.sleep(1000);
 
         ConcertRequest.ConcertQueuePosition request = new ConcertRequest.ConcertQueuePosition(tokenId, concertId);
 
@@ -89,6 +92,23 @@ class ConcertFacadeIntegrationTest extends IntegrationTest {
         // then
         assertThat(result.concertQueuePosition()).isEqualTo(position);
     }
+
+    @Test
+    @Repeat(value = 10)
+    void getConcertQueuePositionTest2() throws InterruptedException {
+        // given
+        Long concertId = 1L;
+        int position = 501;
+
+        ConcertRequest.ConcertQueuePosition request = new ConcertRequest.ConcertQueuePosition(tokenId, concertId);
+
+        // when
+        ConcertResponse.ConcertQueuePosition result = sut.getConcertQueuePosition(request);
+
+        // then
+        assertThat(result.concertQueuePosition()).isEqualTo(position);
+    }
+
 
     @Test
     @DisplayName("콘서트 사용 가능한 날짜 조회 테스트")
