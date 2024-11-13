@@ -65,12 +65,12 @@ class ConcertFacadeIntegrationTest extends IntegrationTest {
         Queue queue = new Queue(1L, 1L, 500);
         queueRepository.save(queue);
 
-        for (int i = 0; i < 500; i++) {
-            QueueToken queueToken = QueueToken.createWaiting(1L, tokenId + i);
-            queueTokenRepository.save(queueToken);
-        }
-        QueueToken queueToken = QueueToken.createWaiting(1L, tokenId);
-        queueTokenRepository.save(queueToken);
+//        for (int i = 0; i < 500; i++) {
+//            QueueToken queueToken = QueueToken.createWaiting(1L, tokenId + i);
+//            queueTokenRepository.save(queueToken);
+//        }
+//        QueueToken queueToken = QueueToken.createWaiting(1L, tokenId);
+//        queueTokenRepository.save(queueToken);
 
 //        Thread.sleep(1500);
     }
@@ -98,9 +98,16 @@ class ConcertFacadeIntegrationTest extends IntegrationTest {
     void getConcertQueuePositionTest2() throws InterruptedException {
         // given
         Long concertId = 1L;
-        int position = 501;
+        int position = 10001;
 
         ConcertRequest.ConcertQueuePosition request = new ConcertRequest.ConcertQueuePosition(tokenId, concertId);
+
+        for (int i = 0; i < 10000; i++) {
+            QueueToken queueToken = QueueToken.createWaiting(1L, tokenId + i);
+            queueTokenRepository.save(queueToken);
+        }
+        QueueToken queueToken = QueueToken.createWaiting(1L, tokenId);
+        queueTokenRepository.save(queueToken);
 
         // when
         ConcertResponse.ConcertQueuePosition result = sut.getConcertQueuePosition(request);

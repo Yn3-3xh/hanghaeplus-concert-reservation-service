@@ -24,7 +24,7 @@ public class QueueTokenRepositoryImpl implements QueueTokenRepository {
 
     @Override
     public void save(QueueToken queueToken) {
-        queueTokenRedisRepository.save2(queueToken);
+        queueTokenRedisRepository.save(queueToken);
     }
 
     @Override
