@@ -1,18 +1,20 @@
 package hanghaeplus.domain.order.entity;
 
+import hanghaeplus.domain.event.OrderCompletedEvent;
 import hanghaeplus.domain.order.entity.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 @Entity
 @Table(name = "orders")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Order {
+public class Order extends AbstractAggregateRoot<Order> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,4 +50,9 @@ public class Order {
     public void updateFailed() {
         this.status = OrderStatus.FAILED;
     }
+
+    public void domainOperation() {
+        registerEvent(new OrderCompletedEvent.Completed(this.id));
+    }
+
 }
