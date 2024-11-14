@@ -1,31 +1,32 @@
 package hanghaeplus.application.concert.service;
 
-import hanghaeplus.application.concert.component.SeatCommandComponent;
-import hanghaeplus.application.concert.component.SeatQueryComponent;
 import hanghaeplus.application.concert.error.ConcertErrorCode;
 import hanghaeplus.domain.common.error.CoreException;
 import hanghaeplus.domain.concert.dto.ReservationCommand;
-import hanghaeplus.domain.concert.dto.SeatCommand;
 import hanghaeplus.domain.concert.entity.Reservation;
 import hanghaeplus.domain.concert.entity.Seat;
 import hanghaeplus.domain.concert.repository.ReservationRepository;
+import hanghaeplus.domain.concert.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static hanghaeplus.application.concert.error.ConcertErrorCode.NOT_AVAILABLE_SEAT;
+
 @Service
 @RequiredArgsConstructor
 public class ReservationCommandService {
 
     private final ReservationRepository reservationRepository;
-
-    private final SeatCommandComponent seatCommandComponent;
-    private final SeatQueryComponent seatQueryComponent;
+    private final SeatRepository seatRepository;
 
     public void reserveConcertSeat(ReservationCommand.Create command) {
-        Seat seat = seatQueryComponent.getAvailableSeatLock(command.seatId());
+//        Seat seat = seatRepository.findAvailableSeatByIdWithPessimisticLock(command.seatId())
+//        Seat seat = seatRepository.findAvailableSeatByIdWithOptimisticLock(command.seatId())
+        Seat seat = seatRepository.findAvailableSeatById(command.seatId())
+                .orElseThrow(() -> new CoreException(NOT_AVAILABLE_SEAT));
 
         Reservation reservation = Reservation.createPending(seat.getId(), command.userId());
         reservationRepository.saveReservation(reservation);
@@ -58,7 +59,9 @@ public class ReservationCommandService {
         List<Long> seatIds = expiredPendingReservations.stream()
                 .map(Reservation::getSeatId)
                 .toList();
-        seatCommandComponent.updateSeatsEmpty(new SeatCommand.CreateEmptySeats(seatIds));
+        List<Seat> seats = seatRepository.selectSeats(seatIds).stream()
+                .peek(Seat::updateEmpty).toList();
+        seatRepository.saveSeats(seats);
     }
 
 }

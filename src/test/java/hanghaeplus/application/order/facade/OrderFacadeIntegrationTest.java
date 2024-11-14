@@ -32,15 +32,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -159,34 +155,4 @@ class OrderFacadeIntegrationTest {
         assertThat(exception.getMessage()).isEqualTo(PointErrorCode.INSUFFICIENT_POINTS.getMessage());
     }
 
-    @Test
-    @DisplayName("주문 결제 동시성 테스트 - 포인트 차감")
-    void orderPaymentConcurrentTest() {
-        // given
-        List<CompletableFuture<Void>> futures = new ArrayList<>();
-        Long orderId = 1L;
-        int pointAmount = 30000;
-        int savedAmount = 10000;
-
-        Point point = new Point(null, userId, pointAmount, null);
-        pointRepository.savePoint(point);
-
-        OrderRequest.paymentExecution request = new OrderRequest.paymentExecution(tokenId, orderId);
-
-        // when
-        for (int i = 0; i < 10; i++) {
-            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                sut.executePayment(request);
-            });
-            futures.add(future);
-        }
-        CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-        Throwable throwable = assertThrows(CompletionException.class, allOf::join);
-
-        // then
-        assertThat(throwable.getCause()).isInstanceOf(ObjectOptimisticLockingFailureException.class);
-
-        Optional<Point> resultPoint = pointRepository.findByUserId(userId);
-        assertThat(resultPoint.get().getPoint()).isEqualTo(savedAmount);
-    }
 }

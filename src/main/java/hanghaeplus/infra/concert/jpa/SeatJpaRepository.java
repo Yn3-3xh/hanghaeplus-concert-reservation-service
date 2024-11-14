@@ -34,8 +34,17 @@ public interface SeatJpaRepository extends CrudRepository<Seat, Long> {
                 WHERE s.id = :seatId
                 AND s.status = 'EMPTY'
             """)
+    @Lock(LockModeType.OPTIMISTIC)
+    Optional<Seat> findAvailableSeatByIdWithOptimisticLock(@Param("seatId") Long seatId);
+
+    @Query("""
+                SELECT s
+                FROM Seat s
+                WHERE s.id = :seatId
+                AND s.status = 'EMPTY'
+            """)
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    Optional<Seat> findAvailableSeatByIdLock(@Param("seatId") Long seatId);
+    Optional<Seat> findAvailableSeatByIdWithPessimisticLock(@Param("seatId") Long seatId);
 
     List<Seat> findByIdIn(List<Long> seatIds);
 

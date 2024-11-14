@@ -1,5 +1,6 @@
 package hanghaeplus.application.concert.facade;
 
+import hanghaeplus.aop.annotation.DistributedLock;
 import hanghaeplus.application.concert.dto.ConcertRequest;
 import hanghaeplus.application.concert.dto.ConcertResponse;
 import hanghaeplus.application.concert.service.ConcertDetailQueryService;
@@ -18,15 +19,12 @@ import hanghaeplus.domain.concert.entity.Seat;
 import hanghaeplus.domain.queue.dto.QueueCommand;
 import hanghaeplus.domain.queue.dto.QueueQuery;
 import hanghaeplus.domain.queue.entity.Queue;
-import hanghaeplus.domain.queue.entity.QueueToken;
 import hanghaeplus.domain.token.dto.TokenQuery;
 import hanghaeplus.domain.token.entity.Token;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -56,18 +54,12 @@ public class ConcertFacade {
     }
 
     public ConcertResponse.ConcertAvailableDates selectConcertAvailableDates(ConcertRequest.ConcertAvailableDates request) {
-        QueueToken queueToken = queueTokenQueryService.getQueueToken(new QueueQuery.CreateToken(request.tokenId()));
-        queueToken.checkExpired(LocalDateTime.now());
-
         List<LocalDate> concertAvailableDates = concertDetailQueryService.selectConcertAvailableDates(new ConcertQuery.CreateConcertAvailableDates(request.concertId()));
 
         return new ConcertResponse.ConcertAvailableDates(concertAvailableDates);
     }
 
     public List<ConcertResponse.ConcertAvailableSeats> selectConcertAvailableSeats(ConcertRequest.ConcertAvailableSeats request) {
-        QueueToken queueToken = queueTokenQueryService.getQueueToken(new QueueQuery.CreateToken(request.tokenId()));
-        queueToken.checkExpired(LocalDateTime.now());
-
         List<Seat> concertAvailableSeats = seatQueryService.selectConcertAvailableSeats(new SeatQuery.CreateConcertAvailableSeats(request.detailId()));
 
         return concertAvailableSeats.stream()
@@ -75,11 +67,10 @@ public class ConcertFacade {
                 .toList();
     }
 
-    @Transactional
+    //    @Transactional
+    @DistributedLock(key = "#request.seatId()", keyPrefix = "SeatReservation")
+//    @DistributedLock(key = "#request", keyPrefix = "SeatReservation")
     public void reserveConcertSeat(ConcertRequest.SeatReservation request) {
-        QueueToken queueToken = queueTokenQueryService.getQueueToken(new QueueQuery.CreateToken(request.tokenId()));
-        queueToken.checkReservation();
-
         Token token = tokenQueryService.getToken(new TokenQuery.Create(request.tokenId()));
         reservationCommandService.reserveConcertSeat(new ReservationCommand.Create(request.seatId(), token.getUserId()));
         seatCommandService.pendConcertSeat(new SeatCommand.CreatePending(request.seatId()));

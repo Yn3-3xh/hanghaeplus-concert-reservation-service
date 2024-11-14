@@ -6,4 +6,9 @@ public class ConcertQuery {
             Long concertId
     ) {
     }
+
+    public record CreateConcertDetail(
+            Long concertDetailId
+    ) {
+    }
 }

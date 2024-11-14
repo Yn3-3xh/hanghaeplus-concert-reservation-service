@@ -12,6 +12,9 @@ public enum QueueErrorCode implements ErrorCode {
 
     NOT_FOUND_CONCERT_QUEUE(NOT_FOUND, "콘서트의 대기열이 존재하지 않습니다.", LogLevel.INFO),
     NOT_FOUND_QUEUE_TOKEN(NOT_FOUND, "대기열 토큰이 존재하지 않습니다.", LogLevel.INFO),
+    NOT_FOUND_WAITING_QUEUE_TOKEN(NOT_FOUND, "WAITING 대기열 토큰이 존재하지 않습니다.", LogLevel.INFO),
+    NOT_FOUND_ACTIVE_QUEUE_TOKEN(NOT_FOUND, "ACTIVE 대기열 토큰이 존재하지 않습니다.", LogLevel.INFO),
+    NOT_FOUND_POP_WAITING_QUEUE_TOKEN(NOT_FOUND, "꺼내올 대기중인 대기열 토큰이 존재하지 않습니다.", LogLevel.INFO),
     ;
 
     private final ErrorStatus status;

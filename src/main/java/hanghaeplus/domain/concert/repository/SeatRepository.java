@@ -11,7 +11,9 @@ public interface SeatRepository {
 
     Optional<Seat> findAvailableSeatById(Long seatId);
 
-    Optional<Seat> findAvailableSeatByIdLock(Long seatId);
+    Optional<Seat> findAvailableSeatByIdWithOptimisticLock(Long seatId);
+
+    Optional<Seat> findAvailableSeatByIdWithPessimisticLock(Long seatId);
 
     Optional<Seat> findById(Long seatId);
 

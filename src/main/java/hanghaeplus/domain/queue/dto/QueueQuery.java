@@ -17,4 +17,16 @@ public class QueueQuery {
             String tokenId
     ) {
     }
+
+    public record CreateWaitingQueueToken(
+            Long concertId,
+            String tokenId
+    ) {
+    }
+
+    public record CreateActiveQueueToken(
+            Long concertId,
+            String tokenId
+    ) {
+    }
 }
