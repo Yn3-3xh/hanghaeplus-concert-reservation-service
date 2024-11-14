@@ -68,11 +68,11 @@
         * loops: 각 단계에서 반복된 횟수를 의미
 
 * 참고
-  [Mysql Explain](https://cheese10yun.github.io/mysql-explian/)
-  [MYSQL EXPLAIN](https://velog.io/@pkt369/MYSQL-EXPLAIN)
-  [[DB] MySQL에서 Explain을 이용하여 실행 계획 분석하기](https://velog.io/@jeong_hun_hui/MySQL%EC%97%90%EC%84%9C-Explain%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EC%8B%A4%ED%96%89-%EA%B3%84%ED%9A%8D-%EB%B6%84%EC%84%9D%ED%95%98%EA%B8%B0)
-  [[MySQL] 쿼리 수행시간 분석하는 방법 (EXPLAIN ANALYZE)](https://june-coder.tistory.com/64)
-  [[MySQL] Explain 사용법 및 분석](https://hoestory.tistory.com/57)
+    * [Mysql Explain](https://cheese10yun.github.io/mysql-explian/)
+    * [MYSQL EXPLAIN](https://velog.io/@pkt369/MYSQL-EXPLAIN)
+    * [[DB] MySQL에서 Explain을 이용하여 실행 계획 분석하기](https://velog.io/@jeong_hun_hui/MySQL%EC%97%90%EC%84%9C-Explain%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EC%8B%A4%ED%96%89-%EA%B3%84%ED%9A%8D-%EB%B6%84%EC%84%9D%ED%95%98%EA%B8%B0)
+    * [[MySQL] 쿼리 수행시간 분석하는 방법 (EXPLAIN ANALYZE)](https://june-coder.tistory.com/64)
+    * [[MySQL] Explain 사용법 및 분석](https://hoestory.tistory.com/57)
 
 ### 예약 가능 좌석 조회
 
