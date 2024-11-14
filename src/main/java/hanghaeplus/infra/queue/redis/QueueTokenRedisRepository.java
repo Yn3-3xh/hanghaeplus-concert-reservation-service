@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class QueueTokenRedisRepository {
 
+
     private final RedisTemplate<String, String> redisTemplate;
 
     private ZSetOperations<String, String> zSetOperations;
@@ -36,7 +37,7 @@ public class QueueTokenRedisRepository {
 
     public void save(QueueToken queueToken) {
         String key = "WAITING_QUEUE:" + queueToken.getQueueId();
-        long score = System.currentTimeMillis();
+        long score = System.nanoTime();
 
         zSetOperations.add(key, queueToken.getTokenId(), score);
         redisTemplate.expire(key, 30, TimeUnit.MINUTES);
