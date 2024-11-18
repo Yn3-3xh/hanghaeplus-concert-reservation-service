@@ -9,6 +9,7 @@ import hanghaeplus.domain.concert.entity.ConcertDetail;
 import hanghaeplus.domain.concert.entity.Reservation;
 import hanghaeplus.domain.concert.entity.Seat;
 import hanghaeplus.domain.concert.entity.enums.ConcertDetailStatus;
+import hanghaeplus.domain.concert.entity.enums.ReservationStatus;
 import hanghaeplus.domain.concert.entity.enums.SeatStatus;
 import hanghaeplus.domain.concert.repository.ConcertDetailRepository;
 import hanghaeplus.domain.concert.repository.ConcertRepository;
@@ -30,11 +31,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -72,11 +74,10 @@ public class OrderPaymentEventTest extends IntegrationTest {
     @Autowired
     private QueueRepository queueRepository;
 
-    @MockBean
-//    @Autowired
+    @SpyBean
     private OrderCompletedEventListener orderCompletedEventListener;
 
-    @MockBean
+    @SpyBean
     private PaymentEventListener paymentEventListener;
 
     private String tokenId = "b9df2619-18cc-4515-9864-df2527d6a7de";
@@ -130,17 +131,36 @@ public class OrderPaymentEventTest extends IntegrationTest {
 
         // then
         verify(orderCompletedEventListener, times(1)).handleOrderCompleted(any(OrderCompletedEvent.Completed.class));
+    }
 
-//        Reservation reservation = reservationRepository.findById(1L).get();
-//        assertThat(reservation.getStatus()).isEqualTo(ReservationStatus.COMPLETED);
-//
-//        Seat seat = seatRepository.findById(1L).get();
-//        assertThat(seat.getStatus()).isEqualTo(SeatStatus.RESERVATION);
+    @Test
+    @DisplayName("[성공] 주문 결제 완료 - 상태 변경 이벤트 테스트")
+    void pass_orderPaymentSuccessEventTest2() throws InterruptedException {
+        // given
+        Long orderId = 1L;
+        int pointAmount = 30000;
+
+        Point point = new Point(null, userId, pointAmount, null);
+        pointRepository.savePoint(point);
+
+        OrderRequest.paymentExecution request = new OrderRequest.paymentExecution(tokenId, orderId);
+
+        // when
+        sut.executePayment(request);
+        Thread.sleep(5000);
+        reservationRepository.flush();
+
+        // then
+        Reservation reservation = reservationRepository.findById(1L).get();
+        assertThat(reservation.getStatus()).isEqualTo(ReservationStatus.COMPLETED);
+
+        Seat seat = seatRepository.findById(1L).get();
+        assertThat(seat.getStatus()).isEqualTo(SeatStatus.RESERVATION);
     }
 
     @Test
     @DisplayName("[성공] 주문 결제 완료 - 알림 이벤트 동작 테스트")
-    void pass_orderPaymentSuccessEventTest2() {
+    void pass_orderPaymentSuccessEventTest3() {
         // given
         Long orderId = 1L;
         int pointAmount = 30000;
