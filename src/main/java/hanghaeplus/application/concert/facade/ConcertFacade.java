@@ -3,19 +3,15 @@ package hanghaeplus.application.concert.facade;
 import hanghaeplus.aop.annotation.DistributedLock;
 import hanghaeplus.application.concert.dto.ConcertRequest;
 import hanghaeplus.application.concert.dto.ConcertResponse;
-import hanghaeplus.application.concert.service.ConcertDetailQueryService;
-import hanghaeplus.application.concert.service.ReservationCommandService;
-import hanghaeplus.application.concert.service.SeatCommandService;
-import hanghaeplus.application.concert.service.SeatQueryService;
+import hanghaeplus.application.concert.service.*;
 import hanghaeplus.application.queue.service.QueueQueryService;
 import hanghaeplus.application.queue.service.QueueTokenCommandService;
 import hanghaeplus.application.queue.service.QueueTokenQueryService;
 import hanghaeplus.application.token.service.TokenQueryService;
-import hanghaeplus.domain.concert.dto.ConcertQuery;
-import hanghaeplus.domain.concert.dto.ReservationCommand;
-import hanghaeplus.domain.concert.dto.SeatCommand;
-import hanghaeplus.domain.concert.dto.SeatQuery;
+import hanghaeplus.domain.concert.dto.*;
+import hanghaeplus.domain.concert.entity.Reservation;
 import hanghaeplus.domain.concert.entity.Seat;
+import hanghaeplus.domain.event.OrderCompletedEvent;
 import hanghaeplus.domain.queue.dto.QueueCommand;
 import hanghaeplus.domain.queue.dto.QueueQuery;
 import hanghaeplus.domain.queue.entity.Queue;
@@ -40,6 +36,7 @@ public class ConcertFacade {
     private final QueueQueryService queueQueryService;
     private final QueueTokenQueryService queueTokenQueryService;
     private final QueueTokenCommandService queueTokenCommandService;
+    private final ReservationQueryService reservationQueryService;
 
     public ConcertResponse.ConcertQueuePosition getConcertQueuePosition(ConcertRequest.ConcertQueuePosition request) {
         Queue queue = queueQueryService.getQueue(new QueueQuery.Create(request.concertId()));
@@ -74,5 +71,12 @@ public class ConcertFacade {
         Token token = tokenQueryService.getToken(new TokenQuery.Create(request.tokenId()));
         reservationCommandService.reserveConcertSeat(new ReservationCommand.Create(request.seatId(), token.getUserId()));
         seatCommandService.pendConcertSeat(new SeatCommand.CreatePending(request.seatId()));
+    }
+
+    public void completeReservation(OrderCompletedEvent.Completed event) {
+        Reservation reservation = reservationQueryService.getReservation(new ReservationQuery.CreateReservation(event.orderId()));
+
+        reservationCommandService.updateReservationCompleted(new ReservationCommand.CreateReservationCompleted(reservation.getId()));
+        seatCommandService.updateSeatCompleted(new SeatCommand.CreateSeatCompleted(reservation.getSeatId()));
     }
 }

@@ -16,4 +16,6 @@ public interface ReservationRepository {
     void saveReservations(List<Reservation> reservations);
 
     List<Reservation> selectPendingReservations(Long seatId);
+
+    void flush();
 }

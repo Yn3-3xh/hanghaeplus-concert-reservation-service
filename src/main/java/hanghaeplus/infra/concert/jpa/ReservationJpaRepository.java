@@ -1,13 +1,13 @@
 package hanghaeplus.infra.concert.jpa;
 
 import hanghaeplus.domain.concert.entity.Reservation;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ReservationJpaRepository extends CrudRepository<Reservation, Long> {
+public interface ReservationJpaRepository extends JpaRepository<Reservation, Long> {
 
     @Query("""
                 SELECT r
