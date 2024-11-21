@@ -1,8 +1,8 @@
 package hanghaeplus.application.order.facade;
 
 import hanghaeplus.application.concert.service.*;
-import hanghaeplus.application.event.PaymentEventPublisher;
 import hanghaeplus.application.order.dto.OrderRequest;
+import hanghaeplus.application.order.event.publisher.PaymentEventPublisher;
 import hanghaeplus.application.order.service.OrderCommandService;
 import hanghaeplus.application.order.service.OrderQueryService;
 import hanghaeplus.application.order.service.PaymentCommandService;
@@ -14,11 +14,11 @@ import hanghaeplus.domain.concert.dto.SeatQuery;
 import hanghaeplus.domain.concert.entity.ConcertDetail;
 import hanghaeplus.domain.concert.entity.Reservation;
 import hanghaeplus.domain.concert.entity.Seat;
-import hanghaeplus.domain.event.PaymentSuccessEvent;
 import hanghaeplus.domain.order.dto.OrderCommand;
 import hanghaeplus.domain.order.dto.OrderQuery;
 import hanghaeplus.domain.order.dto.PaymentCommand;
 import hanghaeplus.domain.order.entity.Order;
+import hanghaeplus.domain.order.event.PaymentEvent;
 import hanghaeplus.domain.queue.dto.QueueQuery;
 import hanghaeplus.domain.queue.dto.QueueTokenCommand;
 import hanghaeplus.domain.queue.entity.Queue;
@@ -62,6 +62,6 @@ public class OrderFacade {
         queueTokenCommandService.deleteQueueToken(new QueueTokenCommand.CreateQueueTokenDelete(queue.getId(), request.tokenId()));
 
         // 결제 알림 이벤트
-        paymentEventPublisher.success(new PaymentSuccessEvent.Success(order.getId(), order.getUserId(), seat.getId()));
+        paymentEventPublisher.success(new PaymentEvent.Success(order.getId(), order.getUserId(), seat.getId()));
     }
 }

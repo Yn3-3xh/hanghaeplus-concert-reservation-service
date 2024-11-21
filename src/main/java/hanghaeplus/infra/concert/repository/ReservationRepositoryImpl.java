@@ -40,4 +40,8 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         return reservationJpaRepository.findBySeatIdAndStatusPending(seatId);
     }
 
+    @Override
+    public void flush() {
+        reservationJpaRepository.flush();
+    }
 }

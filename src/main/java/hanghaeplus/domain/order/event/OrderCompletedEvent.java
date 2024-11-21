@@ -1,4 +1,4 @@
-package hanghaeplus.domain.event;
+package hanghaeplus.domain.order.event;
 
 public class OrderCompletedEvent {
 
