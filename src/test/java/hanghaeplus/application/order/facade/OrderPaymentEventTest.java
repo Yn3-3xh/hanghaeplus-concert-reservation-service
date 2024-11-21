@@ -1,9 +1,9 @@
 package hanghaeplus.application.order.facade;
 
-import hanghaeplus.api.event.OrderCompletedEventListener;
-import hanghaeplus.api.event.PaymentEventListener;
 import hanghaeplus.application.IntegrationTest;
 import hanghaeplus.application.order.dto.OrderRequest;
+import hanghaeplus.application.order.event.listener.OrderCompletedEventListener;
+import hanghaeplus.application.order.event.listener.PaymentEventListener;
 import hanghaeplus.domain.concert.entity.Concert;
 import hanghaeplus.domain.concert.entity.ConcertDetail;
 import hanghaeplus.domain.concert.entity.Reservation;
@@ -15,10 +15,10 @@ import hanghaeplus.domain.concert.repository.ConcertDetailRepository;
 import hanghaeplus.domain.concert.repository.ConcertRepository;
 import hanghaeplus.domain.concert.repository.ReservationRepository;
 import hanghaeplus.domain.concert.repository.SeatRepository;
-import hanghaeplus.domain.event.OrderCompletedEvent;
-import hanghaeplus.domain.event.PaymentSuccessEvent;
 import hanghaeplus.domain.order.entity.Order;
 import hanghaeplus.domain.order.entity.enums.OrderStatus;
+import hanghaeplus.domain.order.event.OrderCompletedEvent;
+import hanghaeplus.domain.order.event.PaymentEvent;
 import hanghaeplus.domain.order.repository.OrderRepository;
 import hanghaeplus.domain.order.repository.PaymentRepository;
 import hanghaeplus.domain.point.entity.Point;
@@ -147,7 +147,7 @@ public class OrderPaymentEventTest extends IntegrationTest {
 
         // when
         sut.executePayment(request);
-        Thread.sleep(5000);
+        Thread.sleep(1000);
         reservationRepository.flush();
 
         // then
@@ -174,6 +174,6 @@ public class OrderPaymentEventTest extends IntegrationTest {
         sut.executePayment(request);
 
         // then
-        verify(paymentEventListener, times(1)).paymentSuccessHandler(any(PaymentSuccessEvent.Success.class));
+        verify(paymentEventListener, times(1)).paymentSuccessHandler(any(PaymentEvent.Success.class));
     }
 }
