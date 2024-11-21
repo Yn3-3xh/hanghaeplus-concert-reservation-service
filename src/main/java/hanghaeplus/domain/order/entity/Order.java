@@ -1,7 +1,7 @@
 package hanghaeplus.domain.order.entity;
 
-import hanghaeplus.domain.event.OrderCompletedEvent;
 import hanghaeplus.domain.order.entity.enums.OrderStatus;
+import hanghaeplus.domain.order.event.OrderCompletedEvent;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
