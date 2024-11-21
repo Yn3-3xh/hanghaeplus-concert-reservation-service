@@ -11,7 +11,7 @@ import hanghaeplus.application.token.service.TokenQueryService;
 import hanghaeplus.domain.concert.dto.*;
 import hanghaeplus.domain.concert.entity.Reservation;
 import hanghaeplus.domain.concert.entity.Seat;
-import hanghaeplus.domain.event.OrderCompletedEvent;
+import hanghaeplus.domain.order.event.OrderCompletedEvent;
 import hanghaeplus.domain.queue.dto.QueueCommand;
 import hanghaeplus.domain.queue.dto.QueueQuery;
 import hanghaeplus.domain.queue.entity.Queue;

@@ -1,17 +1,18 @@
-package hanghaeplus.application.event;
+package hanghaeplus.infra.order.event;
 
-import hanghaeplus.domain.event.PaymentSuccessEvent;
+import hanghaeplus.application.order.event.publisher.PaymentEventPublisher;
+import hanghaeplus.domain.order.event.PaymentEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PaymentEventPublisher {
+public class PaymentEventPublisherImpl implements PaymentEventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public void success(PaymentSuccessEvent.Success event) {
+    public void success(PaymentEvent.Success event) {
         applicationEventPublisher.publishEvent(event);
     }
 }
