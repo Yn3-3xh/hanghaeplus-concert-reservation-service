@@ -19,12 +19,15 @@ import hanghaeplus.domain.order.dto.OrderQuery;
 import hanghaeplus.domain.order.dto.PaymentCommand;
 import hanghaeplus.domain.order.entity.Order;
 import hanghaeplus.domain.order.event.PaymentEvent;
+import hanghaeplus.domain.order.repository.OrderOutboxRepository;
 import hanghaeplus.domain.queue.dto.QueueQuery;
 import hanghaeplus.domain.queue.dto.QueueTokenCommand;
 import hanghaeplus.domain.queue.entity.Queue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -43,6 +46,7 @@ public class OrderFacade {
     private final QueueTokenCommandService queueTokenCommandService;
 
     private final PaymentEventPublisher paymentEventPublisher;
+    private final OrderOutboxRepository orderOutboxRepository;
 
     @Transactional
     public void executePayment(OrderRequest.paymentExecution request) {
@@ -62,6 +66,6 @@ public class OrderFacade {
         queueTokenCommandService.deleteQueueToken(new QueueTokenCommand.CreateQueueTokenDelete(queue.getId(), request.tokenId()));
 
         // 결제 알림 이벤트
-        paymentEventPublisher.success(new PaymentEvent.Success(order.getId(), order.getUserId(), seat.getId()));
+        paymentEventPublisher.success(new PaymentEvent.Success(UUID.randomUUID().toString(), order.getId(), order.getUserId(), seat.getId()));
     }
 }

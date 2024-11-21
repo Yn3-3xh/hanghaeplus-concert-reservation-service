@@ -11,6 +11,7 @@ import static hanghaeplus.domain.common.error.ErrorStatus.NOT_FOUND;
 public enum OrderErrorCode implements ErrorCode {
 
     NOT_FOUND_AVAILABLE_ORDER(NOT_FOUND, "주문 가능한 정보가 존재하지 않습니다.", LogLevel.INFO),
+    NOT_FOUND_OUTBOX(NOT_FOUND, "Outbox 정보가 존재하지 않습니다.", LogLevel.WARN),
     ;
 
     private final ErrorStatus status;
